@@ -2,13 +2,15 @@
 <html>
 <head>
   <title>CrestApiContest</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <base href="/">
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body ng-app="CrestApiContest" layout="column" ng-cloak ng-controller="mainCtrl as main">
+<div id='data-div' data-token="<%= session['token'] %>" data-version="<%= APP_VERSION %>" data-commit="<%= COMMIT %>"></div>
 
-<%= yield %>
+<md-content ui-view layout="row" flex></md-content>
 
 </body>
 </html>

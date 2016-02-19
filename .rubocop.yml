@@ -1,0 +1,36 @@
+AllCops:
+  TargetRubyVersion: 2.2
+  Exclude:
+    - 'db/**/*'
+    - bin/rails
+    - bin/rake
+    - bin/spring
+    - tmp/**/*
+    - spec/teaspoon_env.rb
+    - spec/spec_helper.rb
+Rails:
+    Enabled: true
+StringLiterals:
+  EnforcedStyle: single_quotes
+  Enabled: true
+Metrics/LineLength:
+  Exclude:
+    - config/**/*
+  Description: 'Limit lines to 130 characters.'
+  Max: 130
+Rails/HasAndBelongsToMany:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 40
+Style/Documentation:
+  Enabled: false
+Metrics/AbcSize:
+  Max: 20
+EndOfLine:
+  Enabled: false
+Style/BracesAroundHashParameters:
+  EnforcedStyle: context_dependent
+Rails/TimeZone:
+  Enabled: false

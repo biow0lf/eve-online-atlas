@@ -1,0 +1,28 @@
+@import 'compass';
+
+//colors
+$white: #ffffff;
+
+md-sidenav {
+  min-width: 200px !important;
+  width: 200px !important;
+  max-width: 200px !important;
+  &.md-locked-open {
+    min-width: 200px !important;
+    width: 200px !important;
+    max-width: 200px !important;
+  }
+  &.md-closed.md-locked-open-add-active {
+    min-width: 200px !important;
+    width: 200px !important;
+    max-width: 200px !important;
+  }
+}
+
+md-list-item a {
+  margin: 0 !important;
+}
+
+md-content {
+  background-color: #CFD8DC !important;
+}
