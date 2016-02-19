@@ -1,0 +1,20 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: crest-api-contest
+  pool: 5
+  username: root
+  password:
+  host: localhost
+
+development:
+  <<: *default
+  database: crest-api-contest-develop
+
+test:
+  <<: *default
+  database: crest-api-contest-test
+
+production:
+  <<: *default

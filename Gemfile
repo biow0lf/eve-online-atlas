@@ -48,4 +48,5 @@ group :production do
   gem 'uglifier', '>= 1.3.0'
   gem 'therubyracer'
   gem 'fog'
+  gem 'puma'
 end
