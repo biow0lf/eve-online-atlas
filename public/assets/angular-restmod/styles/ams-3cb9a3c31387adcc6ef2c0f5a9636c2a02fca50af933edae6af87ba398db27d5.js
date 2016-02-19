@@ -1,0 +1,1 @@
+!function(e,t){"use strict";e.module("restmod").factory("AMSApi",["restmod","inflector",function(e,t){return e.mixin("DefaultPacker",{$config:{style:"AMS",primaryKey:"id",jsonMeta:"meta",jsonLinks:"links"},$extend:{Model:{decodeName:t.camelize,encodeName:function(e){return t.parameterize(e,"_")},encodeUrlName:t.parameterize}}})}])}(angular);

@@ -1,0 +1,1 @@
+"use strict";function minify(e,t,n,r){_.isFunction(t)&&(_.isObject(n)&&(r=n),n=t,t=void 0),t||(t=e.replace(/(?=\.js$)/,".min"));var i=uglify.minify(e,_.defaults(r||{},uglifyOptions));fs.writeFile(t,i.code,"utf-8",n)}var _=require("lodash"),fs=require("fs-extra"),uglify=require("uglify-js"),uglifyOptions=require("./uglify.options.js");module.exports=minify;

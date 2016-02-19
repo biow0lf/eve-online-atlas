@@ -1,0 +1,1 @@
+(function(){app.controller("mainCtrl",["$scope","$http",function(t,n){return function(t){return function(){var n,e;t.version="0.0.0",n=function(){},e=function(){return t.version="0.0.1"},e(),t.do_post=n}}(this)()}])}).call(this);

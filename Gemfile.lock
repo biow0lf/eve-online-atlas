@@ -245,16 +245,7 @@ GEM
       railties (= 4.2.0)
       sprockets-rails
     rails-assets-angular (1.5.0)
-    rails-assets-angular-animate (1.5.0)
-      rails-assets-angular (= 1.5.0)
-    rails-assets-angular-aria (1.5.0)
-      rails-assets-angular (= 1.5.0)
     rails-assets-angular-inflector (0.2.3)
-    rails-assets-angular-material (1.0.5)
-      rails-assets-angular (>= 1.4.8, < 2)
-      rails-assets-angular-animate (>= 1.4.8, < 2)
-      rails-assets-angular-aria (>= 1.4.8, < 2)
-      rails-assets-angular-messages (>= 1.4.8, < 2)
     rails-assets-angular-messages (1.5.0)
       rails-assets-angular (= 1.5.0)
     rails-assets-angular-mocks (1.5.0)
@@ -269,9 +260,6 @@ GEM
       rails-assets-angular-inflector (~> 0.2.0)
     rails-assets-angular-ui-router (0.2.18)
       rails-assets-angular (>= 1.0.8, < 2)
-    rails-assets-daniel-nagy--md-data-table (0.9.11)
-      rails-assets-angular (>= 1.4.0, < 2)
-      rails-assets-angular-material (>= 1.0.0, < 2)
     rails-assets-lodash (4.5.0)
     rails-assets-ng-file-upload (12.0.1)
       rails-assets-angular (> 1.2.0)
@@ -376,14 +364,12 @@ DEPENDENCIES
   pundit
   rails (= 4.2.0)
   rails-assets-angular!
-  rails-assets-angular-material!
   rails-assets-angular-messages!
   rails-assets-angular-mocks
   rails-assets-angular-permission!
   rails-assets-angular-recursion!
   rails-assets-angular-restmod!
   rails-assets-angular-ui-router!
-  rails-assets-daniel-nagy--md-data-table!
   rails-assets-lodash!
   rails-assets-ng-file-upload!
   rails-assets-ng-rails-csrf!

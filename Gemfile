@@ -19,13 +19,13 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-lodash'
   gem 'rails-assets-angular'
   gem 'rails-assets-angular-ui-router'
-  gem 'rails-assets-angular-material'
+  # gem 'rails-assets-angular-material'
   gem 'rails-assets-angular-messages'
   gem 'rails-assets-angular-recursion'
   gem 'rails-assets-angular-permission'
   gem 'rails-assets-angular-restmod'
   gem 'rails-assets-ng-rails-csrf'
-  gem 'rails-assets-daniel-nagy--md-data-table'
+  # gem 'rails-assets-daniel-nagy--md-data-table'
   gem 'rails-assets-ng-file-upload'
 end
 

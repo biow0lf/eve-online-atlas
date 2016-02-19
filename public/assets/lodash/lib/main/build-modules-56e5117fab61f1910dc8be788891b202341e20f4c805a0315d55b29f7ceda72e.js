@@ -1,0 +1,1 @@
+"use strict";function onComplete(e){if(e)throw e}function build(e){fs.copy(corePath,path.join(e,"core.js"),onComplete)}var _=require("lodash"),fs=require("fs-extra"),path=require("path"),basePath=path.join(__dirname,"..",".."),distPath=path.join(basePath,"dist"),corePath=path.join(distPath,"lodash.core.js");build(_.last(process.argv));

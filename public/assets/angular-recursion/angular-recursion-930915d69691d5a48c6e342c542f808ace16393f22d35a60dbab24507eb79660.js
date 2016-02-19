@@ -1,0 +1,1 @@
+angular.module("RecursionHelper",[]).factory("RecursionHelper",["$compile",function(e){return{compile:function(t,n){angular.isFunction(n)&&(n={post:n});var r,i=t.contents().remove();return{pre:n&&n.pre?n.pre:null,post:function(t,o){r||(r=e(i)),r(t,function(e){o.append(e)}),n&&n.post&&n.post.apply(null,arguments)}}}}}]);
