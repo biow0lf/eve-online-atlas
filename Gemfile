@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.0'
 gem 'sprockets'
+gem 'sass'
 gem 'sass-rails'
 gem 'compass-rails'
 gem 'jquery-rails'
@@ -49,4 +50,5 @@ group :production do
   gem 'therubyracer'
   gem 'fog'
   gem 'puma'
+  gem 'rails_12factor'
 end
