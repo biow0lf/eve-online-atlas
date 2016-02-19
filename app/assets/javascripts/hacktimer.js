@@ -143,4 +143,4 @@ onmessage = function (event) {\
     } else {
         console.log (logPrefix + 'Initialisation failed - HTML5 Web Worker is not supported');
     }
-}) ('HackTimerWorker.js');
+}) ('hacktimerworker.js');

@@ -11,8 +11,8 @@
 # about supported directives.
 #
 #= require jquery
-#= require HackTimer
-#= require HackTimerWorker
+#= require hacktimer
+#= require hacktimerworker
 #= require lodash
 #= require angular
 #= require angular-ui-router
