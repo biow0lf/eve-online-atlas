@@ -25,6 +25,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-angular-restmod'
   gem 'rails-assets-ng-rails-csrf'
   gem 'rails-assets-daniel-nagy--md-data-table'
+  gem 'rails-assets-ng-file-upload'
 end
 
 group :development do

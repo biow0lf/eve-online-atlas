@@ -11,6 +11,8 @@
 # about supported directives.
 #
 #= require jquery
+#= require HackTimer
+#= require HackTimerWorker
 #= require lodash
 #= require angular
 #= require angular-ui-router
@@ -24,6 +26,7 @@
 #= require angular-permission
 #= require ng-rails-csrf
 #= require angular-material-data-table
+#= require ng-file-upload
 #= require main
 #= require_tree .
 #= require_tree ../templates
