@@ -16,11 +16,16 @@
 #= require lodash
 #= require angular
 #= require angular-ui-router
+#= require angular-aria
+#= require angular-animate
+#= require angular-material
+#= require angular-messages
 #= require angular-recursion
 #= require angular-rails-templates
 #= require angular-restmod
 #= require angular-permission
 #= require ng-rails-csrf
+#= require angular-material-data-table
 #= require ng-file-upload
 #= require main
 #= require_tree .

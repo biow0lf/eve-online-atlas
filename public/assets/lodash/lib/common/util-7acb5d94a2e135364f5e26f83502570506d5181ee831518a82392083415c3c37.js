@@ -1,1 +1,0 @@
-"use strict";function globTemplate(e){return _.transform(glob.sync(e),function(e,t){var n=path.basename(t,path.extname(t));e[n]=_.template(fs.readFileSync(t,"utf8"))},{})}var _=require("lodash"),fs=require("fs-extra"),glob=require("glob"),path=require("path");module.exports={globTemplate:globTemplate};
