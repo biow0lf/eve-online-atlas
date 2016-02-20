@@ -21,5 +21,9 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
     )
     return $q.all(promises)
 
+  factory.getTheraInfo = (system) ->
+    url = "https://eve-scout.com/api/wormholes?systemSearch=#{system}"
+    return $http(method: 'GET', url: url)
+
   return factory
 ]

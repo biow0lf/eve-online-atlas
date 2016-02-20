@@ -1,14 +1,34 @@
-app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', ($scope, $http, $interval, crestService) -> do =>
+app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', ($scope, $http, $interval, crestService, $rootScope) -> do =>
   @bookmark = 1
-  @selected = []
+
   @file = new File([""], "")
-  @lastMod = @file.lastModifiedDate
-  @lastCommandTime = new Date('1969.12.31 18:00:00')
-  @allCommands = ['pcs!', 'pcb!']
   @interval = null
+  @lastMod = @file.lastModifiedDate
   @regionId = 10000002
-  @commands = []
-  @commandsToShow = []
+
+#  @selected = []
+#  @allCommands = ['pcs!', 'pcb!']
+#  @lastCommandTime = new Date('1969.12.31 18:00:00')
+
+  @selected =
+    market: []
+    thera: []
+
+  @commandTime =
+    market: new Date('1969.12.31 18:00:00')
+    thera: new Date('1969.12.31 18:00:00')
+
+  @commandList =
+    market: ['!pcs', '!pcb']
+    thera: ['!thera']
+
+  @commands =
+    market: []
+    thera: []
+
+  @commandsToShow =
+    market: []
+    thera: []
 
   @filter = {
     options: {
@@ -16,17 +36,22 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     }
   }
 
-  @query = {
-    filter: '',
-    order: 'nameToLower',
-    limit: 5,
-    page: 1
-  }
+  @query =
+    market:
+      filter: '',
+      order: 'nameToLower',
+      limit: 5,
+      page: 1
+    thera:
+      filter: '',
+      order: 'nameToLower',
+      limit: 5,
+      page: 1
 
   clearMarketTable = =>
-    @selected = []
-    @commands = []
-    @commandsToShow = []
+    @selected.market = []
+    @commands.market = []
+    @commandsToShow.market = []
 
   # credit - https://gist.github.com/hurjas/2660489
   timeStamp = (t) ->
@@ -105,14 +130,21 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
           # strip out whitespace on either side
           line = _.trim(line)
           # check to see if line contains a command
-          command = _.filter(@allCommands, (command) -> return line.indexOf(command) >= 0)
+
+          command = ''
+          set = ''
+          for commandSet, commands of @commandList
+            tmp = _.filter(commands, (command) -> return line.indexOf(command) >= 0)
+            if tmp.length > 0
+              command = tmp[0]
+              set = commandSet
+
           if command.length > 0
-            c = command[0]
             commandTime = new Date(line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)[0])
-            if commandTime.getTime() > @lastCommandTime.getTime()
+            if commandTime.getTime() > @commandTime[set].getTime()
               # if command is after newest command timestamp, save command time and execute command
-              @lastCommandTime = commandTime
-              value = line.substr(line.indexOf(c)+c.length+1, line.length)
+              @commandTime[set] = commandTime
+              value = line.substr(line.indexOf(command)+command.length+1, line.length)
 
               splits = _.split(value, ',')
               converted = _.map(splits, (s) ->
@@ -123,39 +155,67 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                   return int
               )
 
-              if command.indexOf('pcb!') >= 0
+              console.log 'command', command, 'set', set, 'converted', converted
+
+              if command.indexOf('!pcb') >= 0
                 crestService.getBuyPrices(@regionId, converted).then (responses) =>
                   for response in responses
                     price = getTrimmedMean(response.data.items, 0.2)
-                    @commands.push({id: @commands.length, time: timeStamp(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
-                  onPaginate(@query.page, @query.limit)
+                    @commands.market.push({id: @commands.length, time: timeStamp(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
+                  onMarketPaginate(@query.market.page, @query.market.limit)
 
-              else if command.indexOf('pcs!') >= 0
+              else if command.indexOf('!pcs') >= 0
                 crestService.getSellPrices(@regionId, converted).then (responses) =>
                   for response in responses
-                    @commands.push({id: @commands.length, time: timeStamp(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
-                  onPaginate(@query.page, @query.limit)
+                    @commands.market.push({id: @commands.length, time: timeStamp(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
+                  onMarketPaginate(@query.market.page, @query.market.limit)
+
+              else if command.indexOf('!thera') >= 0
+
+                crestService.getTheraInfo(converted[0]).then (response) =>
+                  @commands.thera = []
+                  console.log response
 
       fileReader.readAsText file
 
-  onPaginate = (page, limit) =>
-    # console.log 'page', page, 'limit', limit
-    @query.page = page
-    @query.limit = limit
-    initial = (page - 1) * limit
-    # case 1 - there are enough commands to paginate
-    if initial < @commands.length
-      if @commands.length - initial >= limit
-        # and there are enough commands left to show at least the limit
-        @commandsToShow = @commands.slice(initial, initial + limit)
+  onMarketPaginate = (page, limit) =>
+    console.log 'page', page, 'limit', limit
+    if page != undefined and limit != undefined
+      @query.market.page = page
+      @query.market.limit = limit
+      initial = (page - 1) * limit
+      # case 1 - there are enough commands to paginate
+      if initial < @commands.market.length
+        if @commands.market.length - initial >= limit
+          # and there are enough commands left to show at least the limit
+          @commandsToShow.market = @commands.market.slice(initial, initial + limit)
+        else
+          # or there aren't enough, and just show what's left
+          @commandsToShow.market = @commands.market.slice(initial, @commands.market.length)
       else
-        # or there aren't enough, and just show what's left
-        @commandsToShow = @commands.slice(initial, @commands.length)
-    else
-      # case 2 - not enough to paginate
-      @commandsToShow = @commands
-    # console.log @query.page, @query.limit, initial, @commandsToShow
+        # case 2 - not enough to paginate
+        @commandsToShow.market = @commands.market
+      # console.log @query.page, @query.limit, initial, @commandsToShow
 
+  onTheraPaginate = (page, limit) =>
+    console.log 'page', page, 'limit', limit
+    if page != undefined and limit != undefined
+      @query.thera.page = page
+      @query.thera.limit = limit
+      initial = (page - 1) * limit
+      # case 1 - there are enough commands to paginate
+      if initial < @commands.thera.length
+        if @commands.thera.length - initial >= limit
+          # and there are enough commands left to show at least the limit
+          @commandsToShow.thera = @commands.thera.slice(initial, initial + limit)
+        else
+          # or there aren't enough, and just show what's left
+          @commandsToShow.thera = @commands.thera.slice(initial, @commands.thera.length)
+      else
+        # case 2 - not enough to paginate
+        @commandsToShow.thera = @commands.thera
+      # console.log @query.page, @query.limit, initial, @commandsToShow  
+  
   onReorder = (order) =>
     @query.order = order
     # need to do reorder logic
@@ -180,7 +240,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   #-- Public Functions
 
   @setFile = setFile
-  @onPaginate = onPaginate
+  @onMarketPaginate = onMarketPaginate
+  @onTheraPaginate = onTheraPaginate
   @onReorder = onReorder
   @removeFilter = removeFilter
   @clearMarketTable = clearMarketTable

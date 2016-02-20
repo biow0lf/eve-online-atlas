@@ -5,36 +5,80 @@
     <div flex></div>
   </div>
 
-  <md-card layout-margin class="md-whiteframe-z2">
-    <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
-      <div class="md-toolbar-tools">
-        <h2>Market Commands {{ctc.lastCommandTime > 0 ? ' - Last Command Time - ' + ctc.timeStamp(ctc.lastCommandTime) : ''}}</h2>
-        <div flex></div>
-        <md-button ng-show="ctc.commands.length" ng-click="ctc.clearMarketTable()">Clear Table</md-button>
-      </div>
-    </md-toolbar>
-    <md-table-container style="margin-bottom: 0; margin-top: 0;">
-      <table md-table md-row-select ng-model="ctc.selected">
-        <thead md-head md-order="ctc.query.order" md-on-reorder="ctc.onReorder">
-        <tr md-row>
-          <th md-column><span>Action</span></th>
-          <th md-column><span>Time</span></th>
-          <th md-column><span>Item</span></th>
-          <th md-column md-numeric>Price</th>
-        </tr>
-        </thead>
-        <tbody md-body>
-        <tr md-row md-select="command" md-select-id="{{command.id}}" ng-class="{'buy-order': command.buyOrder, 'sell-order': command.sellOrder}" md-auto-select ng-repeat="command in ctc.commandsToShow">
-          <td md-cell>{{command.name}}</td>
-          <td md-cell>{{command.time}}</td>
-          <td md-cell>{{command.result.item}}</td>
-          <td md-cell>{{command.result.price}}</td>
-        </tr>
-        </tbody>
-      </table>
-    </md-table-container>
+  <md-card layout="column" flex layout-margin class="md-whiteframe-z2">
+    <md-tabs flex>
+      <md-tab label="Market" flex>
+        <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+          <div class="md-toolbar-tools">
+            <h2>Market Commands {{ctc.commandTime.market > 0 ? ' - Last Command Time - ' +
+              ctc.timeStamp(ctc.commandTime.market) : ''}}</h2>
+            <div flex></div>
+            <md-button ng-show="ctc.commands.market.length" ng-click="ctc.clearTable('market')">Clear Table</md-button>
+          </div>
+        </md-toolbar>
+        <md-table-container style="margin-bottom: 0; margin-top: 0;">
+          <table md-table md-row-select ng-model="ctc.selected.market">
+            <thead md-head md-order="ctc.query.market.order" md-on-reorder="ctc.onReorder">
+            <tr md-row>
+              <th md-column><span>Action</span></th>
+              <th md-column><span>Time</span></th>
+              <th md-column><span>Item</span></th>
+              <th md-column md-numeric>Price</th>
+            </tr>
+            </thead>
+            <tbody md-body>
+            <tr md-row md-select="command" md-select-id="{{command.id}}" ng-class="{'buy-order': command.buyOrder, 'sell-order': command.sellOrder}" md-auto-select ng-repeat="command in ctc.commandsToShow.market">
+              <td md-cell>{{command.name}}</td>
+              <td md-cell>{{command.time}}</td>
+              <td md-cell>{{command.result.item}}</td>
+              <td md-cell>{{command.result.price}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-table-pagination md-limit="ctc.query.market.limit" md-page="ctc.query.market.page" md-total="{{ctc.commands.market.length}}" md-on-paginate="ctc.onMarketPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+      </md-tab>
 
-    <md-table-pagination md-limit="ctc.query.limit" md-page="ctc.query.page" md-total="{{ctc.commands.length}}" md-on-paginate="ctc.onPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+      <md-tab label="thera" flex>
+        <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+          <div class="md-toolbar-tools">
+            <h2>Thera Commands {{ctc.commandTime.thera > 0 ? ' - Last Command Time - ' +
+              ctc.timeStamp(ctc.commandTime.thera) : ''}}</h2>
+            <div flex></div>
+            <md-button ng-show="ctc.commands.thera.length" ng-click="ctc.clearTable('thera')">Clear Table</md-button>
+          </div>
+        </md-toolbar>
+        <md-table-container style="margin-bottom: 0; margin-top: 0;">
+          <table md-table md-row-select ng-model="ctc.selected.market">
+            <thead md-head md-order="ctc.query.thera.order" md-on-reorder="ctc.onReorder">
+            <tr md-row>
+              <th md-column><span>Region</span></th>
+              <th md-column><span>System</span></th>
+              <th md-column><span>Jumps</span></th>
+              <th md-column><span>Type</span></th>
+              <th md-column><span>Out Sig</span></th>
+              <th md-column><span>In Sig</span></th>
+              <th md-column><span>Estimated Life</span></th>
+              <th md-column><span>Updated</span></th>
+            </tr>
+            </thead>
+            <tbody md-body>
+            <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.thera">
+              <td md-cell>{{command.result.region}}</td>
+              <td md-cell>{{command.result.system}}</td>
+              <td md-cell>{{command.result.jumps}}</td>
+              <td md-cell>{{command.result.type}}</td>
+              <td md-cell>{{command.result.outSig}}</td>
+              <td md-cell>{{command.result.inSig}}</td>
+              <td md-cell>{{command.result.estimateLife}}</td>
+              <td md-cell>{{command.result.updated}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-table-pagination md-limit="ctc.query.thera.limit" md-page="ctc.query.thera.page" md-total="{{ctc.commands.thera.length}}" md-on-paginate="ctc.onTheraPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+      </md-tab>
+    </md-tabs>
   </md-card>
 
 </div>
