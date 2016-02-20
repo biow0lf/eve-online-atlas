@@ -222,6 +222,7 @@ GEM
       mini_portile2 (~> 2.0.0.rc2)
     parser (2.3.0.6)
       ast (~> 2.2)
+    pg (0.18.4)
     phantomjs (2.1.1.0)
     powerpack (0.1.1)
     puma (2.16.0)
@@ -374,6 +375,7 @@ DEPENDENCIES
   jquery-rails
   meta_request
   mysql2 (~> 0.3.18)
+  pg
   phantomjs
   puma
   pundit

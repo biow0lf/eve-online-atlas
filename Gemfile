@@ -14,6 +14,7 @@ gem 'responders'
 gem 'coffee-rails'
 gem 'angular-rails-templates', '>= 1.0'
 gem 'pundit'
+gem 'pg'
 # gem 'reve', :git => 'git@github.com:lisa/reve.git'
 
 source 'https://rails-assets.org' do
