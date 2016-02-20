@@ -1,6 +1,8 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Welcome to the EDA? (Eve Digital Assistant)
+
+#todo
 
 ### What is this repository for? ###
 
