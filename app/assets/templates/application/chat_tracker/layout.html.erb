@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody md-body>
-        <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow">
+        <tr md-row md-select="command" md-select-id="{{command.id}}" ng-class="{'buy-order': command.buyOrder, 'sell-order': command.sellOrder}" md-auto-select ng-repeat="command in ctc.commandsToShow">
           <td md-cell>{{command.name}}</td>
           <td md-cell>{{command.time}}</td>
           <td md-cell>{{command.result.item}}</td>

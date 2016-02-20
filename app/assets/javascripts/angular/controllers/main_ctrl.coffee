@@ -1,5 +1,5 @@
-app.controller 'mainCtrl', ['$scope', '$http',
-  ($scope, $http) -> do =>
+app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav',
+  ($scope, $http, $mdSidenav) -> do =>
     @version = '0.0.0'
 
     do_post = =>
@@ -20,6 +20,12 @@ app.controller 'mainCtrl', ['$scope', '$http',
 #          console.log 'does not have permission', permission
 #        )
 
+    closeSidenav = (componentId) =>
+      $mdSidenav(componentId).close()
+
+    openSidenav = (componentId) =>
+      $mdSidenav(componentId).open()
+
     init = =>
       @version = '0.0.1'
 
@@ -28,6 +34,8 @@ app.controller 'mainCtrl', ['$scope', '$http',
     #-- Public Functions
 
     @do_post = do_post
+    @closeSidenav = closeSidenav
+    @openSidenav = openSidenav
 
     return
 

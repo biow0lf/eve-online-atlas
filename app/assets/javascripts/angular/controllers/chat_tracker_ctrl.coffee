@@ -127,13 +127,13 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                 crestService.getBuyPrices(@regionId, converted).then (responses) =>
                   for response in responses
                     price = getTrimmedMean(response.data.items, 0.2)
-                    @commands.push({id: @commands.length, time: timeStamp(), name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
+                    @commands.push({id: @commands.length, time: timeStamp(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
                   onPaginate(@query.page, @query.limit)
 
               else if command.indexOf('pcs!') >= 0
                 crestService.getSellPrices(@regionId, converted).then (responses) =>
                   for response in responses
-                    @commands.push({id: @commands.length, time: timeStamp(),  name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
+                    @commands.push({id: @commands.length, time: timeStamp(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
                   onPaginate(@query.page, @query.limit)
 
       fileReader.readAsText file

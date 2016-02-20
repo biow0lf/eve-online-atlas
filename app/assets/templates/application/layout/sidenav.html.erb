@@ -1,9 +1,17 @@
-<md-sidenav layout="column" flex class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="true">
+<md-sidenav layout="column" flex class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
   <md-list>
-    <md-list-item ui-sref="root.dashboard">
+    <md-list-item>
+      <div flex layout layout-align="center center">
+        <img style="height: 48px" src="assets/dark.png" />
+      </div>
+      <md-button class="md-icon-button" ng-click="main.closeSidenav('left')" aria-label="Menu">
+        <md-icon md-menu-origin md-svg-icon="navigation:menu"></md-icon>
+      </md-button>
+    </md-list-item>
+    <md-list-item ui-sref="root.dashboard" ng-click="main.closeSidenav('left')">
       <p> Dashboard </p>
     </md-list-item>
-    <md-list-item ui-sref="root.chat_tracker">
+    <md-list-item ui-sref="root.chat_tracker" ng-click="main.closeSidenav('left')">
       <p> Chat Tracker </p>
     </md-list-item>
   </md-list>
