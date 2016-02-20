@@ -1,6 +1,6 @@
-var app = angular.module('CrestApiContest', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'RecursionHelper', 'templates', 'restmod', 'permission', 'ng-rails-csrf', 'md.data.table', 'ngFileUpload']);
+var app = angular.module('CrestApiContest', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'RecursionHelper', 'templates', 'restmod', 'permission', 'md.data.table', 'ngFileUpload', 'ct.ui.router.extras']);
 
-app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', '$urlRouterProvider', function ($httpProvider, $stateProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, $urlRouterProvider) {
+app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', '$urlRouterProvider', '$stickyStateProvider', function ($httpProvider, $stateProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, $urlRouterProvider, $stickyStateProvider) {
 
   // $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
   $locationProvider.html5Mode({
@@ -54,7 +54,9 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     name: 'root.chat_tracker',
     parent: root,
     url: '/chat_tracker',
-    templateUrl: 'application/chat_tracker/layout.html'
+    templateUrl: 'application/chat_tracker/layout.html',
+    sticky: true,
+    dsr: true
   };
 
   $stateProvider

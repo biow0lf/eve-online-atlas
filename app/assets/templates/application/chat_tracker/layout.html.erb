@@ -1,8 +1,32 @@
-<div flex layout="column" layout-margin ng-controller="chatTrackerCtrl as ctc" ng-cloak>
-  Chat Tracker!
-  Please Select text file of which contents are to be read:
+<div flex layout="column" ng-controller="chatTrackerCtrl as ctc" ng-cloak>
   <div layout="row">
-    <md-button class="md-primary md-raised" ngf-select="ctc.setFile($file)">Upload on file select</md-button>
+    <md-button class="md-primary md-raised" ngf-select="ctc.setFile($file)">Click to set log file</md-button>
     <div flex></div>
   </div>
+
+  <md-card layout-margin class="md-whiteframe-z2">
+    <md-table-container>
+      <table md-table md-row-select ng-model="ctc.selected">
+        <thead md-head md-order="ctc.query.order" md-on-reorder="ctc.onReorder">
+        <tr md-row>
+          <th md-column><span>Action</span></th>
+          <th md-column><span>Time</span></th>
+          <th md-column><span>Item</span></th>
+          <th md-column md-numeric>Price</th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow">
+          <td md-cell>{{command.name}}</td>
+          <td md-cell>{{command.time}}</td>
+          <td md-cell>{{command.result.item}}</td>
+          <td md-cell>{{command.result.price}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+
+    <md-table-pagination md-limit="ctc.query.limit" md-page="ctc.query.page" md-total="{{ctc.commands.length}}" md-on-paginate="ctc.onPaginate" md-page-select></md-table-pagination>
+  </md-card>
+
 </div>

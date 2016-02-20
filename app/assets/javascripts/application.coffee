@@ -16,6 +16,7 @@
 #= require lodash
 #= require angular
 #= require angular-ui-router
+#= require ui-router-extras
 #= require angular-aria
 #= require angular-animate
 #= require angular-material
