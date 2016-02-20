@@ -1,11 +1,19 @@
 <div flex layout="column" ng-controller="chatTrackerCtrl as ctc" ng-cloak>
   <div layout="row">
     <md-button class="md-primary md-raised" ngf-select="ctc.setFile($file)">Click to set log file</md-button>
+    <p> Log file: {{ctc.file.name.length > 0 ? ctc.file.name : 'No file selected'}} </p>
     <div flex></div>
   </div>
 
   <md-card layout-margin class="md-whiteframe-z2">
-    <md-table-container>
+    <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+      <div class="md-toolbar-tools">
+        <h2>Market Commands {{ctc.lastCommandTime > 0 ? ' - Last Command Time - ' + ctc.timeStamp(ctc.lastCommandTime) : ''}}</h2>
+        <div flex></div>
+        <md-button ng-show="ctc.commands.length" ng-click="ctc.clearMarketTable()">Clear Table</md-button>
+      </div>
+    </md-toolbar>
+    <md-table-container style="margin-bottom: 0; margin-top: 0;">
       <table md-table md-row-select ng-model="ctc.selected">
         <thead md-head md-order="ctc.query.order" md-on-reorder="ctc.onReorder">
         <tr md-row>
@@ -26,7 +34,7 @@
       </table>
     </md-table-container>
 
-    <md-table-pagination md-limit="ctc.query.limit" md-page="ctc.query.page" md-total="{{ctc.commands.length}}" md-on-paginate="ctc.onPaginate" md-page-select></md-table-pagination>
+    <md-table-pagination md-limit="ctc.query.limit" md-page="ctc.query.page" md-total="{{ctc.commands.length}}" md-on-paginate="ctc.onPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
   </md-card>
 
 </div>

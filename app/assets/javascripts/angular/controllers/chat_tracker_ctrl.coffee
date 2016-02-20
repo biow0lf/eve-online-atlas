@@ -1,9 +1,9 @@
 app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', ($scope, $http, $interval, crestService) -> do =>
   @bookmark = 1
   @selected = []
-  @file = new File([""], "filename")
+  @file = new File([""], "")
   @lastMod = @file.lastModifiedDate
-  @lastCommandTime = new Date('2000.01.01 00:00:00')
+  @lastCommandTime = new Date('1969.12.31 18:00:00')
   @allCommands = ['pcs!', 'pcb!']
   @interval = null
   @regionId = 10000002
@@ -23,10 +23,18 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     page: 1
   }
 
+  clearMarketTable = =>
+    @selected = []
+    @commands = []
+    @commandsToShow = []
+
   # credit - https://gist.github.com/hurjas/2660489
-  timeStamp = ->
+  timeStamp = (t) ->
     # Create a date object with the current time
-    now = new Date
+    if t != undefined
+      now = new Date(t)
+    else
+      now = new Date
     # Create an array with the current month, day and time
     date = [
       now.getMonth() + 1
@@ -59,7 +67,19 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     toTrim = Math.round(itemPrices.length * trimPercentage)
     trimmedItems = itemPrices.slice(toTrim, itemPrices.length)
     trimmedItems = trimmedItems.slice(0, trimmedItems.length - toTrim)
-    return _.mean(trimmedItems).toFixed(2)
+    price = _.mean(trimmedItems)
+    if price > 1000000000
+      price /= 1000000000
+      price = price.toFixed(2).toString() + 'B isk'
+    else if price > 1000000
+      price /= 1000000
+      price = price.toFixed(2).toString() + 'M isk'
+    else if price > 1000
+      price /= 1000
+      price = price.toFixed(2).toString() + 'K isk'
+    else
+      price = price.toFixed(2).toString() + ' isk'
+    return price
 
   tick = =>
     if @file != null && @file.lastModifiedDate.getTime() != @lastMod.getTime()
@@ -106,7 +126,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
               if command.indexOf('pcb!') >= 0
                 crestService.getBuyPrices(@regionId, converted).then (responses) =>
                   for response in responses
-                    @commands.push({id: @commands.length, time: timeStamp(), name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
+                    price = getTrimmedMean(response.data.items, 0.2)
+                    @commands.push({id: @commands.length, time: timeStamp(), name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
                   onPaginate(@query.page, @query.limit)
 
               else if command.indexOf('pcs!') >= 0
@@ -162,6 +183,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @onPaginate = onPaginate
   @onReorder = onReorder
   @removeFilter = removeFilter
+  @clearMarketTable = clearMarketTable
+  @timeStamp = timeStamp
 
   return
 ]
