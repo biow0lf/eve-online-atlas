@@ -107,8 +107,9 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     return price
 
   tick = =>
-    if @file != null && @file.lastModifiedDate.getTime() != @lastMod.getTime()
-      @lastMod = @file.lastModifiedDate
+    currentTime = new Date
+    if @file != null && (currentTime.getTime() - @lastMod.getTime()) > 1000  # && @file.lastModifiedDate.getTime() != @lastMod.getTime()
+      @lastMod = currentTime
       readFile(@file)
 
   setFile = (file) =>
@@ -121,7 +122,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   readFile = (file) =>
     if file.size != 0
-      console.log 'Reading file', file
       fileReader = new FileReader
       fileReader.onload = (e) =>
         text = e.target.result;
