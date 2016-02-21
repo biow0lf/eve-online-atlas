@@ -73,23 +73,26 @@ module Api
       end
 
       def get_trimmed_mean(items, trim_percentage)
-        item_prices = items.map { |item| item['price'] }.sort
-        to_trim = (item_prices.size * trim_percentage).round
-        trimmed_items = item_prices.slice(to_trim..(item_prices.size - to_trim))
-        price = trimmed_items.sum / trimmed_items.size.to_f
-        if price > 1000000000
-          price /= 1000000000
-          price = price.round(2).to_s + 'B isk'
-        elsif price > 1000000
-          price /= 1000000
-          price = price.round(2).to_s + 'M isk'
-        elsif price > 1000
-          price /= 1000
-          price = price.round(2).to_s + 'K isk'
-        else
-          price = price.round(2).to_s + ' isk'
+        if items.size > 0
+          item_prices = items.map { |item| item['price'] }.sort
+          to_trim = (item_prices.size * trim_percentage).round
+          trimmed_items = item_prices.slice(to_trim..(item_prices.size - to_trim))
+          price = trimmed_items.sum / trimmed_items.size.to_f
+          if price > 1000000000
+            price /= 1000000000
+            price = price.round(2).to_s + 'B isk'
+          elsif price > 1000000
+            price /= 1000000
+            price = price.round(2).to_s + 'M isk'
+          elsif price > 1000
+            price /= 1000
+            price = price.round(2).to_s + 'K isk'
+          else
+            price = price.round(2).to_s + ' isk'
+          end
+          return price
         end
-        return price
+        return 'N/A'
       end
     end
   end
