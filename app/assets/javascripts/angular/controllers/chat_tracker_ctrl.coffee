@@ -159,7 +159,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                       return int
                   )
                 else
-                  converted = [value]
+                  converted = [_.trim(value)]
 
                 console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
 
