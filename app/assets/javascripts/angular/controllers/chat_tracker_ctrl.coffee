@@ -121,6 +121,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   readFile = (file) =>
     if file.size != 0
+      console.log 'Reading file', file
       fileReader = new FileReader
       fileReader.onload = (e) =>
         text = e.target.result;
