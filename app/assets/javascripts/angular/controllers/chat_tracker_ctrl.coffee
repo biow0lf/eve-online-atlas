@@ -52,6 +52,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     @selected[tab] = []
     @commands[tab] = []
     @commandsToShow[tab] = []
+    console.log @selected, @commands, @commandsToShow
 
   # credit - https://gist.github.com/hurjas/2660489
   timeStamp = (t) ->

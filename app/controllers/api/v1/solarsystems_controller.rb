@@ -10,16 +10,15 @@ module Api
       end
 
       def show
-        if params[:id].to_i > 0
-          # if actually an item id, search by id
-          solarsystem = Solarsystem.find_by(solarSystemID: params[:id].to_s)
-        else
-          # else search by name
-          solarsystem = Solarsystem.find_by(solarSystemName: params[:id])
-        end
+        solarsystem = if params[:id].to_i > 0
+                        # if actually an item id, search by id
+                        Solarsystem.find_by(solarSystemID: params[:id].to_s)
+                      else
+                        # else search by name
+                        Solarsystem.find_by(solarSystemName: params[:id])
+                      end
         render json: solarsystem.to_json
       end
-
     end
   end
 end

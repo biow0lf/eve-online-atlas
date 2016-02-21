@@ -4,4 +4,5 @@ class Solarsystem < ActiveRecord::Base
 
   belongs_to :region, foreign_key: 'regionID'
   has_many :stations, foreign_key: 'solarSystemID'
+  has_many :playerstations, foreign_key: 'solarSystemID'
 end
