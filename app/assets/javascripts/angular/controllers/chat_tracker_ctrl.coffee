@@ -6,7 +6,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @file = new File([""], "")
   @interval = null
   @lastMod = @file.lastModifiedDate
-  @regionId = 10000002
+  @system = 'Jita'
 
   @selected =
     market: []
@@ -17,7 +17,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     thera: new Date('1969.12.31 18:00:00')
 
   @commandList =
-    market: ['!pcs', '!pcb']
+    market: ['!pc', '!marketsystem']
     thera: ['!thera']
 
   @commands =
@@ -87,25 +87,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     # Return the formatted string
     return date.join('/') + ' ' + time.join(':') + ' ' + suffix
 
-  getTrimmedMean = (items, trimPercentage) =>
-    itemPrices = _.map(items, (item) -> return item.price).sort()
-    toTrim = Math.round(itemPrices.length * trimPercentage)
-    trimmedItems = itemPrices.slice(toTrim, itemPrices.length)
-    trimmedItems = trimmedItems.slice(0, trimmedItems.length - toTrim)
-    price = _.mean(trimmedItems)
-    if price > 1000000000
-      price /= 1000000000
-      price = price.toFixed(2).toString() + 'B isk'
-    else if price > 1000000
-      price /= 1000000
-      price = price.toFixed(2).toString() + 'M isk'
-    else if price > 1000
-      price /= 1000
-      price = price.toFixed(2).toString() + 'K isk'
-    else
-      price = price.toFixed(2).toString() + ' isk'
-    return price
-
   tick = =>
     currentTime = new Date
     if @file != null && (currentTime.getTime() - @lastMod.getTime()) > 1000  # && @file.lastModifiedDate.getTime() != @lastMod.getTime()
@@ -114,7 +95,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   setFile = (file) =>
     @file = file
-
     if @interval != null
       $interval.cancel(@interval)
     @interval = $interval(tick, 250)
@@ -160,30 +140,37 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                 # if command is after newest command timestamp, save command time and execute command
                 @commandTime[set] = commandTime
                 value = line.substr(line.indexOf(command)+command.length+1, line.length)
+                converted = []
 
-                splits = _.split(value, ',')
-                converted = _.map(splits, (s) ->
-                  int = _.parseInt(s)
-                  if _.isNaN(int)
-                    return _.trim(s)
-                  else
-                    return int
-                )
+                # two ways to imput items to parse
+                # first, by typing in items delimited by comma
+                # second, by dragging items to bar there are two spaces between items
+                splitChar = null
+                if value.indexOf(',') >= 0 then splitChar = ','
+                if value.indexOf('  ') >= 0 then splitChar = '  '
+                if splitChar != null
+                  value = _.split(value, splitChar)
+                  converted = _.map(value, (s) ->
+                    int = _.parseInt(s)
+                    if _.isNaN(int)
+                      return _.trim(s)
+                    else
+                      return int
+                  )
+                else
+                  converted = [value]
 
                 console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
 
-                if command.indexOf('!pcb') >= 0
-                  crestService.getBuyPrices(@regionId, converted).then (responses) =>
-                    for response in responses
-                      price = getTrimmedMean(response.data.items, 0.2)
-                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
-                    onMarketPaginate(@query.market.page, @query.market.limit)
-                    @selectedTab = @query.market.tab
+                if command.indexOf('!marketsystem') >= 0
+                  crestService.isValidSystem(converted[0]).then (response) =>
+                    if response.data != null
+                      @system = response.data.solarSystemName
 
-                else if command.indexOf('!pcs') >= 0
-                  crestService.getSellPrices(@regionId, converted).then (responses) =>
-                    for response in responses
-                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
+                if command.indexOf('!pc') >= 0
+                  crestService.getPrices(@system, converted).then (response) =>
+                    for item in response.data
+                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: item.buy_price, sell_price: item.sell_price, system: item.system}})
                     onMarketPaginate(@query.market.page, @query.market.limit)
                     @selectedTab = @query.market.tab
 

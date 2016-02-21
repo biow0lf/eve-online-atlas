@@ -10,7 +10,7 @@
       <md-tab label="Market" flex>
         <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
           <div class="md-toolbar-tools">
-            <h2>Market Commands {{ctc.commandTime.market > 0 ? ' - Last Command Time - ' +
+            <h2>Market Commands ({{ctc.system}}){{ctc.commandTime.market > 0 ? ' - Last Command Time - ' +
               ctc.timeStamp(ctc.commandTime.market) : ''}}</h2>
             <div flex></div>
             <md-button ng-show="ctc.commands.market.length" ng-click="ctc.clearTable('market')">Clear Table</md-button>
@@ -20,18 +20,20 @@
           <table md-table md-row-select ng-model="ctc.selected.market">
             <thead md-head md-order="ctc.query.market.order" md-on-reorder="ctc.onReorder">
             <tr md-row>
-              <th md-column><span>Action</span></th>
-              <th md-column><span>Time</span></th>
+              <th md-column><span>System</span></th>
               <th md-column><span>Item</span></th>
-              <th md-column md-numeric>Price</th>
+              <th md-column><span>Buy Price</span></th>
+              <th md-column><span>Sell Price</span></th>
+              <th md-column><span>Time</span></th>
             </tr>
             </thead>
             <tbody md-body>
-            <tr md-row md-select="command" md-select-id="{{command.id}}" ng-class="{'buy-order': command.buyOrder, 'sell-order': command.sellOrder}" md-auto-select ng-repeat="command in ctc.commandsToShow.market">
-              <td md-cell>{{command.name}}</td>
+            <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.market">
+              <td md-cell>{{command.item.system}}</td>
+              <td md-cell>{{command.item.name}}</td>
+              <td md-cell>{{command.item.buy_price}}</td>
+              <td md-cell>{{command.item.sell_price}}</td>
               <td md-cell am-time-ago="command.time"></td>
-              <td md-cell>{{command.result.item}}</td>
-              <td md-cell>{{command.result.price}}</td>
             </tr>
             </tbody>
           </table>
