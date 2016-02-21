@@ -1,6 +1,7 @@
 app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', ($scope, $http, $interval, crestService, $rootScope) -> do =>
   @bookmark = 1
   @selectedTab = 0
+  @characters = []
 
   @file = new File([""], "")
   @interval = null
@@ -130,6 +131,14 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
           line = _.trim(line)
           # check to see if line contains a command
 
+          # if character not set, set it
+          if _.isEmpty(@characters)
+            # make sure that we get the Listener: {character name} line and not a regular log line
+            unless line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
+              if line.indexOf('Listener:') >= 0
+                # add Listener character
+                @characters.push _.map(line.split(':'), (l) -> return _.trim(l))[1]
+
           command = ''
           set = ''
           for commandSet, commands of @commandList
@@ -139,45 +148,49 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
               set = commandSet
 
           if command.length > 0
-            commandTime = new Date(line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)[0])
-            if commandTime.getTime() > @commandTime[set].getTime()
-              # if command is after newest command timestamp, save command time and execute command
-              @commandTime[set] = commandTime
-              value = line.substr(line.indexOf(command)+command.length+1, line.length)
+            # verify character
+            character_name = line.substr(line.indexOf(']')+2, line.indexOf('>')-1-(line.indexOf(']')+2))
+            if character_name in @characters
 
-              splits = _.split(value, ',')
-              converted = _.map(splits, (s) ->
-                int = _.parseInt(s)
-                if _.isNaN(int)
-                  return _.trim(s)
-                else
-                  return int
-              )
+              commandTime = new Date(line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)[0])
+              if commandTime.getTime() > @commandTime[set].getTime()
+                # if command is after newest command timestamp, save command time and execute command
+                @commandTime[set] = commandTime
+                value = line.substr(line.indexOf(command)+command.length+1, line.length)
 
-              console.log 'command', command, 'set', set, 'converted', converted
+                splits = _.split(value, ',')
+                converted = _.map(splits, (s) ->
+                  int = _.parseInt(s)
+                  if _.isNaN(int)
+                    return _.trim(s)
+                  else
+                    return int
+                )
 
-              if command.indexOf('!pcb') >= 0
-                crestService.getBuyPrices(@regionId, converted).then (responses) =>
-                  for response in responses
-                    price = getTrimmedMean(response.data.items, 0.2)
-                    @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
-                  onMarketPaginate(@query.market.page, @query.market.limit)
-                  @selectedTab = @query.market.tab
+                console.log 'command', command, 'set', set, 'converted', converted
 
-              else if command.indexOf('!pcs') >= 0
-                crestService.getSellPrices(@regionId, converted).then (responses) =>
-                  for response in responses
-                    @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
-                  onMarketPaginate(@query.market.page, @query.market.limit)
-                  @selectedTab = @query.market.tab
+                if command.indexOf('!pcb') >= 0
+                  crestService.getBuyPrices(@regionId, converted).then (responses) =>
+                    for response in responses
+                      price = getTrimmedMean(response.data.items, 0.2)
+                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
+                    onMarketPaginate(@query.market.page, @query.market.limit)
+                    @selectedTab = @query.market.tab
 
-              else if command.indexOf('!thera') >= 0
-                crestService.getTheraInfo(converted[0]).then (response) =>
-                  @commands.thera = []
-                  for item in response.data
-                    @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
-                  onTheraPaginate(@query.thera.page, @query.thera.limit)
-                  @selectedTab = @query.thera.tab
+                else if command.indexOf('!pcs') >= 0
+                  crestService.getSellPrices(@regionId, converted).then (responses) =>
+                    for response in responses
+                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
+                    onMarketPaginate(@query.market.page, @query.market.limit)
+                    @selectedTab = @query.market.tab
+
+                else if command.indexOf('!thera') >= 0
+                  crestService.getTheraInfo(converted[0]).then (response) =>
+                    @commands.thera = []
+                    for item in response.data
+                      @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
+                    onTheraPaginate(@query.thera.page, @query.thera.limit)
+                    @selectedTab = @query.thera.tab
 
       fileReader.readAsText file
 
