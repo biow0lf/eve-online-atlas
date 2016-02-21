@@ -1,14 +1,11 @@
 app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', ($scope, $http, $interval, crestService, $rootScope) -> do =>
   @bookmark = 1
+  @selectedTab = 0
 
   @file = new File([""], "")
   @interval = null
   @lastMod = @file.lastModifiedDate
   @regionId = 10000002
-
-#  @selected = []
-#  @allCommands = ['pcs!', 'pcb!']
-#  @lastCommandTime = new Date('1969.12.31 18:00:00')
 
   @selected =
     market: []
@@ -42,16 +39,18 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       order: 'nameToLower',
       limit: 5,
       page: 1
+      tab: 0
     thera:
       filter: '',
       order: 'nameToLower',
       limit: 5,
       page: 1
+      tab: 1
 
-  clearMarketTable = =>
-    @selected.market = []
-    @commands.market = []
-    @commandsToShow.market = []
+  clearTable = (tab) =>
+    @selected[tab] = []
+    @commands[tab] = []
+    @commandsToShow[tab] = []
 
   # credit - https://gist.github.com/hurjas/2660489
   timeStamp = (t) ->
@@ -161,24 +160,24 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                 crestService.getBuyPrices(@regionId, converted).then (responses) =>
                   for response in responses
                     price = getTrimmedMean(response.data.items, 0.2)
-                    @commands.market.push({id: @commands.market.length, time: timeStamp(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
+                    @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
                   onMarketPaginate(@query.market.page, @query.market.limit)
+                  @selectedTab = @query.market.tab
 
               else if command.indexOf('!pcs') >= 0
                 crestService.getSellPrices(@regionId, converted).then (responses) =>
                   for response in responses
-                    @commands.market.push({id: @commands.market.length, time: timeStamp(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
+                    @commands.market.unshift({id: @commands.market.length, time: Date.now(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
                   onMarketPaginate(@query.market.page, @query.market.limit)
+                  @selectedTab = @query.market.tab
 
               else if command.indexOf('!thera') >= 0
-                console.log 'doing thera'
-                crestService.getTheraInfo(converted[0]).success (response) =>
-                  console.log 'response', response
+                crestService.getTheraInfo(converted[0]).then (response) =>
                   @commands.thera = []
-                  for item in response
+                  for item in response.data
                     @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
-                  console.log @commands.thera
                   onTheraPaginate(@query.thera.page, @query.thera.limit)
+                  @selectedTab = @query.thera.tab
 
       fileReader.readAsText file
 
@@ -248,7 +247,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @onTheraPaginate = onTheraPaginate
   @onReorder = onReorder
   @removeFilter = removeFilter
-  @clearMarketTable = clearMarketTable
+  @clearTable = clearTable
   @timeStamp = timeStamp
 
   return

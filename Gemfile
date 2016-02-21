@@ -14,7 +14,7 @@ gem 'responders'
 gem 'coffee-rails'
 gem 'angular-rails-templates', '>= 1.0'
 gem 'pundit'
-gem 'pg'
+gem 'httparty'
 # gem 'reve', :git => 'git@github.com:lisa/reve.git'
 
 source 'https://rails-assets.org' do
@@ -30,6 +30,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-ng-rails-csrf'
   gem 'rails-assets-daniel-nagy--md-data-table'
   gem 'rails-assets-ng-file-upload'
+  gem 'rails-assets-moment'
+  gem 'rails-assets-angular-moment', '1.0.0.beta.4'
 end
 
 group :development do

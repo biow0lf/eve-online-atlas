@@ -78,7 +78,7 @@ GEM
     excon (0.45.4)
     execjs (2.6.0)
     fabrication (2.14.1)
-    faker (1.6.1)
+    faker (1.6.2)
       i18n (~> 0.5)
     ffi (1.9.10)
     fission (0.5.0)
@@ -196,6 +196,9 @@ GEM
     git-version-bump (0.15.1)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     inflecto (0.0.2)
     ipaddress (0.8.3)
@@ -209,20 +212,20 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    meta_request (0.3.4)
+    meta_request (0.4.0)
       callsite (~> 0.0, >= 0.0.11)
       rack-contrib (~> 1.1)
-      railties (>= 3.0.0, < 5.0.0)
+      railties (>= 3.0.0, < 5.1.0)
     mime-types (2.99)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     multi_json (1.11.2)
+    multi_xml (0.5.5)
     mysql2 (0.3.20)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     parser (2.3.0.6)
       ast (~> 2.2)
-    pg (0.18.4)
     phantomjs (2.1.1.0)
     powerpack (0.1.1)
     puma (2.16.0)
@@ -260,6 +263,9 @@ GEM
       rails-assets-angular (= 1.5.0)
     rails-assets-angular-mocks (1.5.0)
       rails-assets-angular (= 1.5.0)
+    rails-assets-angular-moment (1.0.0.beta.4)
+      rails-assets-angular (>= 1.2.0, < 1.6.0)
+      rails-assets-moment (>= 2.8.0, < 2.12.0)
     rails-assets-angular-permission (2.0.9)
       rails-assets-angular (~> 1.0)
       rails-assets-angular-ui-router (~> 0.2.0)
@@ -274,6 +280,7 @@ GEM
       rails-assets-angular (>= 1.4.0, < 2)
       rails-assets-angular-material (>= 1.0.0, < 2)
     rails-assets-lodash (4.5.0)
+    rails-assets-moment (2.11.2)
     rails-assets-ng-file-upload (12.0.1)
       rails-assets-angular (> 1.2.0)
     rails-assets-ng-rails-csrf (0.1.0)
@@ -372,10 +379,10 @@ DEPENDENCIES
   fabrication
   faker
   fog
+  httparty
   jquery-rails
   meta_request
   mysql2 (~> 0.3.18)
-  pg
   phantomjs
   puma
   pundit
@@ -384,12 +391,14 @@ DEPENDENCIES
   rails-assets-angular-material!
   rails-assets-angular-messages!
   rails-assets-angular-mocks
+  rails-assets-angular-moment (= 1.0.0.beta.4)!
   rails-assets-angular-permission!
   rails-assets-angular-recursion!
   rails-assets-angular-restmod!
   rails-assets-angular-ui-router!
   rails-assets-daniel-nagy--md-data-table!
   rails-assets-lodash!
+  rails-assets-moment!
   rails-assets-ng-file-upload!
   rails-assets-ng-rails-csrf!
   rails-assets-ui-router-extras!

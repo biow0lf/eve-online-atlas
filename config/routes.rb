@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   root 'crest#index'
 
+  get '/thera' => 'crest#thera'
+
   # everything else falls down to angular's ui-router
   get '*path' => 'crest#index'
 end

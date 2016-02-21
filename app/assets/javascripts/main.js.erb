@@ -1,13 +1,9 @@
-var app = angular.module('CrestApiContest', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'RecursionHelper', 'templates', 'restmod', 'permission', 'md.data.table', 'ngFileUpload', 'ct.ui.router.extras']);
+var app = angular.module('CrestApiContest', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'RecursionHelper', 'templates', 'restmod', 'permission', 'md.data.table', 'ngFileUpload', 'ct.ui.router.extras', 'angularMoment']);
 
 app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', '$urlRouterProvider', '$stickyStateProvider', function ($httpProvider, $stateProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, $urlRouterProvider, $stickyStateProvider) {
 
-//   $httpProvider.defaults.useXDomain = true;
-//   delete $httpProvider.defaults.headers.common['X-Requested-With'];
-//
-//   $httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-
   // $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
+
   $locationProvider.html5Mode({
     enabled: true
   });

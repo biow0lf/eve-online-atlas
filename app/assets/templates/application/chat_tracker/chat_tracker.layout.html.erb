@@ -6,7 +6,7 @@
   </div>
 
   <md-card layout="column" flex layout-margin class="md-whiteframe-z2">
-    <md-tabs flex>
+    <md-tabs flex md-selected="ctc.selectedTab">
       <md-tab label="Market" flex>
         <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
           <div class="md-toolbar-tools">
@@ -29,7 +29,7 @@
             <tbody md-body>
             <tr md-row md-select="command" md-select-id="{{command.id}}" ng-class="{'buy-order': command.buyOrder, 'sell-order': command.sellOrder}" md-auto-select ng-repeat="command in ctc.commandsToShow.market">
               <td md-cell>{{command.name}}</td>
-              <td md-cell>{{command.time}}</td>
+              <td md-cell am-time-ago="command.time"></td>
               <td md-cell>{{command.result.item}}</td>
               <td md-cell>{{command.result.price}}</td>
             </tr>
@@ -42,7 +42,7 @@
       <md-tab label="thera" flex>
         <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
           <div class="md-toolbar-tools">
-            <h2>Thera Commands {{ctc.commandTime.thera > 0 ? ' - Last Command Time - ' +
+            <h2>Thera Connections {{ctc.commandTime.thera > 0 ? ' - Last Command Time - ' +
               ctc.timeStamp(ctc.commandTime.thera) : ''}}</h2>
             <div flex></div>
             <md-button ng-show="ctc.commands.thera.length" ng-click="ctc.clearTable('thera')">Clear Table</md-button>
@@ -54,12 +54,12 @@
             <tr md-row>
               <th md-column><span>Region</span></th>
               <th md-column><span>System</span></th>
-              <th md-column><span>Jumps</span></th>
+              <th md-column md-numeric><span>Jumps</span></th>
               <th md-column><span>Type</span></th>
               <th md-column><span>Out Sig</span></th>
               <th md-column><span>In Sig</span></th>
-              <th md-column><span>Estimated Life</span></th>
-              <th md-column><span>Updated</span></th>
+              <th md-column md-numeric><span>Estimated Life</span></th>
+              <th md-column md-numeric><span>Updated</span></th>
             </tr>
             </thead>
             <tbody md-body>
@@ -70,8 +70,8 @@
               <td md-cell>{{command.type}}</td>
               <td md-cell>{{command.outSig}}</td>
               <td md-cell>{{command.inSig}}</td>
-              <td md-cell>{{command.estimateLife}}</td>
-              <td md-cell>{{command.updated}}</td>
+              <td md-cell>{{command.estimatedLife | amDifference : null : 'hours' }} hours</td>
+              <td md-cell am-time-ago="command.updated"></td>
             </tr>
             </tbody>
           </table>

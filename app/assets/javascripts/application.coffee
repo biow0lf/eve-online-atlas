@@ -17,6 +17,7 @@
 #= require angular
 #= require angular-ui-router
 #= require ui-router-extras
+#= require moment
 #= require angular-aria
 #= require angular-animate
 #= require angular-material
@@ -25,6 +26,7 @@
 #= require angular-rails-templates
 #= require angular-restmod
 #= require angular-permission
+#= require angular-moment
 #= require ng-rails-csrf
 #= require angular-material-data-table
 #= require ng-file-upload

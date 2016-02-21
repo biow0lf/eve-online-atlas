@@ -10,20 +10,19 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
     # console.log 'getBuyPrices', regionId, items
     promises = _.map(items, (item) ->
       url = "#{factory.rootUrl}/market/#{regionId}/orders/buy/?type=#{factory.rootUrl}/types/#{item}/"
-      return $http(method: 'GET', url: url)
+      return $http.get(url)
     )
     return $q.all(promises)
 
   factory.getSellPrices = (regionId, items) ->
     promises = _.map(items, (item) ->
       url = "#{factory.rootUrl}/market/#{regionId}/orders/sell/?type=#{factory.rootUrl}/types/#{item}/"
-      return $http(method: 'GET', url: url)
+      return $http.get(url)
     )
     return $q.all(promises)
 
   factory.getTheraInfo = (system) ->
-    url = "https://eve-scout.com/api/wormholes?systemSearch=#{system}?callback=JSON_CALLBACK"
-    return $http.jsonp(url)
+    return $http.get("/thera?system=#{system}")
 
   return factory
 ]
