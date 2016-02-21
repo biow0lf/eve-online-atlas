@@ -2,8 +2,10 @@ var app = angular.module('CrestApiContest', ['ui.router', 'ngAria', 'ngAnimate',
 
 app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', '$urlRouterProvider', '$stickyStateProvider', function ($httpProvider, $stateProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, $urlRouterProvider, $stickyStateProvider) {
 
-  $httpProvider.defaults.useXDomain = true;
-  delete $httpProvider.defaults.headers.common['X-Requested-With'];
+//   $httpProvider.defaults.useXDomain = true;
+//   delete $httpProvider.defaults.headers.common['X-Requested-With'];
+//
+//   $httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
   // $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
   $locationProvider.html5Mode({
@@ -35,13 +37,13 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     abstract: true,
     views: {
       '': {
-        templateUrl: 'application/layout/layout.html'
+        templateUrl: 'application/root/root.layout.html'
       },
       'toolbar@root': {
-        templateUrl: 'application/layout/toolbar.html'
+        templateUrl: 'application/root/root.toolbar.html'
       },
       'sidenav@root': {
-        templateUrl: 'application/layout/sidenav.html'
+        templateUrl: 'application/root/root.sidenav.html'
       }
     }
   };
@@ -50,14 +52,14 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     name: 'root.dashboard',
     parent: root,
     url: '/',
-    templateUrl: 'application/dashboard/layout.html'
+    templateUrl: 'application/dashboard/dashboard.layout.html'
   };
 
   var chat_tracker = {
     name: 'root.chat_tracker',
     parent: root,
     url: '/chat_tracker',
-    templateUrl: 'application/chat_tracker/layout.html',
+    templateUrl: 'application/chat_tracker/chat_tracker.layout.html',
     sticky: true,
     dsr: true
   };

@@ -161,25 +161,29 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                 crestService.getBuyPrices(@regionId, converted).then (responses) =>
                   for response in responses
                     price = getTrimmedMean(response.data.items, 0.2)
-                    @commands.market.push({id: @commands.length, time: timeStamp(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
+                    @commands.market.push({id: @commands.market.length, time: timeStamp(), buyOrder: true, sellOrder: false, name: 'PriceCheckBuy', result: {item: response.data.items[0].type.name, price: price}})
                   onMarketPaginate(@query.market.page, @query.market.limit)
 
               else if command.indexOf('!pcs') >= 0
                 crestService.getSellPrices(@regionId, converted).then (responses) =>
                   for response in responses
-                    @commands.market.push({id: @commands.length, time: timeStamp(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
+                    @commands.market.push({id: @commands.market.length, time: timeStamp(), buyOrder: false, sellOrder: true, name: 'PriceCheckSell', result: {item: response.data.items[0].type.name, price: getTrimmedMean(response.data.items, 0.2)}})
                   onMarketPaginate(@query.market.page, @query.market.limit)
 
               else if command.indexOf('!thera') >= 0
-
-                crestService.getTheraInfo(converted[0]).then (response) =>
+                console.log 'doing thera'
+                crestService.getTheraInfo(converted[0]).success (response) =>
+                  console.log 'response', response
                   @commands.thera = []
-                  console.log response
+                  for item in response
+                    @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
+                  console.log @commands.thera
+                  onTheraPaginate(@query.thera.page, @query.thera.limit)
 
       fileReader.readAsText file
 
   onMarketPaginate = (page, limit) =>
-    console.log 'page', page, 'limit', limit
+    console.log 'market: page', page, 'limit', limit
     if page != undefined and limit != undefined
       @query.market.page = page
       @query.market.limit = limit
@@ -198,7 +202,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       # console.log @query.page, @query.limit, initial, @commandsToShow
 
   onTheraPaginate = (page, limit) =>
-    console.log 'page', page, 'limit', limit
+    console.log 'thera: page', page, 'limit', limit
     if page != undefined and limit != undefined
       @query.thera.page = page
       @query.thera.limit = limit
