@@ -137,7 +137,9 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
             unless line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
               if line.indexOf('Listener:') >= 0
                 # add Listener character
-                @characters.push _.map(line.split(':'), (l) -> return _.trim(l))[1]
+                c = _.map(line.split(':'), (l) -> return _.trim(l))[1]
+                @characters.push c
+                console.log 'Added character:', c
 
           command = ''
           set = ''
@@ -167,7 +169,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                     return int
                 )
 
-                console.log 'command', command, 'set', set, 'converted', converted
+                console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
 
                 if command.indexOf('!pcb') >= 0
                   crestService.getBuyPrices(@regionId, converted).then (responses) =>
@@ -195,7 +197,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       fileReader.readAsText file
 
   onMarketPaginate = (page, limit) =>
-    console.log 'market: page', page, 'limit', limit
+    # console.log 'market: page', page, 'limit', limit
     if page != undefined and limit != undefined
       @query.market.page = page
       @query.market.limit = limit
@@ -214,7 +216,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       # console.log @query.page, @query.limit, initial, @commandsToShow
 
   onTheraPaginate = (page, limit) =>
-    console.log 'thera: page', page, 'limit', limit
+    # console.log 'thera: page', page, 'limit', limit
     if page != undefined and limit != undefined
       @query.thera.page = page
       @query.thera.limit = limit
