@@ -18,7 +18,7 @@
         </md-toolbar>
         <md-table-container style="margin-bottom: 0; margin-top: 0;">
           <table md-table md-row-select ng-model="ctc.selected.market">
-            <thead md-head md-order="ctc.query.market.order" md-on-reorder="ctc.onReorder">
+            <thead md-head md-order="ctc.query.market.order" md-on-reorder="ctc.onMarketReorder">
             <tr md-row>
               <th md-column><span>System</span></th>
               <th md-column><span>Item</span></th>
@@ -44,19 +44,18 @@
       <md-tab label="thera" flex>
         <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
           <div class="md-toolbar-tools">
-            <h2>Thera Connections {{ctc.commandTime.thera > 0 ? ' - Last Command Time - ' +
-              ctc.timeStamp(ctc.commandTime.thera) : ''}}</h2>
+            <h2>Thera Connections {{ctc.theraOrigin != '' ? ' from ' + ctc.theraOrigin : ''}}</h2>
             <div flex></div>
             <md-button ng-show="ctc.commands.thera.length" ng-click="ctc.clearTable('thera')">Clear Table</md-button>
           </div>
         </md-toolbar>
         <md-table-container style="margin-bottom: 0; margin-top: 0;">
           <table md-table md-row-select ng-model="ctc.selected.market">
-            <thead md-head md-order="ctc.query.thera.order" md-on-reorder="ctc.onReorder">
+            <thead md-head md-order="ctc.query.thera.order" md-on-reorder="ctc.onTheraReorder">
             <tr md-row>
               <th md-column><span>Region</span></th>
               <th md-column><span>System</span></th>
-              <th md-column md-numeric><span>Jumps</span></th>
+              <th md-column md-order-by="jumps"><span>Jumps</span></th>
               <th md-column><span>Type</span></th>
               <th md-column><span>Out Sig</span></th>
               <th md-column><span>In Sig</span></th>
@@ -80,6 +79,35 @@
         </md-table-container>
         <md-table-pagination md-limit="ctc.query.thera.limit" md-page="ctc.query.thera.page" md-total="{{ctc.commands.thera.length}}" md-on-paginate="ctc.onTheraPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
       </md-tab>
+
+      <md-tab label="Characters" flex>
+        <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+          <div class="md-toolbar-tools">
+            <h2>Character Listeners {{ctc.commandTime.chat > 0 ? ' - Last Command Time - ' +
+              ctc.timeStamp(ctc.commandTime.chat) : ''}}</h2>
+            <div flex></div>
+            <md-button ng-show="ctc.commands.chat.length" ng-click="ctc.clearTable('char')">Clear Table</md-button>
+          </div>
+        </md-toolbar>
+        <md-table-container style="margin-bottom: 0; margin-top: 0;">
+          <table md-table md-row-select ng-model="ctc.selected.char">
+            <thead md-head md-order="ctc.query.thera.order" md-on-reorder="ctc.onCharReorder">
+            <tr md-row>
+              <th md-column><span>Name</span></th>
+              <th md-column><span>Added</span></th>
+            </tr>
+            </thead>
+            <tbody md-body>
+            <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.char">
+              <td md-cell>{{command.name}}</td>
+              <td md-cell am-time-ago="command.time"></td>
+            </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-table-pagination md-limit="ctc.query.char.limit" md-page="ctc.query.char.page" md-total="{{ctc.commands.char.length}}" md-on-paginate="ctc.onCharPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+      </md-tab>
+
     </md-tabs>
   </md-card>
 

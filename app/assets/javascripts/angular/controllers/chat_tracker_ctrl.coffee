@@ -7,26 +7,37 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @interval = null
   @lastMod = @file.lastModifiedDate
   @system = 'Jita'
+  @theraOrigin = ''
 
   @selected =
     market: []
     thera: []
+    char: []
+    command: []
 
   @commandTime =
     market: new Date('1969.12.31 18:00:00')
     thera: new Date('1969.12.31 18:00:00')
+    char: new Date('1969.12.31 18:00:00')
+    command: new Date('1969.12.31 18:00:00')
 
   @commandList =
-    market: ['!pc', '!marketsystem']
+    market: ['!market', '!pc', '!marketsystem']
     thera: ['!thera']
+    char: ['!char', '!addchar', '!removechar']
+    command: ['!commands', '!help']
 
   @commands =
     market: []
     thera: []
+    char: []
+    command: []
 
   @commandsToShow =
     market: []
     thera: []
+    char: []
+    command: []
 
   @filter = {
     options: {
@@ -37,16 +48,28 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @query =
     market:
       filter: '',
-      order: 'nameToLower',
+      order: '',
       limit: 5,
       page: 1
       tab: 0
     thera:
       filter: '',
-      order: 'nameToLower',
+      order: '',
       limit: 5,
       page: 1
       tab: 1
+    char:
+      filter: '',
+      order: '',
+      limit: 5,
+      page: 1
+      tab: 2
+    command:
+      filter: '',
+      order: '',
+      limit: 5,
+      page: 1
+      tab: 3
 
   clearTable = (tab) =>
     @selected[tab] = []
@@ -114,13 +137,15 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
           # check to see if line contains a command
 
           # if character not set, set it
-          if _.isEmpty(@characters)
+          if _.isEmpty(@commands.char)
             # make sure that we get the Listener: {character name} line and not a regular log line
             unless line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
               if line.indexOf('Listener:') >= 0
                 # add Listener character
                 c = _.map(line.split(':'), (l) -> return _.trim(l))[1]
-                @characters.push c
+                @commands.char.push {name: c, time: Date.now()}
+                onCharPaginate(@query.char.page, @query.char.limit)
+                @selectedTab = @query.char.tab
                 console.log 'Added character:', c
 
           command = ''
@@ -134,8 +159,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
           if command.length > 0
             # verify character
             character_name = line.substr(line.indexOf(']')+2, line.indexOf('>')-1-(line.indexOf(']')+2))
-            if character_name in @characters
-
+            if _.some(@commands.char, (char) -> return _.lowerCase(char.name) == _.lowerCase(character_name))
               commandTime = new Date(line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)[0])
               if commandTime.getTime() > @commandTime[set].getTime()
                 # if command is after newest command timestamp, save command time and execute command
@@ -163,12 +187,18 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
                 console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
 
-                if command.indexOf('!marketsystem') >= 0
+                if command.indexOf('!market') >= 0
+                  @selectedTab = @query.market.tab
+                  
+                if command.indexOf('!char') >= 0
+                  @selectedTab = @query.char.tab
+
+                else if command.indexOf('!marketsystem') >= 0
                   crestService.isValidSystem(converted[0]).then (response) =>
                     if response.data != null
                       @system = response.data.solarSystemName
 
-                if command.indexOf('!pc') >= 0
+                else if command.indexOf('!pc') >= 0
                   crestService.getPrices(@system, converted).then (response) =>
                     for item in response.data
                       @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: item.buy_price, sell_price: item.sell_price, system: item.system}})
@@ -176,6 +206,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                     @selectedTab = @query.market.tab
 
                 else if command.indexOf('!thera') >= 0
+                  @theraOrigin = _.upperFirst(converted[0])
                   crestService.getTheraInfo(converted[0]).then (response) =>
                     @commands.thera = []
                     for item in response.data
@@ -183,56 +214,89 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                     onTheraPaginate(@query.thera.page, @query.thera.limit)
                     @selectedTab = @query.thera.tab
 
+                else if command.indexOf('!addchar') >= 0
+                  @commands.char.unshift {name: converted[0], time: Date.now()}
+                  onCharPaginate(@query.char.page, @query.char.limit)
+                  @selectedTab = @query.char.tab
+                  console.log 'Added character:', converted[0]
+
+                else if command.indexOf('!removechar') >= 0
+                  if @commands.char.length > 1
+                    if converted[0] == 'self'
+                      converted[0] = character_name
+                    @commands.char = _.filter(@commands.char, (char) -> return _.toLower(char.name) != _.toLower(converted[0]))
+                    onCharPaginate(@query.char.page, @query.char.limit)
+                    @selectedTab = @query.char.tab
+                    console.log @commands.char
+                    console.log 'Removed character:', converted[0]
+                  else
+                    console.log 'Cannot remove last character'
+
       fileReader.readAsText file
 
-  onMarketPaginate = (page, limit) =>
+  onPaginate = (page, limit, tab) =>
     # console.log 'market: page', page, 'limit', limit
     if page != undefined and limit != undefined
-      @query.market.page = page
-      @query.market.limit = limit
+      @query[tab].page = page
+      @query[tab].limit = limit
       initial = (page - 1) * limit
       # case 1 - there are enough commands to paginate
-      if initial < @commands.market.length
-        if @commands.market.length - initial >= limit
-          # and there are enough commands left to show at least the limit
-          @commandsToShow.market = @commands.market.slice(initial, initial + limit)
+      if initial < @commands[tab].length
+        @query[tab].page = 1
+        if @commands[tab].length - initial >= limit
+        # and there are enough commands left to show at least the limit
+          @commandsToShow[tab] = @commands[tab].slice(initial, initial + limit)
         else
-          # or there aren't enough, and just show what's left
-          @commandsToShow.market = @commands.market.slice(initial, @commands.market.length)
+        # or there aren't enough, and just show what's left
+          @commandsToShow[tab] = @commands[tab].slice(initial, @commands[tab].length)
       else
-        # case 2 - not enough to paginate
-        @commandsToShow.market = @commands.market
-      # console.log @query.page, @query.limit, initial, @commandsToShow
+      # case 2 - not enough to paginate
+        @commandsToShow[tab] = @commands[tab]
+        # console.log @query.page, @query.limit, initial, @commandsToShow
+
+  onReorder = (order, tab) =>
+    if order.indexOf('-') >= 0
+      order = order.substr(1, order.length)
+      @commands[tab].sort((a, b) ->
+        if tab == 'thera' and order.indexOf('jumps') >= 0 and a[order] == 0 or b[order] == 0 then return -1
+        # if tab == 'thera' and order.indexOf('jumps') >= 0 and b[order] == 0 then return -1
+        if a[order] < b[order] then return -1
+        if a[order] > b[order] then return 1
+        return 0
+      ).reverse()
+    else
+      @commands[tab].sort((a, b) ->
+        if a[order] < b[order] then return -1
+        if a[order] > b[order] then return 1
+        return 0
+      )
+    onPaginate(@query[tab].page, @query[tab].limit, tab)
+    return
+
+  onMarketPaginate = (page, limit) =>
+    onPaginate(page, limit, 'market')
 
   onTheraPaginate = (page, limit) =>
-    # console.log 'thera: page', page, 'limit', limit
-    if page != undefined and limit != undefined
-      @query.thera.page = page
-      @query.thera.limit = limit
-      initial = (page - 1) * limit
-      # case 1 - there are enough commands to paginate
-      if initial < @commands.thera.length
-        if @commands.thera.length - initial >= limit
-          # and there are enough commands left to show at least the limit
-          @commandsToShow.thera = @commands.thera.slice(initial, initial + limit)
-        else
-          # or there aren't enough, and just show what's left
-          @commandsToShow.thera = @commands.thera.slice(initial, @commands.thera.length)
-      else
-        # case 2 - not enough to paginate
-        @commandsToShow.thera = @commands.thera
-      # console.log @query.page, @query.limit, initial, @commandsToShow  
-  
-  onReorder = (order) =>
-    @query.order = order
-    # need to do reorder logic
+    onPaginate(page, limit, 'thera')
 
+  onCharPaginate = (page, limit) =>
+    onPaginate(page, limit, 'char')
+
+  onMarketReorder = (order) =>
+    onReorder(order, 'market')
+
+  onTheraReorder = (order) =>
+    onReorder(order, 'thera')
+
+  onCharReorder = (order) =>
+    onReorder(order, 'char')
 
   removeFilter = =>
     # @filter.show = false
     @query.filter = ''
 
   init = =>
+    console.log 'initializing'
     return
 
   init()
@@ -249,7 +313,10 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @setFile = setFile
   @onMarketPaginate = onMarketPaginate
   @onTheraPaginate = onTheraPaginate
-  @onReorder = onReorder
+  @onCharPaginate = onCharPaginate
+  @onMarketReorder = onMarketReorder
+  @onTheraReorder = onTheraReorder
+  @onCharReorder = onCharReorder
   @removeFilter = removeFilter
   @clearTable = clearTable
   @timeStamp = timeStamp
