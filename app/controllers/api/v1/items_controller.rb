@@ -9,11 +9,6 @@ module Api
       # after_action :verify_policy_scoped, only: :index
 
       def index
-        # check to see if player stations need to be updated
-        if Playerstation.first.created_at < Date.current - 1.hour
-          UpdatePlayerstations.update_playerstations
-        end
-
         items = []
         # default to Jita
         system = 30_000_142
@@ -36,6 +31,8 @@ module Api
           b_items['items'].each do |i|
             station = Station.find_by(stationID: i['location']['id'].to_i)
             if station == nil
+              # check to see if player stations need to be updated
+              check_playerstations
               station = Playerstation.find_by(stationID: i['location']['id'].to_i)
             end
             if station.solarsystem.solarSystemID == solarsystem.solarSystemID
@@ -48,6 +45,8 @@ module Api
           s_items = JSON.parse sell
           s_items_from_system = []
           s_items['items'].each do |i|
+            # check to see if player stations need to be updated
+            check_playerstations
             station = Station.find_by(stationID: i['location']['id'].to_i)
             if station == nil
               station = Playerstation.find_by(stationID: i['location']['id'].to_i)
@@ -75,6 +74,12 @@ module Api
       end
 
       private
+
+      def check_playerstations
+        if Playerstation.first.created_at < Date.current - 1.hour
+          UpdatePlayerstations.update_playerstations
+        end
+      end
 
       def find_item_by_name(names)
         return Item.where(typeName: names.split(',')) if names.include?(',')
