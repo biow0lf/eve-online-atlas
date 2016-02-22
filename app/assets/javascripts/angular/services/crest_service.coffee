@@ -11,6 +11,9 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
 
   factory.getTheraInfo = (system) ->
     return $http.get("/thera?system=#{system}")
+	
+  factory.getAgents = (system) ->
+    return $http.get("api/v1/agents?")
 
   return factory
 ]

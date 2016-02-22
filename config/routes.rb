@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :items, only: [:index, :show]
       resources :solarsystems, only: [:index, :show]
+	  resources :agents, only: [:index, :show]
     end
   end
 
