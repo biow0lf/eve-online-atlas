@@ -24,7 +24,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @commandList =
     market: ['!market', '!pc', '!marketsystem']
     thera: ['!thera']
-    char: ['!char', '!addchar', '!removechar']
+    char: ['!char', '!allow', '!remove']
     command: ['!commands', '!help']
 
   @commands =
@@ -189,9 +189,12 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
                 if command.indexOf('!market') >= 0
                   @selectedTab = @query.market.tab
-                  
-                if command.indexOf('!char') >= 0
+
+                else if command.indexOf('!char') >= 0
                   @selectedTab = @query.char.tab
+
+                else if command.indexOf('!commands') >= 0 or command.indexOf('!help') >= 0
+                  @selectedTab = @query.command.tab
 
                 else if command.indexOf('!marketsystem') >= 0
                   crestService.isValidSystem(converted[0]).then (response) =>
@@ -214,13 +217,13 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                     onTheraPaginate(@query.thera.page, @query.thera.limit)
                     @selectedTab = @query.thera.tab
 
-                else if command.indexOf('!addchar') >= 0
+                else if command.indexOf('!allow') >= 0
                   @commands.char.unshift {name: converted[0], time: Date.now()}
                   onCharPaginate(@query.char.page, @query.char.limit)
                   @selectedTab = @query.char.tab
                   console.log 'Added character:', converted[0]
 
-                else if command.indexOf('!removechar') >= 0
+                else if command.indexOf('!remove') >= 0
                   if @commands.char.length > 1
                     if converted[0] == 'self'
                       converted[0] = character_name
@@ -282,6 +285,9 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   onCharPaginate = (page, limit) =>
     onPaginate(page, limit, 'char')
 
+  onCommandPaginate = (page, limit) =>
+    onPaginate(page, limit, 'command')
+
   onMarketReorder = (order) =>
     onReorder(order, 'market')
 
@@ -291,12 +297,25 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   onCharReorder = (order) =>
     onReorder(order, 'char')
 
+  onCommandReorder = (order) =>
+    onReorder(order, 'command')
+
   removeFilter = =>
     # @filter.show = false
     @query.filter = ''
 
   init = =>
     console.log 'initializing'
+    @commands.command.push({name: '!market', set: 'Market', argument: '', description: 'Switches to the market tab'})
+    @commands.command.push({name: '!pc', set: 'Market', argument: 'List of item names separated by comma or doublespace', description: 'Price checks an item in the current market system'})
+    @commands.command.push({name: '!marketsystem', set: 'Market', argument: '[system name]', description: 'Sets the current market system for checking prices. Does not change if system name is invalid.'})
+    @commands.command.push({name: '!thera', set: 'Thera', argument: '[system name]', description: 'Finds distances to Thera wormholes from given system'})
+    @commands.command.push({name: '!char', set: 'Character', argument: '', description: 'Switches to the character tab'})
+    @commands.command.push({name: '!allow', set: 'Character', argument: '[character name]', description: 'Adds [character name] to set of characters allowed to use commands'})
+    @commands.command.push({name: '!remove', set: 'Character', argument: '[character name] or \'self\'', description: 'Removes [character name] form set of characters allowed to use commands. Removes current character if \'self\''})
+    @commands.command.push({name: '!commands', set: 'Command', argument: '', description: 'Switches to the command tab'})
+    @commands.command.push({name: '!help', set: 'Command', argument: '', description: 'Switches to the command tab'})
+    onCommandPaginate(@query.command.page, @query.command.limit)
     return
 
   init()
@@ -314,9 +333,11 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @onMarketPaginate = onMarketPaginate
   @onTheraPaginate = onTheraPaginate
   @onCharPaginate = onCharPaginate
+  @onCommandPaginate = onCommandPaginate
   @onMarketReorder = onMarketReorder
   @onTheraReorder = onTheraReorder
   @onCharReorder = onCharReorder
+  @onCommandReorder = onCommandReorder
   @removeFilter = removeFilter
   @clearTable = clearTable
   @timeStamp = timeStamp
