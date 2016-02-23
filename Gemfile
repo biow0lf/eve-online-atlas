@@ -15,6 +15,7 @@ gem 'coffee-rails'
 gem 'angular-rails-templates', '>= 1.0'
 gem 'pundit'
 gem 'httparty'
+gem 'composite_primary_keys'
 # gem 'reve', :git => 'git@github.com:lisa/reve.git'
 
 source 'https://rails-assets.org' do
@@ -24,9 +25,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-ui-router-extras'
   gem 'rails-assets-angular-material'
   gem 'rails-assets-angular-messages'
-  gem 'rails-assets-angular-recursion'
   gem 'rails-assets-angular-permission'
-  gem 'rails-assets-angular-restmod'
   gem 'rails-assets-ng-rails-csrf'
   gem 'rails-assets-daniel-nagy--md-data-table'
   gem 'rails-assets-ng-file-upload'
@@ -54,6 +53,4 @@ group :production do
   gem 'uglifier', '>= 1.3.0'
   gem 'therubyracer'
   gem 'fog'
-  gem 'puma'
-  gem 'rails_12factor'
 end

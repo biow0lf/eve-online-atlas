@@ -22,9 +22,7 @@
 #= require angular-animate
 #= require angular-material
 #= require angular-messages
-#= require angular-recursion
 #= require angular-rails-templates
-#= require angular-restmod
 #= require angular-permission
 #= require angular-moment
 #= require ng-rails-csrf

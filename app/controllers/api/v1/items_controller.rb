@@ -45,10 +45,10 @@ module Api
           s_items = JSON.parse sell
           s_items_from_system = []
           s_items['items'].each do |i|
-            # check to see if player stations need to be updated
-            check_playerstations
             station = Station.find_by(stationID: i['location']['id'].to_i)
             if station == nil
+              # check to see if player stations need to be updated
+              check_playerstations
               station = Playerstation.find_by(stationID: i['location']['id'].to_i)
             end
             if station.solarsystem.solarSystemID == solarsystem.solarSystemID

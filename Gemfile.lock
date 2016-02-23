@@ -71,6 +71,8 @@ GEM
       compass (~> 1.0.0)
       sass-rails (< 5.1)
       sprockets (< 4.0)
+    composite_primary_keys (8.1.2)
+      activerecord (~> 4.2.0)
     concurrent-ruby (1.0.0)
     database_cleaner (1.5.1)
     docile (1.1.5)
@@ -216,7 +218,7 @@ GEM
       callsite (~> 0.0, >= 0.0.11)
       rack-contrib (~> 1.1)
       railties (>= 3.0.0, < 5.1.0)
-    mime-types (2.99)
+    mime-types (2.99.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     multi_json (1.11.2)
@@ -228,7 +230,6 @@ GEM
       ast (~> 2.2)
     phantomjs (2.1.1.0)
     powerpack (0.1.1)
-    puma (2.16.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     rack (1.6.4)
@@ -253,7 +254,6 @@ GEM
       rails-assets-angular (= 1.5.0)
     rails-assets-angular-aria (1.5.0)
       rails-assets-angular (= 1.5.0)
-    rails-assets-angular-inflector (0.2.3)
     rails-assets-angular-material (1.0.5)
       rails-assets-angular (>= 1.4.8, < 2)
       rails-assets-angular-animate (>= 1.4.8, < 2)
@@ -269,17 +269,12 @@ GEM
     rails-assets-angular-permission (2.0.9)
       rails-assets-angular (~> 1.0)
       rails-assets-angular-ui-router (~> 0.2.0)
-    rails-assets-angular-recursion (1.0.5)
-      rails-assets-angular (>= 1.2.0)
-    rails-assets-angular-restmod (1.1.11)
-      rails-assets-angular (~> 1)
-      rails-assets-angular-inflector (~> 0.2.0)
     rails-assets-angular-ui-router (0.2.18)
       rails-assets-angular (>= 1.0.8, < 2)
     rails-assets-daniel-nagy--md-data-table (0.9.11)
       rails-assets-angular (>= 1.4.0, < 2)
       rails-assets-angular-material (>= 1.0.0, < 2)
-    rails-assets-lodash (4.5.0)
+    rails-assets-lodash (4.5.1)
     rails-assets-moment (2.11.2)
     rails-assets-ng-file-upload (12.0.1)
       rails-assets-angular (> 1.2.0)
@@ -300,11 +295,6 @@ GEM
       ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
-    rails_12factor (0.0.3)
-      rails_serve_static_assets
-      rails_stdout_logging
-    rails_serve_static_assets (0.0.5)
-    rails_stdout_logging (0.0.4)
     railties (4.2.0)
       actionpack (= 4.2.0)
       activesupport (= 4.2.0)
@@ -375,6 +365,7 @@ DEPENDENCIES
   angular-rails-templates (>= 1.0)
   coffee-rails
   compass-rails
+  composite_primary_keys
   database_cleaner
   fabrication
   faker
@@ -384,7 +375,6 @@ DEPENDENCIES
   meta_request
   mysql2 (~> 0.3.18)
   phantomjs
-  puma
   pundit
   rails (= 4.2.0)
   rails-assets-angular!
@@ -393,8 +383,6 @@ DEPENDENCIES
   rails-assets-angular-mocks
   rails-assets-angular-moment (= 1.0.0.beta.4)!
   rails-assets-angular-permission!
-  rails-assets-angular-recursion!
-  rails-assets-angular-restmod!
   rails-assets-angular-ui-router!
   rails-assets-daniel-nagy--md-data-table!
   rails-assets-lodash!
@@ -403,7 +391,6 @@ DEPENDENCIES
   rails-assets-ng-rails-csrf!
   rails-assets-ui-router-extras!
   rails-erd
-  rails_12factor
   responders
   rubocop
   sass
