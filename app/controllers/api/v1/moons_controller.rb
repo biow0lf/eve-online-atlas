@@ -21,13 +21,14 @@ module Api
           tmp = a.as_json
 
           tmp['statistics'] = a.celestialstatistic
+		  tmp['materials'] = a.moonmaterial
 
           # push the result to the output
           result.push(tmp)
         end
 
         # return the output
-        render json: moons.as_json
+        render json: result.as_json
       end
     end
   end

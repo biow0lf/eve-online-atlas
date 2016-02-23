@@ -3,7 +3,7 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
   factory = {}
 
   factory.isValidSystem = (system) ->
-    return $http.get("/api/v1/solarsystems/#{system}")
+    $http.get("/api/v1/solarsystems?name={system}")
 
   factory.getPrices = (system, items) ->
     names = encodeURI(items)
@@ -14,6 +14,15 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
 	
   factory.getAgents = (system) ->
     return $http.get("api/v1/agents?")
+	
+  factory.getSolarSystem = (locationID) ->
+	return $http.get("api/v1/solarsystems/#{locationID}")
+	
+  factory.getPlanet = (solarSystemID, planetID) ->
+	return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}")
+	
+  factory.getMoon = (solarSystemID, planetID, moonID) ->
+	return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}/moons/#{moonID}")
 
   return factory
 ]

@@ -6,36 +6,33 @@ module Api
       # after_action :verify_policy_scoped, only: :index
 
       def index
-        render json: Solarsystem.all.to_json
+
+        render json: solarsystem.to_json
       end
 
       def show
+		# permit proper parameters
+        ssp = planet_params
+	  	  
         # find planets by solarSystemID as int
-        planets = Solarsystem.find_by(solarSystemID: params[:solarsystem_id].to_i).planets.where(itemID: params[:id].to_i)
-        # create output array
-        result = []
-        # for each planet in the relationship
-        planets.each do |a|
-          # dump the planet to a tmp variable as json
-          tmp = a.as_json
-
-          tmp['moonIDs'] = a.moons.pluck(:itemID)
-
-          # Lookup the typeName from Items table
-          type = Item.find_by(typeID: a.typeID).typeName
-
-          # add in planet type to the temp variable
-          tmp['type'] = type[/\(([^)]+)\)/, 1]
-
-          # add in the planet's statistics to the tmp variable
-          tmp['statistics'] = a.celestialstatistic
-
-          # push the result to the output
-          result.push(tmp)
+        planet = Solarsystem.find_by(solarSystemID: ssp[:solarsystem_id]).planets.find_by(itemID: params[:id].to_i)
+		
+		# make sure planet is not nil before finding moonIDs
+        unless planet.nil?
+          moon_ids = planet.moons.pluck(:itemID)
+          result = planet.as_json
+          result['moonIDs'] = moon_ids
+		  result['type'] = Item.find_by(typeID: planet.typeID).typeName[/\(([^)]+)\)/, 1]
+          result['statistics'] = planet.celestialstatistic
         end
 
         # return the output
-        render json: result.as_json
+        render json: result
+     end		
+	  private
+
+      def planet_params
+        params.permit(:id, :solarsystem_id)
       end
     end
   end
