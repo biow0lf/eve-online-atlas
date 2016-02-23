@@ -30,7 +30,7 @@ module Api
           b_items_from_system = []
           b_items['items'].each do |i|
             station = Station.find_by(stationID: i['location']['id'].to_i)
-            if station == nil
+            if station.nil?
               # check to see if player stations need to be updated
               check_playerstations
               station = Playerstation.find_by(stationID: i['location']['id'].to_i)
@@ -46,7 +46,7 @@ module Api
           s_items_from_system = []
           s_items['items'].each do |i|
             station = Station.find_by(stationID: i['location']['id'].to_i)
-            if station == nil
+            if station.nil?
               # check to see if player stations need to be updated
               check_playerstations
               station = Playerstation.find_by(stationID: i['location']['id'].to_i)

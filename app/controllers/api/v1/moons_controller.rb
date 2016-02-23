@@ -10,23 +10,24 @@ module Api
       end
 
       def show
-			# find planets by solarSystemID as int
-			planets = Solarsystem.find_by(solarSystemID: params[:solarsystem_id].to_i).planets.where(itemID: params[:planet_id].to_i)
-			# create output array
-			result = []
-			# for each planet in the relationship
-			planets.each do |a|
-				# dump the planet to a tmp variable as json
-				tmp = a.moons.where(itemID: params[:id].to_i)
+        # find planets by solarSystemID as int
+        planet = Solarsystem.find_by(solarSystemID: params[:solarsystem_id].to_i).planets.find_by(itemID: params[:planet_id].to_i)
 
-				# push the result to the output
-				result.push(tmp)
-			end
-			
+        moons = planet.moons.where(itemID: params[:id].to_i)
 
-			# return the output
-			render json: result.as_json
-       
+        result = []
+        # for each planet in the relationship
+        moons.each do |a|
+          tmp = a.as_json
+
+          tmp['statistics'] = a.celestialstatistic
+
+          # push the result to the output
+          result.push(tmp)
+        end
+
+        # return the output
+        render json: moons.as_json
       end
     end
   end

@@ -4,5 +4,4 @@ class Agent < ActiveRecord::Base
 
   belongs_to :station, foreign_key: 'locationID', primary_key: 'locationID'
   has_one :agentname, foreign_key: 'itemID'
-
 end

@@ -11,11 +11,11 @@ module Api
 
         # if there is a :name parameter, use that to find solarsystem
         # else return all solarsystems
-        if ssp.has_key?(:name)
-          solarsystem = Solarsystem.find_by(solarSystemName: ssp[:name])
-        else
-          solarsystem = Solarsystem.all
-        end
+        solarsystem = if ssp.key?(:name)
+                        Solarsystem.find_by(solarSystemName: ssp[:name])
+                      else
+                        Solarsystem.all
+                      end
 
         render json: solarsystem.to_json
       end
