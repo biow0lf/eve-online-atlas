@@ -6,27 +6,41 @@ module Api
       # after_action :verify_policy_scoped, only: :index
 
       def index
-        render json: Solarsystem.all.to_json
+        # permit proper parameters
+        ssp = solarsystem_params
+
+        # if there is a :name parameter, use that to find solarsystem
+        # else return all solarsystems
+        if ssp.has_key?(:name)
+          solarsystem = Solarsystem.find_by(solarSystemName: ssp[:name])
+        else
+          solarsystem = Solarsystem.all
+        end
+
+        render json: solarsystem.to_json
       end
 
       def show
-			# find solar system by solarSystemID as int
-			system = Solarsystem.where(solarSystemID: params[:id].to_i)
-			# create output array
-			result = []
-			# add planetIDs to the solarsystem data
-			system.each do |a|
-			
-				tmp = a.as_json
-				
-				tmp['planetIDs'] = a.planets.pluck(:itemID)
-				
-				# push the result to the output
-				result.push(tmp)
-			end
-			
-			# return the output
-			render json: result.as_json
+        # permit proper parameters
+        ssp = solarsystem_params
+
+        # find solarsystem by id
+        solarsystem = Solarsystem.find_by(solarSystemID: ssp[:id])
+
+        # make sure solarsystem is not nil before finding planetIDs
+        unless solarsystem.nil?
+          planet_ids = solarsystem.planets.pluck(:itemID)
+          solarsystem = solarsystem.as_json
+          solarsystem['planetIDs'] = planet_ids
+        end
+
+        render json: solarsystem.as_json
+      end
+
+      private
+
+      def solarsystem_params
+        params.permit(:id, :name)
       end
     end
   end
