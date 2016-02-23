@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160221210646) do
+ActiveRecord::Schema.define(version: 20160223221106) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -633,6 +633,31 @@ ActiveRecord::Schema.define(version: 20160221210646) do
     t.float  "zMin",         limit: 53
     t.float  "zMax",         limit: 53
     t.float  "radius",       limit: 53
+  end
+
+  create_table "mapmoons", id: false, force: :cascade do |t|
+    t.integer "moonID", limit: 4
+    t.integer "atm",    limit: 1, default: -1
+    t.integer "eva",    limit: 1, default: -1
+    t.integer "hyd",    limit: 1, default: -1
+    t.integer "sil",    limit: 1, default: -1
+    t.integer "cob",    limit: 1, default: -1
+    t.integer "sca",    limit: 1, default: -1
+    t.integer "tit",    limit: 1, default: -1
+    t.integer "tun",    limit: 1, default: -1
+    t.integer "cad",    limit: 1, default: -1
+    t.integer "van",    limit: 1, default: -1
+    t.integer "chr",    limit: 1, default: -1
+    t.integer "pla",    limit: 1, default: -1
+    t.integer "cae",    limit: 1, default: -1
+    t.integer "tec",    limit: 1, default: -1
+    t.integer "haf",    limit: 1, default: -1
+    t.integer "mer",    limit: 1, default: -1
+    t.integer "pro",    limit: 1, default: -1
+    t.integer "dys",    limit: 1, default: -1
+    t.integer "neo",    limit: 1, default: -1
+    t.integer "thu",    limit: 1, default: -1
+    t.integer "scan",   limit: 1, default: -1
   end
 
   create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
