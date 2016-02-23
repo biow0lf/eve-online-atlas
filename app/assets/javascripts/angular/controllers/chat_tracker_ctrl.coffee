@@ -245,7 +245,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       initial = (page - 1) * limit
       # case 1 - there are enough commands to paginate
       if initial < @commands[tab].length
-        @query[tab].page = 1
         if @commands[tab].length - initial >= limit
         # and there are enough commands left to show at least the limit
           @commandsToShow[tab] = @commands[tab].slice(initial, initial + limit)
@@ -254,6 +253,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
           @commandsToShow[tab] = @commands[tab].slice(initial, @commands[tab].length)
       else
       # case 2 - not enough to paginate
+        @query[tab].page = 1
         @commandsToShow[tab] = @commands[tab]
         # console.log @query.page, @query.limit, initial, @commandsToShow
 
@@ -261,7 +261,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     if order.indexOf('-') >= 0
       order = order.substr(1, order.length)
       @commands[tab].sort((a, b) ->
-        if tab == 'thera' and order.indexOf('jumps') >= 0 and a[order] == 0 or b[order] == 0 then return -1
+        if tab == 'thera' and order.indexOf('jumps') >= 0 and (a[order] == 0 or b[order] == 0) then return -1
         # if tab == 'thera' and order.indexOf('jumps') >= 0 and b[order] == 0 then return -1
         if a[order] < b[order] then return -1
         if a[order] > b[order] then return 1
