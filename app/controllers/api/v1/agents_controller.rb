@@ -19,7 +19,7 @@ module Api
 				# dump the agent to a tmp variable as json
 				tmp = a.as_json
 				# add in the agent's name to the tmp variable
-				tmp['name'] = a.name.itemName
+				tmp['name'] = a.agentname.itemName
 				# push the result to the output
 				result.push(tmp)
 			end

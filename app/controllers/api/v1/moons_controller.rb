@@ -1,6 +1,6 @@
 module Api
   module V1
-    class SolarsystemsController < ApiController
+    class MoonsController < ApiController
       respond_to :json
       # after_action :verify_authorized, except: :index
       # after_action :verify_policy_scoped, only: :index
@@ -10,23 +10,23 @@ module Api
       end
 
       def show
-			# find solar system by solarSystemID as int
-			system = Solarsystem.where(solarSystemID: params[:id].to_i)
+			# find planets by solarSystemID as int
+			planets = Solarsystem.find_by(solarSystemID: params[:solarsystem_id].to_i).planets.where(itemID: params[:planet_id].to_i)
 			# create output array
 			result = []
-			# add planetIDs to the solarsystem data
-			system.each do |a|
-			
-				tmp = a.as_json
-				
-				tmp['planetIDs'] = a.planets.pluck(:itemID)
-				
+			# for each planet in the relationship
+			planets.each do |a|
+				# dump the planet to a tmp variable as json
+				tmp = a.moons.where(itemID: params[:id].to_i)
+
 				# push the result to the output
 				result.push(tmp)
 			end
 			
+
 			# return the output
 			render json: result.as_json
+       
       end
     end
   end
