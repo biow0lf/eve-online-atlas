@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :items, only: [:index, :show]
       resources :solarsystems, only: [:index, :show]
 	  resources :agents, only: [:index, :show]
+	  resources :planets, only: [:index, :show]
     end
   end
 

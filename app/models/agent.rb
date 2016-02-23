@@ -3,6 +3,6 @@ class Agent < ActiveRecord::Base
   self.primary_key = 'agentID'
 
   belongs_to :station, foreign_key: 'locationID', primary_key: 'locationID'
-  has_one :name, foreign_key: 'itemID'
+  has_one :agentname, foreign_key: 'itemID'
 
 end
