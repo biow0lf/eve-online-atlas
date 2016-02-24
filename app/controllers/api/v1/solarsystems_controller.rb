@@ -23,13 +23,13 @@ module Api
       def show
         # permit proper parameters
         ssp = solarsystem_params
-        result = {}
+        result = nil
 
         # find solarsystem by id
         solarsystem = Solarsystem.find_by(solarSystemID: ssp[:id])
 
         # make sure solarsystem is not nil before finding planetIDs
-        unless result.nil?
+        unless solarsystem.nil?
           planet_ids = solarsystem.planets.pluck(:itemID)
           result = solarsystem.as_json
           result['class'] = solarsystem.wormholeclass.wormholeClassID
