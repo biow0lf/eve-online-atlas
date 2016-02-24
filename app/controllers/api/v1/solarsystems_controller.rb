@@ -25,16 +25,22 @@ module Api
         ssp = solarsystem_params
 
         # find solarsystem by id
-        solarsystem = Solarsystem.find_by(solarSystemID: ssp[:id])
+        result = Solarsystem.find_by(solarSystemID: ssp[:id])
 
         # make sure solarsystem is not nil before finding planetIDs
-        unless solarsystem.nil?
-          planet_ids = solarsystem.planets.pluck(:itemID)
-          solarsystem = solarsystem.as_json
-          solarsystem['planetIDs'] = planet_ids
+        unless result.nil?
+          planet_ids = result.planets.pluck(:itemID)
+          result = result.as_json
+          result['planetIDs'] = planet_ids
         end
 
-        render json: solarsystem.as_json
+        status = 200
+        if result.nil?
+          status = 400
+          result = { error: 'Invalid solarSystemID', status: status }
+        end
+
+        render json: result, status: status
       end
 
       private

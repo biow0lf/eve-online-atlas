@@ -6,33 +6,62 @@ module Api
       # after_action :verify_policy_scoped, only: :index
 
       def index
-        render json: Solarsystem.find_by(solarSystemID: params[:solarsystem_id]).planets.find_by(itemID: params[:planet_id]).moons
+        mp = moon_params
+        solarsystem = Solarsystem.find_by(solarSystemID: mp[:solarsystem_id])
+        result = nil
+        planet = nil
+        unless solarsystem.nil?
+          planet = solarsystem.planets.find_by(itemID: mp[:planet_id])
+          result = planet.moons unless planet.nil?
+        end
+
+        status = 200
+        if solarsystem.nil?
+          status = 400
+          result = { error: 'Invalid solarSystemID', status: status }
+        elsif planet.nil?
+          status = 400
+          result = { error: 'Invalid itemID for planet', status: status }
+        end
+        render json: result, status: status
       end
 
       def show
         # permit proper parameters
         mp = moon_params
         solarsystem = Solarsystem.find_by(solarSystemID: mp[:solarsystem_id])
-        result = {}
+        result = nil
+        planet = nil
+        moon = nil
 
-        # Make sure solarsysetm is not nil
+        # Make sure solarsystem is not nil
         unless solarsystem.nil?
           planet = solarsystem.planets.find_by(itemID: mp[:planet_id])
-
           # Make sure planet is not nil
           unless planet.nil?
-            moons = planet.moons.find_by(itemID: params[:id])
-            result = moons.as_json
-            unless moons.nil?
-              result['statistics'] = moons.celestialstatistic
-              result['materials'] = moons.moonmaterial
+            moon = planet.moons.find_by(itemID: params[:id])
+            result = moon.as_json
+            unless moon.nil?
+              result['statistics'] = moon.celestialstatistic
+              result['materials'] = moon.moonmaterial
             end
           end
-    end
+        end
 
-        # return the output
-        render json: result
-       end
+        status = 200
+        if solarsystem.nil?
+          status = 400
+          result = { error: 'Invalid solarSystemID', status: status }
+        elsif planet.nil?
+          status = 400
+          result = { error: 'Invalid itemID for planet', status: status }
+        elsif moon.nil?
+          status = 400
+          result = { error: 'Invalid itemID for moon', status: status }
+        end
+
+        render json: result.as_json, status: status
+      end
 
       private
 

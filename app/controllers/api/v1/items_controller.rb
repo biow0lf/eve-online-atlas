@@ -76,9 +76,8 @@ module Api
       private
 
       def check_playerstations
-        if Playerstation.first.created_at < Date.current - 1.hour
-          UpdatePlayerstations.update_playerstations
-        end
+        return if Playerstation.first.created_at < Date.current - 1.hour
+        UpdatePlayerstations.update_playerstations
       end
 
       def find_item_by_name(names)
@@ -87,7 +86,7 @@ module Api
       end
 
       def get_trimmed_mean(items, trim_percentage)
-        if items.size > 0
+        unless items.empty?
           item_prices = items.map { |item| item['price'] }.sort
           to_trim = (item_prices.size * trim_percentage).round
           trimmed_items = item_prices.slice(to_trim..(item_prices.size - to_trim))

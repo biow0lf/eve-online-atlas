@@ -6,14 +6,26 @@ module Api
       # after_action :verify_policy_scoped, only: :index
 
       def index
-        render json: Solarsystem.find_by(solarSystemID: params[:solarsystem_id]).planets
+        pp = planet_params
+        solarsystem = Solarsystem.find_by(solarSystemID: pp[:solarsystem_id])
+        result = nil
+        result = solarsystem.planets unless solarsystem.nil?
+
+        status = 200
+        if solarsystem.nil?
+          status = 400
+          result = { error: 'Invalid solarSystemID', status: status }
+        end
+
+        render json: result, status: status
       end
 
       def show
         # permit proper parameters
         pp = planet_params
         solarsystem = Solarsystem.find_by(solarSystemID: pp[:solarsystem_id])
-        result = {}
+        result = nil
+        planet = nil
 
         # Make sure solarsysetm is not nil
         unless solarsystem.nil?
@@ -26,11 +38,19 @@ module Api
             result['moonIDs'] = moon_ids
             result['statistics'] = planet.celestialstatistic
           end
-    end
+        end
 
-        # return the output
-        render json: result
-     end
+        status = 200
+        if solarsystem.nil?
+          status = 400
+          result = { error: 'Invalid solarSystemID', status: status }
+        elsif planet.nil?
+          status = 400
+          result = { error: 'Invalid itemID for planet', status: status }
+        end
+
+        render json: result, status: status
+      end
 
       private
 
