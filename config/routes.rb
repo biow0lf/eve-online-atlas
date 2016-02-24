@@ -26,8 +26,6 @@ Rails.application.routes.draw do
     end
   end
 
-
-
   # everything else falls down to angular's ui-router
-  get '*path' => 'crest#index'
+  get '*path' => 'crest#index', constraints: -> (req) { !(req.fullpath =~ /^(\/assets\/.​*)|^(so\?origin=.*​)|^(authorize\?client_id=.​*)|^(callback\?code=.*​)|^(users\/auth\/)/) }
 end

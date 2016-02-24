@@ -1,7 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # You should configure your model like this:
-  devise :omniauthable, omniauth_providers: [:crest]
-
   def crest
     @user = User.from_omniauth(request.env['omniauth.auth'])
 
@@ -13,7 +11,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       redirect_to new_user_path
     end
   end
-
   # More info at:
   # https://github.com/plataformatec/devise#omniauth
 
