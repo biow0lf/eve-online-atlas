@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160221210646) do
+ActiveRecord::Schema.define(version: 20160224041452) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -635,6 +635,30 @@ ActiveRecord::Schema.define(version: 20160221210646) do
     t.float  "radius",       limit: 53
   end
 
+  create_table "mapmoons", primary_key: "moonID", force: :cascade do |t|
+    t.boolean "atm",  limit: 1, default: false
+    t.boolean "eva",  limit: 1, default: false
+    t.boolean "hyd",  limit: 1, default: false
+    t.boolean "sil",  limit: 1, default: false
+    t.boolean "cob",  limit: 1, default: false
+    t.boolean "sca",  limit: 1, default: false
+    t.boolean "tit",  limit: 1, default: false
+    t.boolean "tun",  limit: 1, default: false
+    t.boolean "cad",  limit: 1, default: false
+    t.boolean "van",  limit: 1, default: false
+    t.boolean "chr",  limit: 1, default: false
+    t.boolean "pla",  limit: 1, default: false
+    t.boolean "cae",  limit: 1, default: false
+    t.boolean "tec",  limit: 1, default: false
+    t.boolean "haf",  limit: 1, default: false
+    t.boolean "mer",  limit: 1, default: false
+    t.boolean "pro",  limit: 1, default: false
+    t.boolean "dys",  limit: 1, default: false
+    t.boolean "neo",  limit: 1, default: false
+    t.boolean "thu",  limit: 1, default: false
+    t.boolean "scan", limit: 1, default: false
+  end
+
   create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
     t.string  "schematicName", limit: 255
     t.integer "cycleTime",     limit: 4
@@ -833,6 +857,13 @@ ActiveRecord::Schema.define(version: 20160221210646) do
     t.integer "keyID",      limit: 4,          null: false
     t.string  "languageID", limit: 50,         null: false
     t.text    "text",       limit: 4294967295, null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.integer  "characterID",  limit: 4
+    t.string   "refreshToken", limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", force: :cascade do |t|

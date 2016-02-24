@@ -16,6 +16,8 @@ gem 'angular-rails-templates', '>= 1.0'
 gem 'pundit'
 gem 'httparty'
 gem 'composite_primary_keys'
+gem 'omniauth-crest'
+gem 'devise'
 # gem 'reve', :git => 'git@github.com:lisa/reve.git'
 
 source 'https://rails-assets.org' do

@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   get '/thera' => 'crest#thera'
 
+  resources :users, only: [:create], as: 'new_user_path'
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       root to: proc { version_info }
@@ -22,6 +24,8 @@ Rails.application.routes.draw do
       resources :solarsystems, only: [:index, :show]
     end
   end
+
+  devise_for :users, controllers: {omniauth_callbacks: 'users/omniauth_callbacks'}
 
   # everything else falls down to angular's ui-router
   get '*path' => 'crest#index'
