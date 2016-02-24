@@ -18,15 +18,14 @@ module Api
         # Make sure solarsysetm is not nil
         unless solarsystem.nil?
           planet = solarsystem.planets.find_by(itemID: mp[:planet_id])
-          result = planet.as_json
+
           # Make sure planet is not nil
           unless planet.nil?
-            moons = planet.moons
+            moons = planet.moons.find_by(itemID:params[:id])
+			result = moons.as_json
             unless moons.nil?
-              moon_ids = planet.moons.pluck(:itemID)
-              result['type'] = Item.find_by(typeID: planet.typeID).typeName[/\(([^)]+)\)/, 1]
-              result['moonIDs'] = moon_ids
-              result['statistics'] = planet.celestialstatistic
+			  result['statistics'] = moons.celestialstatistic
+              result['materials'] = moons.moonmaterial
             end
           end
     end
