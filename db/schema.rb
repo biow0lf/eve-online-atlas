@@ -866,6 +866,8 @@ ActiveRecord::Schema.define(version: 20160224041452) do
     t.datetime "updated_at",               null: false
   end
 
+  add_index "users", ["characterID"], name: "index_users_on_characterID", unique: true, using: :btree
+
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", force: :cascade do |t|
     t.integer "combatZoneID", limit: 4
   end

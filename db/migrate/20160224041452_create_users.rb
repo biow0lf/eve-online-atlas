@@ -5,5 +5,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :refreshToken
       t.timestamps null: false
     end
+    add_index :users, :characterID, unique: true
   end
 end

@@ -15,7 +15,8 @@ Rails.application.routes.draw do
 
   get '/thera' => 'crest#thera'
 
-  resources :users, only: [:create], as: 'new_user_path'
+  devise_for :users, controllers: {omniauth_callbacks: 'users/omniauth_callbacks'}
+  match '/users', to: 'users#create', via: ['GET','POST'], as: :new_user
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
@@ -25,7 +26,7 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: {omniauth_callbacks: 'users/omniauth_callbacks'}
+
 
   # everything else falls down to angular's ui-router
   get '*path' => 'crest#index'
