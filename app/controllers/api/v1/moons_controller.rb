@@ -21,10 +21,10 @@ module Api
 
           # Make sure planet is not nil
           unless planet.nil?
-            moons = planet.moons.find_by(itemID:params[:id])
-			result = moons.as_json
+            moons = planet.moons.find_by(itemID: params[:id])
+            result = moons.as_json
             unless moons.nil?
-			  result['statistics'] = moons.celestialstatistic
+              result['statistics'] = moons.celestialstatistic
               result['materials'] = moons.moonmaterial
             end
           end
