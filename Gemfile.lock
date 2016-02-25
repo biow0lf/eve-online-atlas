@@ -44,7 +44,6 @@ GEM
       tilt
     arel (6.0.3)
     ast (2.2.0)
-    bcrypt (3.1.10)
     builder (3.2.2)
     callsite (0.0.11)
     choice (0.2.0)
@@ -76,13 +75,6 @@ GEM
       activerecord (~> 4.2.0)
     concurrent-ruby (1.0.0)
     database_cleaner (1.5.1)
-    devise (3.5.6)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
-      responders
-      thread_safe (~> 0.1)
-      warden (~> 1.2.3)
     docile (1.1.5)
     erubis (2.7.0)
     excon (0.45.4)
@@ -253,7 +245,6 @@ GEM
     omniauth-oauth2 (1.4.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
-    orm_adapter (0.5.0)
     parser (2.3.0.6)
       ast (~> 2.2)
     phantomjs (2.1.1.0)
@@ -384,8 +375,6 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unicode-display_width (0.3.1)
-    warden (1.2.6)
-      rack (>= 1.0)
     xml-simple (1.1.5)
 
 PLATFORMS
@@ -397,7 +386,6 @@ DEPENDENCIES
   compass-rails
   composite_primary_keys
   database_cleaner
-  devise
   fabrication
   faker
   fog

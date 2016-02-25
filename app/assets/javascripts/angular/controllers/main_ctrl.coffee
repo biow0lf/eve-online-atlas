@@ -1,5 +1,5 @@
-app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state',
-  ($scope, $http, $mdSidenav, $state) -> do =>
+app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window',
+  ($scope, $http, $mdSidenav, $state, $window) -> do =>
     @version = '0.0.0'
 
     closeSidenav = (componentId) =>
@@ -7,6 +7,10 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state',
 
     openSidenav = (componentId) =>
       $mdSidenav(componentId).open()
+
+    signin = =>
+      console.log 'going to /auth/crest'
+      $window.location.href = '/auth/crest'
 
     init = =>
       @version = '0.0.1'
@@ -17,7 +21,7 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state',
 
     @closeSidenav = closeSidenav
     @openSidenav = openSidenav
+    @signin = signin
 
     return
-
 ]

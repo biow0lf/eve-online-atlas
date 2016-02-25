@@ -1,10 +1,8 @@
 class User < ActiveRecord::Base
-  devise :omniauthable, omniauth_providers: [:crest]
-  def self.from_omniauth(access_token)
+  def self.create_from_omniauth(access_token)
+    logger.debug access_token
     data = access_token.info
     user = User.where(refreshToken: data['refreshToken']).first
-
-    logger.debug access_token
 
     unless user
       include HTTParty
@@ -16,5 +14,9 @@ class User < ActiveRecord::Base
     end
 
     user
+
+    # self.create(provider: auth_hash[:provider],
+    #             uid: auth_hash[:uid],
+    #             name: auth_hash[:info][:name])
   end
 end

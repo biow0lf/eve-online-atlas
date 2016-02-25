@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-APP_VERSION = `git describe --tags HEAD`.delete("\n").freeze
+APP_VERSION = '0.0.1'
 BRANCH = `git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3`.freeze
 COMMIT = `git log --pretty=format:'%h' -n 1`.freeze
 
