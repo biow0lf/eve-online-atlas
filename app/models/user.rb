@@ -1,6 +1,8 @@
 require 'base64'
 require 'logger'
+require 'HTTParty'
 class User < ActiveRecord::Base
+  include HTTParty
   def self.create_from_omniauth(auth)
     create! do |user|
       user.uid = auth['uid']
@@ -14,7 +16,7 @@ class User < ActiveRecord::Base
 
   def refresh_token_if_expired
     if token_expired?
-      include HTTParty
+
       headers = { Authorization: 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}") }
       body = { grant_type: 'refresh_token', refresh_token: self.refreshToken}
       response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.to_json, headers: headers )
