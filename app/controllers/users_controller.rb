@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def index
     return render status: :bad_request unless @user
-    @user.refresh_token_if_expired
+    refresh_token_if_expired
     render json: @user.as_json
   end
 
