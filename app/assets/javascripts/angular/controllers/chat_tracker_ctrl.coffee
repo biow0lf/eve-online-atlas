@@ -22,7 +22,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     command: new Date('1969.12.31 18:00:00')
 
   @commandList =
-    market: ['!market', '!pc', '!marketsystem']
+    market: ['!market', '!pc', '!system']
     thera: ['!thera']
     char: ['!char', '!allow', '!remove']
     command: ['!commands', '!help']
@@ -308,7 +308,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     console.log 'initializing'
     @commands.command.push({name: '!market', set: 'Market', argument: '', description: 'Switches to the market tab'})
     @commands.command.push({name: '!pc', set: 'Market', argument: 'List of item names separated by comma or doublespace', description: 'Price checks an item in the current market system'})
-    @commands.command.push({name: '!marketsystem', set: 'Market', argument: '[system name]', description: 'Sets the current market system for checking prices. Does not change if system name is invalid.'})
+    @commands.command.push({name: '!system', set: 'Market', argument: '[system name]', description: 'Sets the current market system for checking prices. Does not change if system name is invalid.'})
     @commands.command.push({name: '!thera', set: 'Thera', argument: '[system name]', description: 'Finds distances to Thera wormholes from given system'})
     @commands.command.push({name: '!char', set: 'Character', argument: '', description: 'Switches to the character tab'})
     @commands.command.push({name: '!allow', set: 'Character', argument: '[character name]', description: 'Adds [character name] to set of characters allowed to use commands'})
