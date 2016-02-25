@@ -24,5 +24,11 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
   factory.getMoon = (solarSystemID, planetID, moonID) ->
 	  return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}/moons/#{moonID}")
 
+  factory.getUser = ->
+    return $http.get("/users")
+
+  factory.signout = ->
+    return $http.get("/signout")
+
   return factory
 ]
