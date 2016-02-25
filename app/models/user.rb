@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.refresh_token_if_expired
+  def refresh_token_if_expired
     if token_expired?
       include HTTParty
       headers = { Authorization: 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}") }
@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.token_expired?
+  def token_expired?
     expiry = Time.at(self.expiry)
     return true if expiry < Time.now
     false
