@@ -9,14 +9,12 @@ class SessionsController < ApplicationController
     user = User.where(uid: auth['uid'].to_s).first || User.create_from_omniauth(auth)
     reset_session
     session[:user_id] = user.id
-    render json: user.to_json
-    # redirect_to root_url, notice: 'Signed in!'
+    redirect_to root_url, notice: 'Signed in!'
   end
 
   def destroy
     reset_session
-    render json: {info: 'Session reset'}
-    # redirect_to root_url, notice: 'Signed out!'
+    redirect_to root_url, notice: 'Signed out!'
   end
 
   def failure
