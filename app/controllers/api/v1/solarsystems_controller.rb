@@ -2,22 +2,37 @@ module Api
   module V1
     class SolarsystemsController < ApiController
       respond_to :json
-      # after_action :verify_authorized, except: :index
-      # after_action :verify_policy_scoped, only: :index
+      before_action :find_solarsystem
 
       def index
-        render json: Solarsystem.all.to_json
+        return render json: @solarsystem.to_json if @solarsystem
+        render json: Solarsystem.all
       end
 
       def show
-        solarsystem = if params[:id].to_i > 0
-                        # if actually an item id, search by id
-                        Solarsystem.find_by(solarSystemID: params[:id].to_s)
-                      else
-                        # else search by name
-                        Solarsystem.find_by(solarSystemName: params[:id])
-                      end
-        render json: solarsystem.to_json
+        return render status: :bad_request unless @solarsystem
+        planet_ids = @solarsystem.planets.pluck(:itemID)
+        result = @solarsystem.as_json
+        result['class'] = @solarsystem.wormholeclass.wormholeClassID
+        result['planetIDs'] = planet_ids
+        render json: result
+      end
+
+      private
+
+      def solarsystem_params
+        params.permit(:id, :name)
+      end
+
+      def find_solarsystem
+        @ssp = solarsystem_params
+        if @ssp.key?(:name)
+          @solarsystem = Solarsystem.find_by(solarSystemName: @ssp[:name])
+        elsif @ssp[:id]
+          @solarsystem = Solarsystem.find(@ssp[:id])
+        end
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'Solarsystem not found', status: :bad_request }, status: :bad_request
       end
     end
   end

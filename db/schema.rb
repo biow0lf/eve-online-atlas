@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225034612) do
+ActiveRecord::Schema.define(version: 20160223221106) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -27,15 +27,15 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.boolean "isLocator",     limit: 1
   end
 
-  add_index "agtAgents", ["corporationID"], name: "agtAgents_IX_corporation", using: :btree
-  add_index "agtAgents", ["locationID"], name: "agtAgents_IX_station", using: :btree
+  add_index "agtagents", ["corporationID"], name: "agtAgents_IX_corporation", using: :btree
+  add_index "agtagents", ["locationID"], name: "agtAgents_IX_station", using: :btree
 
   create_table "agtResearchAgents", id: false, force: :cascade do |t|
     t.integer "agentID", limit: 4, null: false
     t.integer "typeID",  limit: 4, null: false
   end
 
-  add_index "agtResearchAgents", ["typeID"], name: "agtResearchAgents_IX_type", using: :btree
+  add_index "agtresearchagents", ["typeID"], name: "agtResearchAgents_IX_type", using: :btree
 
   create_table "certCerts", primary_key: "certID", force: :cascade do |t|
     t.text    "description", limit: 4294967295
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.string  "certLevelText", limit: 8
   end
 
-  add_index "certSkills", ["certID"], name: "ix_certSkills_certID", using: :btree
+  add_index "certskills", ["certID"], name: "ix_certSkills_certID", using: :btree
 
   create_table "chrAncestries", primary_key: "ancestryID", force: :cascade do |t|
     t.string  "ancestryName",     limit: 100
@@ -274,7 +274,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "time",       limit: 4
   end
 
-  add_index "industryActivity", ["activityID"], name: "ix_industryActivity_activityID", using: :btree
+  add_index "industryactivity", ["activityID"], name: "ix_industryActivity_activityID", using: :btree
 
   create_table "industryActivityMaterials", id: false, force: :cascade do |t|
     t.integer "typeID",         limit: 4
@@ -283,8 +283,8 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "quantity",       limit: 4
   end
 
-  add_index "industryActivityMaterials", ["typeID", "activityID"], name: "industryActivityMaterials_idx1", using: :btree
-  add_index "industryActivityMaterials", ["typeID"], name: "ix_industryActivityMaterials_typeID", using: :btree
+  add_index "industryactivitymaterials", ["typeID", "activityID"], name: "industryActivityMaterials_idx1", using: :btree
+  add_index "industryactivitymaterials", ["typeID"], name: "ix_industryActivityMaterials_typeID", using: :btree
 
   create_table "industryActivityProbabilities", id: false, force: :cascade do |t|
     t.integer "typeID",        limit: 4
@@ -293,8 +293,8 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.decimal "probability",             precision: 3, scale: 2
   end
 
-  add_index "industryActivityProbabilities", ["productTypeID"], name: "ix_industryActivityProbabilities_productTypeID", using: :btree
-  add_index "industryActivityProbabilities", ["typeID"], name: "ix_industryActivityProbabilities_typeID", using: :btree
+  add_index "industryactivityprobabilities", ["productTypeID"], name: "ix_industryActivityProbabilities_productTypeID", using: :btree
+  add_index "industryactivityprobabilities", ["typeID"], name: "ix_industryActivityProbabilities_typeID", using: :btree
 
   create_table "industryActivityProducts", id: false, force: :cascade do |t|
     t.integer "typeID",        limit: 4
@@ -303,9 +303,9 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "quantity",      limit: 4
   end
 
-  add_index "industryActivityProducts", ["productTypeID"], name: "ix_industryActivityProducts_productTypeID", using: :btree
-  add_index "industryActivityProducts", ["typeID", "activityID"], name: "industryActivityProduct_idx1", using: :btree
-  add_index "industryActivityProducts", ["typeID"], name: "ix_industryActivityProducts_typeID", using: :btree
+  add_index "industryactivityproducts", ["productTypeID"], name: "ix_industryActivityProducts_productTypeID", using: :btree
+  add_index "industryactivityproducts", ["typeID", "activityID"], name: "industryActivityProduct_idx1", using: :btree
+  add_index "industryactivityproducts", ["typeID"], name: "ix_industryActivityProducts_typeID", using: :btree
 
   create_table "industryActivitySkills", id: false, force: :cascade do |t|
     t.integer "typeID",     limit: 4
@@ -314,9 +314,9 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "level",      limit: 4
   end
 
-  add_index "industryActivitySkills", ["skillID"], name: "ix_industryActivitySkills_skillID", using: :btree
-  add_index "industryActivitySkills", ["typeID", "activityID"], name: "industryActivitySkills_idx1", using: :btree
-  add_index "industryActivitySkills", ["typeID"], name: "ix_industryActivitySkills_typeID", using: :btree
+  add_index "industryactivityskills", ["skillID"], name: "ix_industryActivitySkills_skillID", using: :btree
+  add_index "industryactivityskills", ["typeID", "activityID"], name: "industryActivitySkills_idx1", using: :btree
+  add_index "industryactivityskills", ["typeID"], name: "ix_industryActivitySkills_typeID", using: :btree
 
   create_table "industryBlueprints", primary_key: "typeID", force: :cascade do |t|
     t.integer "maxProductionLimit", limit: 4
@@ -337,7 +337,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float   "attackMinSec",     limit: 53
   end
 
-  add_index "invContrabandTypes", ["typeID"], name: "invContrabandTypes_IX_type", using: :btree
+  add_index "invcontrabandtypes", ["typeID"], name: "invContrabandTypes_IX_type", using: :btree
 
   create_table "invControlTowerResourcePurposes", primary_key: "purpose", force: :cascade do |t|
     t.string "purposeText", limit: 100
@@ -369,7 +369,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.boolean "published",            limit: 1
   end
 
-  add_index "invGroups", ["categoryID"], name: "invTypes_categoryid", using: :btree
+  add_index "invgroups", ["categoryID"], name: "invTypes_categoryid", using: :btree
 
   create_table "invItems", primary_key: "itemID", force: :cascade do |t|
     t.integer "typeID",     limit: 4, null: false
@@ -379,8 +379,8 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "quantity",   limit: 4, null: false
   end
 
-  add_index "invItems", ["locationID"], name: "items_IX_Location", using: :btree
-  add_index "invItems", ["ownerID", "locationID"], name: "items_IX_OwnerLocation", using: :btree
+  add_index "invitems", ["locationID"], name: "items_IX_Location", using: :btree
+  add_index "invitems", ["ownerID", "locationID"], name: "items_IX_OwnerLocation", using: :btree
 
   create_table "invMarketGroups", primary_key: "marketGroupID", force: :cascade do |t|
     t.integer "parentGroupID",   limit: 4
@@ -452,15 +452,15 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "graphicID",     limit: 8
   end
 
-  add_index "invTypes", ["groupID"], name: "invTypes_groupid", using: :btree
+  add_index "invtypes", ["groupID"], name: "invTypes_groupid", using: :btree
 
   create_table "invUniqueNames", primary_key: "itemID", force: :cascade do |t|
     t.string  "itemName", limit: 200, null: false
     t.integer "groupID",  limit: 4
   end
 
-  add_index "invUniqueNames", ["groupID", "itemName"], name: "invUniqueNames_IX_GroupName", using: :btree
-  add_index "invUniqueNames", ["itemName"], name: "invUniqueNames_UQ", unique: true, using: :btree
+  add_index "invuniquenames", ["groupID", "itemName"], name: "invUniqueNames_IX_GroupName", using: :btree
+  add_index "invuniquenames", ["itemName"], name: "invUniqueNames_UQ", unique: true, using: :btree
 
   create_table "mapCelestialStatistics", primary_key: "celestialID", force: :cascade do |t|
     t.float   "temperature",    limit: 53
@@ -507,7 +507,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float   "radius",            limit: 53
   end
 
-  add_index "mapConstellations", ["regionID"], name: "mapConstellations_IX_region", using: :btree
+  add_index "mapconstellations", ["regionID"], name: "mapConstellations_IX_region", using: :btree
 
   create_table "mapDenormalize", primary_key: "itemID", force: :cascade do |t|
     t.integer "typeID",          limit: 4
@@ -526,14 +526,14 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "orbitIndex",      limit: 4
   end
 
-  add_index "mapDenormalize", ["constellationID"], name: "mapDenormalize_IX_constellation", using: :btree
-  add_index "mapDenormalize", ["groupID", "constellationID"], name: "mapDenormalize_IX_groupConstellation", using: :btree
-  add_index "mapDenormalize", ["groupID", "regionID"], name: "mapDenormalize_IX_groupRegion", using: :btree
-  add_index "mapDenormalize", ["groupID", "solarSystemID"], name: "mapDenormalize_IX_groupSystem", using: :btree
-  add_index "mapDenormalize", ["orbitID"], name: "mapDenormalize_IX_orbit", using: :btree
-  add_index "mapDenormalize", ["regionID"], name: "mapDenormalize_IX_region", using: :btree
-  add_index "mapDenormalize", ["solarSystemID", "x", "y", "z", "itemName", "itemID"], name: "mapDenormalize_gis", length: {"solarSystemID"=>nil, "x"=>nil, "y"=>nil, "z"=>nil, "itemName"=>40, "itemID"=>nil}, using: :btree
-  add_index "mapDenormalize", ["solarSystemID"], name: "mapDenormalize_IX_system", using: :btree
+  add_index "mapdenormalize", ["constellationID"], name: "mapDenormalize_IX_constellation", using: :btree
+  add_index "mapdenormalize", ["groupID", "constellationID"], name: "mapDenormalize_IX_groupConstellation", using: :btree
+  add_index "mapdenormalize", ["groupID", "regionID"], name: "mapDenormalize_IX_groupRegion", using: :btree
+  add_index "mapdenormalize", ["groupID", "solarSystemID"], name: "mapDenormalize_IX_groupSystem", using: :btree
+  add_index "mapdenormalize", ["orbitID"], name: "mapDenormalize_IX_orbit", using: :btree
+  add_index "mapdenormalize", ["regionID"], name: "mapDenormalize_IX_region", using: :btree
+  add_index "mapdenormalize", ["solarSystemID", "x", "y", "z", "itemName", "itemID"], name: "mapDenormalize_gis", length: {"solarSystemID"=>nil, "x"=>nil, "y"=>nil, "z"=>nil, "itemName"=>40, "itemID"=>nil}, using: :btree
+  add_index "mapdenormalize", ["solarSystemID"], name: "mapDenormalize_IX_system", using: :btree
 
   create_table "mapJumps", primary_key: "stargateID", force: :cascade do |t|
     t.integer "destinationID", limit: 8
@@ -577,7 +577,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float   "radius",     limit: 53
   end
 
-  add_index "mapRegions", ["regionID"], name: "mapRegions_IX_region", using: :btree
+  add_index "mapregions", ["regionID"], name: "mapRegions_IX_region", using: :btree
 
   create_table "mapSolarSystemJumps", id: false, force: :cascade do |t|
     t.integer "fromRegionID",        limit: 8
@@ -616,10 +616,10 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.string  "securityClass",   limit: 2
   end
 
-  add_index "mapSolarSystems", ["constellationID"], name: "mapSolarSystems_IX_constellation", using: :btree
-  add_index "mapSolarSystems", ["regionID"], name: "mapSolarSystems_IX_region", using: :btree
-  add_index "mapSolarSystems", ["security"], name: "mapSolarSystems_IX_security", using: :btree
-  add_index "mapSolarSystems", ["solarSystemName"], name: "mss_name", length: {"solarSystemName"=>40}, using: :btree
+  add_index "mapsolarsystems", ["constellationID"], name: "mapSolarSystems_IX_constellation", using: :btree
+  add_index "mapsolarsystems", ["regionID"], name: "mapSolarSystems_IX_region", using: :btree
+  add_index "mapsolarsystems", ["security"], name: "mapSolarSystems_IX_security", using: :btree
+  add_index "mapsolarsystems", ["solarSystemName"], name: "mss_name", length: {"solarSystemName"=>40}, using: :btree
 
   create_table "mapUniverse", primary_key: "universeID", force: :cascade do |t|
     t.string "universeName", limit: 100
@@ -633,6 +633,31 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float  "zMin",         limit: 53
     t.float  "zMax",         limit: 53
     t.float  "radius",       limit: 53
+  end
+
+  create_table "mapmoons", id: false, force: :cascade do |t|
+    t.integer "moonID", limit: 4
+    t.integer "atm",    limit: 1, default: -1
+    t.integer "eva",    limit: 1, default: -1
+    t.integer "hyd",    limit: 1, default: -1
+    t.integer "sil",    limit: 1, default: -1
+    t.integer "cob",    limit: 1, default: -1
+    t.integer "sca",    limit: 1, default: -1
+    t.integer "tit",    limit: 1, default: -1
+    t.integer "tun",    limit: 1, default: -1
+    t.integer "cad",    limit: 1, default: -1
+    t.integer "van",    limit: 1, default: -1
+    t.integer "chr",    limit: 1, default: -1
+    t.integer "pla",    limit: 1, default: -1
+    t.integer "cae",    limit: 1, default: -1
+    t.integer "tec",    limit: 1, default: -1
+    t.integer "haf",    limit: 1, default: -1
+    t.integer "mer",    limit: 1, default: -1
+    t.integer "pro",    limit: 1, default: -1
+    t.integer "dys",    limit: 1, default: -1
+    t.integer "neo",    limit: 1, default: -1
+    t.integer "thu",    limit: 1, default: -1
+    t.integer "scan",   limit: 1, default: -1
   end
 
   create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
@@ -683,8 +708,8 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "regionID",           limit: 4
   end
 
-  add_index "ramAssemblyLineStations", ["ownerID"], name: "ramAssemblyLineStations_IX_owner", using: :btree
-  add_index "ramAssemblyLineStations", ["regionID"], name: "ramAssemblyLineStations_IX_region", using: :btree
+  add_index "ramassemblylinestations", ["ownerID"], name: "ramAssemblyLineStations_IX_owner", using: :btree
+  add_index "ramassemblylinestations", ["regionID"], name: "ramAssemblyLineStations_IX_region", using: :btree
 
   create_table "ramAssemblyLineTypeDetailPerCategory", id: false, force: :cascade do |t|
     t.integer "assemblyLineTypeID", limit: 1,  null: false
@@ -734,8 +759,8 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "typeID", limit: 4
   end
 
-  add_index "skinShip", ["skinID"], name: "ix_skinShip_skinID", using: :btree
-  add_index "skinShip", ["typeID"], name: "ix_skinShip_typeID", using: :btree
+  add_index "skinship", ["skinID"], name: "ix_skinShip_skinID", using: :btree
+  add_index "skinship", ["typeID"], name: "ix_skinShip_typeID", using: :btree
 
   create_table "skins", primary_key: "skinID", force: :cascade do |t|
     t.string  "internalName",   limit: 70
@@ -801,12 +826,12 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "reprocessingHangarFlag",   limit: 1
   end
 
-  add_index "staStations", ["constellationID"], name: "staStations_IX_constellation", using: :btree
-  add_index "staStations", ["corporationID"], name: "staStations_IX_corporation", using: :btree
-  add_index "staStations", ["operationID"], name: "staStations_IX_operation", using: :btree
-  add_index "staStations", ["regionID"], name: "staStations_IX_region", using: :btree
-  add_index "staStations", ["solarSystemID"], name: "staStations_IX_system", using: :btree
-  add_index "staStations", ["stationTypeID"], name: "staStations_IX_type", using: :btree
+  add_index "stastations", ["constellationID"], name: "staStations_IX_constellation", using: :btree
+  add_index "stastations", ["corporationID"], name: "staStations_IX_corporation", using: :btree
+  add_index "stastations", ["operationID"], name: "staStations_IX_operation", using: :btree
+  add_index "stastations", ["regionID"], name: "staStations_IX_region", using: :btree
+  add_index "stastations", ["solarSystemID"], name: "staStations_IX_system", using: :btree
+  add_index "stastations", ["stationTypeID"], name: "staStations_IX_type", using: :btree
 
   create_table "translationTables", id: false, force: :cascade do |t|
     t.string  "sourceTable",      limit: 200, null: false
@@ -834,19 +859,6 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.string  "languageID", limit: 50,         null: false
     t.text    "text",       limit: 4294967295, null: false
   end
-
-  create_table "users", force: :cascade do |t|
-    t.integer  "characterID",  limit: 4
-    t.integer  "uid",          limit: 4
-    t.string   "refreshToken", limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.string   "name",         limit: 255
-    t.string   "token",        limit: 255
-    t.datetime "expiry"
-  end
-
-  add_index "users", ["characterID"], name: "index_users_on_characterID", unique: true, using: :btree
 
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", force: :cascade do |t|
     t.integer "combatZoneID", limit: 4

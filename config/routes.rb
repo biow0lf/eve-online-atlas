@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   def version_info
     [200,
      { 'Content-Type': 'application/json' },
@@ -26,11 +25,21 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       root to: proc { version_info }
-      resources :items, only: [:index, :show]
-      resources :solarsystems, only: [:index, :show]
+      resources :items, only: [:index, :show] do
+        collection do
+          get '/price', to: 'items#price'
+        end
+      end
+      resources :solarsystems, only: [:index, :show] do
+        resources :planets, only: [:index, :show] do
+          resources :moons, only: [:index, :show]
+        end
+        resources :stations, only: [:index, :show] do
+          resources :agents, only: [:index, :show]
+        end
+      end
     end
   end
-
   # everything else falls down to angular's ui-router
   get '*path' => 'crest#index', constraints: -> (req) do
     !(req.fullpath =~ %r{^(\/assets\/.*)|^(so\?origin=.*)|^(authorize\?client_id=.*)|^(callback\?code=.*)|^(\/auth\/so.*)})
