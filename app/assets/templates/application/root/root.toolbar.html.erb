@@ -10,7 +10,7 @@
       <span layout="row" flex></span>
       <span layout="row"><img ng-src="{{main.user.image}}" style="height: 48px" ng-show="main.user.name"></span>
       <span layout="row"><md-button ng-hide="main.user.name" ng-click="main.signin()" style="height: 48px;"><%= image_tag 'EVE_SSO_Login_Buttons_Large_White.png', style: 'height: 48px;' %></md-button></span>
-      <span layout="row"><md-button ng-show="main.user.name" ng-click="main.signout()" class="md-raised">Sign Out</md-button></span>
+      <span layout="row"><md-button ng-show="main.user.name" ng-click="main.signout()">Sign Out</md-button></span>
       <span>
     </span>
     </div>

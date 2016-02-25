@@ -14,7 +14,8 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    redirect_to root_url, notice: 'Signed out!'
+    render nothing: true
+    # redirect_to root_url, notice: 'Signed out!'
   end
 
   def failure

@@ -32,6 +32,7 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
     @closeSidenav = closeSidenav
     @openSidenav = openSidenav
     @signin = signin
+    @signout = signout
 
     return
 ]
