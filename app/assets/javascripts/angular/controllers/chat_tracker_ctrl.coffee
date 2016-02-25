@@ -196,7 +196,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                 else if command.indexOf('!commands') >= 0 or command.indexOf('!help') >= 0
                   @selectedTab = @query.command.tab
 
-                else if command.indexOf('!marketsystem') >= 0
+                else if command.indexOf('!system') >= 0
                   crestService.isValidSystem(converted[0]).then (response) =>
                     if response.data != null
                       @system = response.data.solarSystemName
