@@ -12,7 +12,7 @@ module Api
         result = @moon.as_json
         result['statistics'] = @moon.celestialstatistic
         result['materials'] = @moon.moonmaterial
-        render json: result.as_json, status: status
+        render json: result.as_json
       end
 
       private
