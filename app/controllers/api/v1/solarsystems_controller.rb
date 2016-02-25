@@ -26,10 +26,10 @@ module Api
 
       def find_solarsystem
         @ssp = solarsystem_params
-        if @ssp.has_key?(:name)
+        if @ssp.key?(:name)
           @solarsystem = Solarsystem.find_by(solarSystemName: @ssp[:name])
-        else
-          @solarsystem = Solarsystem.find(@ssp[:id]) if @ssp[:id]
+        elsif @ssp[:id]
+          @solarsystem = Solarsystem.find(@ssp[:id])
         end
       rescue ActiveRecord::RecordNotFound
         render json: { error: 'Solarsystem not found', status: :bad_request }, status: :bad_request

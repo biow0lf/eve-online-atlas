@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   def version_info
     [200,
      { 'Content-Type': 'application/json' },
@@ -26,7 +25,11 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       root to: proc { version_info }
-      resources :items, only: [:index, :show]
+      resources :items, only: [:index, :show] do
+        collection do
+          get '/price', to: 'items#price'
+        end
+      end
       resources :solarsystems, only: [:index, :show] do
         resources :planets, only: [:index, :show] do
           resources :moons, only: [:index, :show]

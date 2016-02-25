@@ -77,40 +77,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     @commandsToShow[tab] = []
     console.log @selected, @commands, @commandsToShow
 
-  # credit - https://gist.github.com/hurjas/2660489
-  timeStamp = (t) ->
-    # Create a date object with the current time
-    if t != undefined
-      now = new Date(t)
-    else
-      now = new Date
-    # Create an array with the current month, day and time
-    date = [
-      now.getMonth() + 1
-      now.getDate()
-      now.getFullYear()
-    ]
-    # Create an array with the current hour, minute and second
-    time = [
-      now.getHours()
-      now.getMinutes()
-      now.getSeconds()
-    ]
-    # Determine AM or PM suffix based on the hour
-    suffix = if time[0] < 12 then 'AM' else 'PM'
-    # Convert hour from military time
-    time[0] = if time[0] < 12 then time[0] else time[0] - 12
-    # If hour is 0, set it to 12
-    time[0] = time[0] or 12
-    # If seconds and minutes are less than 10, add a zero
-    i = 1
-    while i < 3
-      if time[i] < 10
-        time[i] = '0' + time[i]
-      i++
-    # Return the formatted string
-    return date.join('/') + ' ' + time.join(':') + ' ' + suffix
-
   tick = =>
     currentTime = new Date
     if @file != null && (currentTime.getTime() - @lastMod.getTime()) > 1000  # && @file.lastModifiedDate.getTime() != @lastMod.getTime()
@@ -124,6 +90,22 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     @interval = $interval(tick, 250)
     return
 
+  priceToIsk = (price) ->
+    console.log price
+    if price >= 1000000000
+      price /= 1000000000
+      price = price.toFixed(2).toString() + 'B isk'
+    else if price >= 1000000
+      price /= 1000000
+      price = price.toFixed(2).toString() + 'M isk'
+    else if price >= 1000
+      price /= 1000
+      price = price.toFixed(2).toString() + 'K isk'
+    else
+      price = price.toFixed(2).toString() + ' isk'
+    console.log price
+    return price
+    
   readFile = (file) =>
     if file.size != 0
       fileReader = new FileReader
@@ -204,7 +186,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                 else if command.indexOf('!pc') >= 0
                   crestService.getPrices(@system, converted).then (response) =>
                     for item in response.data
-                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: item.buy_price, sell_price: item.sell_price, system: item.system}})
+                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
                     onMarketPaginate(@query.market.page, @query.market.limit)
                     @selectedTab = @query.market.tab
 
@@ -340,7 +322,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @onCommandReorder = onCommandReorder
   @removeFilter = removeFilter
   @clearTable = clearTable
-  @timeStamp = timeStamp
 
   return
 ]

@@ -9,7 +9,7 @@ module Api
       end
 
       def show
-        return render json: { error: 'Planet not found', status: :bad_request }, status: :bad_request unless (@solarsystem && @planet)
+        return render json: { error: 'Planet not found', status: :bad_request }, status: :bad_request unless @solarsystem && @planet
         result = @planet.as_json
         moon_ids = @planet.moons.pluck(:itemID)
         result['type'] = Item.find_by(typeID: @planet.typeID).typeName[/\(([^)]+)\)/, 1]
