@@ -2,7 +2,7 @@ module Api
   module V1
     class PlanetsController < ApiController
       respond_to :json
-      before_action :find_solarsystem, :find_planet, except: [:index]
+      before_action :find_solarsystem, :find_planet
 
       def index
         render json: @solarsystem.planets.to_json if @solarsystem
@@ -34,7 +34,7 @@ module Api
       def find_planet
         @planet = @solarsystem.planets.find(@pp[:id]) if @pp[:id]
       rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Solarsystem not found', status: :bad_request }, status: :bad_request
+        render json: { error: 'Planet not found', status: :bad_request }, status: :bad_request
       end
     end
   end
