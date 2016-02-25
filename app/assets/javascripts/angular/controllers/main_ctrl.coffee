@@ -1,6 +1,8 @@
-app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window',
-  ($scope, $http, $mdSidenav, $state, $window) -> do =>
+app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window', 'crestService',
+  ($scope, $http, $mdSidenav, $state, $window, crestService) -> do =>
     @version = '0.0.0'
+    @user = 
+        name: ''
 
     closeSidenav = (componentId) =>
       $mdSidenav(componentId).close()
@@ -13,6 +15,8 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
 
     init = =>
       @version = '0.0.1'
+      crestService.getUser().then (response) =>
+        angular.copy(response.data, @user)
 
     init()
 

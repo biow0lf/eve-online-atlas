@@ -20,7 +20,8 @@ Rails.application.routes.draw do
   # get '/signout' => 'sessions#destroy', :as => :signout
   get '/auth/failure' => 'sessions#failure'
 
-  # resources :sessions, only: [:new, :destroy]
+  resources :sessions, only: [:destroy]
+  resources :users, only: [:index, :show]
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do

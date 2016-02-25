@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
       user.refreshToken = auth['credentials']['refresh_token']
       user.characterID = auth['info']['character_id']
       user.name = auth['info']['name']
+      user.token = auth['credentials']['token']
+      user.expiry = auth['info']['expires_on']
     end
   end
 end

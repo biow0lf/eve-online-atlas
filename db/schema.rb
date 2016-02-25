@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225025611) do
+ActiveRecord::Schema.define(version: 20160225034612) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -842,6 +842,8 @@ ActiveRecord::Schema.define(version: 20160225025611) do
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
     t.string   "name",         limit: 255
+    t.string   "token",        limit: 255
+    t.datetime "expiry"
   end
 
   add_index "users", ["characterID"], name: "index_users_on_characterID", unique: true, using: :btree
