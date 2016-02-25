@@ -2,53 +2,37 @@ module Api
   module V1
     class SolarsystemsController < ApiController
       respond_to :json
-      # after_action :verify_authorized, except: :index
-      # after_action :verify_policy_scoped, only: :index
+      before_action :find_solarsystem
 
       def index
-        # permit proper parameters
-        ssp = solarsystem_params
-
-        # if there is a :name parameter, use that to find solarsystem
-        # else return all solarsystems
-        solarsystem = if ssp.key?(:name)
-                        Solarsystem.find_by(solarSystemName: ssp[:name])
-                      else
-                        Solarsystem.all
-                      end
-
-        render json: solarsystem.to_json
+        return render json: @solarsystem.to_json if @solarsystem
+        render json: Solarsystem.all
       end
 
       def show
-        # permit proper parameters
-        ssp = solarsystem_params
-        result = nil
-
-        # find solarsystem by id
-        solarsystem = Solarsystem.find_by(solarSystemID: ssp[:id])
-
-        # make sure solarsystem is not nil before finding planetIDs
-        unless solarsystem.nil?
-          planet_ids = solarsystem.planets.pluck(:itemID)
-          result = solarsystem.as_json
-          result['class'] = solarsystem.wormholeclass.wormholeClassID
-          result['planetIDs'] = planet_ids
-        end
-
-        status = 200
-        if result.nil?
-          status = 400
-          result = { error: 'Invalid solarSystemID', status: status }
-        end
-
-        render json: result, status: status
+        return render status: :bad_request unless @solarsystem
+        planet_ids = @solarsystem.planets.pluck(:itemID)
+        result = @solarsystem.as_json
+        result['class'] = @solarsystem.wormholeclass.wormholeClassID
+        result['planetIDs'] = planet_ids
+        render json: result
       end
 
       private
 
       def solarsystem_params
         params.permit(:id, :name)
+      end
+
+      def find_solarsystem
+        @ssp = solarsystem_params
+        if @ssp.has_key?(:name)
+          @solarsystem = Solarsystem.find_by(solarSystemName: @ssp[:name])
+        else
+          @solarsystem = Solarsystem.find(@ssp[:id]) if @ssp[:id]
+        end
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'Solarsystem not found', status: :bad_request }, status: :bad_request
       end
     end
   end
