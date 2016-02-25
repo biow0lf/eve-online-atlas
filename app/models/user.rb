@@ -1,4 +1,4 @@
-include 'logger'
+require 'logger'
 class User < ActiveRecord::Base
   def self.create_from_omniauth(auth)
     log = Logger.new('log/tk.log')
