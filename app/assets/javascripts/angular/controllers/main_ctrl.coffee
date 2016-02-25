@@ -9,7 +9,6 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
       $mdSidenav(componentId).open()
 
     signin = =>
-      console.log 'going to /auth/crest'
       $window.location.href = '/auth/crest'
 
     init = =>

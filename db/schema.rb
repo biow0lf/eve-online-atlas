@@ -861,6 +861,7 @@ ActiveRecord::Schema.define(version: 20160224041452) do
 
   create_table "users", force: :cascade do |t|
     t.integer  "characterID",  limit: 4
+    t.integer  "uid",          limit: 4
     t.string   "refreshToken", limit: 255
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
