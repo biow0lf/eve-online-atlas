@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   get '/thera' => 'crest#thera'
 
-  get '/auth/crest/callback' => 'sessions#create'
+  get '/auth/:provider/callback' => 'sessions#create'
   # get '/signin' => 'sessions#new', :as => :signin
   # get '/signout' => 'sessions#destroy', :as => :signout
   get '/auth/failure' => 'sessions#failure'

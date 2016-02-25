@@ -6,6 +6,9 @@ class User < ActiveRecord::Base
     log.debug auth.inspect
     create! do |user|
       user.uid = auth['uid']
+      user.refreshToken = auth['credentials']['refresh_token']
+      user.characterID = auth['info']['character_id']
+      user.name = auth['info']['name']
     end
   end
 end
