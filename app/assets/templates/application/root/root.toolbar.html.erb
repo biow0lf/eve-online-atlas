@@ -8,8 +8,9 @@
         Eve-Assistant Tool
       </span>
       <span layout="row" flex></span>
-      <span layout="row">{{main.user.name ? main.user.name : ''}}</span>
-      <span layout="row"><md-button class="md-primary md-raised" ng-click="main.signin()">Sign in with Eve Online</md-button></span>
+      <span layout="row"><img ng-source="main.user.image" style="height: 48px" ng-show="main.user.name"></span>
+      <span layout="row"><md-button ng-hide="main.user.name" ng-click="main.signin()" style="height: 48px;"><%= image_tag 'EVE_SSO_Login_Buttons_Large_White.png', style: 'height: 48px;' %></md-button></span>
+      <span layout="row"><md-button ng-show="main.user.name" ng-click="main.signout()" class="md-primary md-raised">Sign Out</md-button></span>
       <span>
     </span>
     </div>

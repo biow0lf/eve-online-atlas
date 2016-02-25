@@ -1,5 +1,4 @@
 class SessionsController < ApplicationController
-
   def new
     redirect_to '/auth/crest'
   end
@@ -7,18 +6,20 @@ class SessionsController < ApplicationController
   def create
     auth = request.env['omniauth.auth']
     logger.debug auth
-    user = User.where(:uid => auth['uid'].to_s).first || User.create_from_omniauth(auth)
+    user = User.where(uid: auth['uid'].to_s).first || User.create_from_omniauth(auth)
     reset_session
     session[:user_id] = user.id
-    redirect_to root_url, :notice => 'Signed in!'
+    render json: user.to_json
+    # redirect_to root_url, notice: 'Signed in!'
   end
 
   def destroy
     reset_session
-    redirect_to root_url, :notice => 'Signed out!'
+    render json: {info: 'Session reset'}
+    # redirect_to root_url, notice: 'Signed out!'
   end
 
   def failure
-    redirect_to root_url, :alert => "Authentication error: #{params[:message].humanize}"
+    redirect_to root_url, alert: "Authentication error: #{params[:message].humanize}"
   end
 end
