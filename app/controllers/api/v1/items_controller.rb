@@ -81,7 +81,8 @@ module Api
       def check_playerstations
         # make sure there are entries in the table
         if Playerstation.exists?
-          return if Playerstation.first.created_at < Date.current - 1.hour
+          # do not update if created_at is more recent than an hour ago
+          return if Playerstation.first.created_at > Date.current - 1.hour
         end
         UpdatePlayerstations.update_playerstations
       end
