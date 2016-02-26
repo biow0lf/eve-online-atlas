@@ -28,6 +28,9 @@
 #= require ng-rails-csrf
 #= require angular-material-data-table
 #= require ng-file-upload
+#= require d3
+#= require c3
+#= require c3-angular
 #= require main
 #= require_tree .
 #= require_tree ../templates

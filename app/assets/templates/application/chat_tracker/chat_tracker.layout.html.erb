@@ -39,6 +39,17 @@
           </table>
         </md-table-container>
         <md-table-pagination md-limit="ctc.query.market.limit" md-page="ctc.query.market.page" md-total="{{ctc.commands.market.length}}" md-on-paginate="ctc.onMarketPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+        <div flex></div>
+        <div ng-show="ctc.datapoints.length">
+          <h4>Average Price of {{ctc.marketItem}} at Jita</h4>
+          <c3chart bindto-id="chart" chart-data="ctc.datapoints" chart-columns="ctc.datacolumns" chart-x="ctc.datax">
+            <chart-axis>
+              <chart-axis-x axis-id="date" axis-type="timeseries" axis-x-format="%m-%Y">
+                <chart-axis-x-tick tick-format-time="%m-%Y"/>
+              </chart-axis-x>
+            </chart-axis>
+          </c3chart>
+        </div>
       </md-tab>
 
       <md-tab label="thera" flex>
@@ -137,7 +148,6 @@
         </md-table-container>
         <md-table-pagination md-limit="ctc.query.command.limit" md-page="ctc.query.command.page" md-total="{{ctc.commands.command.length}}" md-on-paginate="ctc.onCommandPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
       </md-tab>
-
     </md-tabs>
   </md-card>
 

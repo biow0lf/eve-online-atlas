@@ -19,6 +19,7 @@ gem 'composite_primary_keys'
 gem 'omniauth'
 gem 'omniauth-crest'
 gem 'activerecord-import'
+gem 'activerecord-mysql-unsigned'
 # gem 'reve', :git => 'git@github.com:lisa/reve.git'
 
 source 'https://rails-assets.org' do
@@ -34,6 +35,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-ng-file-upload'
   gem 'rails-assets-moment'
   gem 'rails-assets-angular-moment', '1.0.0.beta.4'
+  gem 'rails-assets-c3-angular', '1.0.1'
 end
 
 group :development do

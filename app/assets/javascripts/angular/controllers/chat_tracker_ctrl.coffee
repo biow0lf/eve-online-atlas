@@ -1,4 +1,4 @@
-app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', ($scope, $http, $interval, crestService, $rootScope) -> do =>
+app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', 'moment', ($scope, $http, $interval, crestService, $rootScope, moment) -> do =>
   @bookmark = 1
   @selectedTab = 0
   @characters = []
@@ -8,6 +8,11 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @lastMod = @file.lastModifiedDate
   @system = 'Jita'
   @theraOrigin = ''
+
+  @datapoints = []
+  @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}]
+  @datax = {id: 'date'}
+  @marketItem = ''
 
   @selected =
     market: []
@@ -91,7 +96,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     return
 
   priceToIsk = (price) ->
-    console.log price
     if price >= 1000000000
       price /= 1000000000
       price = price.toFixed(2).toString() + 'B isk'
@@ -103,7 +107,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       price = price.toFixed(2).toString() + 'K isk'
     else
       price = price.toFixed(2).toString() + ' isk'
-    console.log price
     return price
     
   readFile = (file) =>
@@ -187,8 +190,22 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                   crestService.getPrices(@system, converted).then (response) =>
                     for item in response.data
                       @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
+                      @marketItem = item.typeName
                     onMarketPaginate(@query.market.page, @query.market.limit)
                     @selectedTab = @query.market.tab
+                  crestService.getHistories(converted).then (response) =>
+                    @datapoints = []
+                    for item in response.data
+                      # sort items into month groups
+                      groups = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
+                      result = []
+                      for key, val of groups
+                        avg = _.mean(_.map(val, (v) -> v['avgPrice']))
+                        result.push({date: moment(key, 'MM YYYY').toDate(), value: avg.toFixed(2)})
+                      result = result.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                      for r in result
+                        @datapoints.push({date: r.date, avg: r.value})
+                      console.log result
 
                 else if command.indexOf('!thera') >= 0
                   @theraOrigin = _.upperFirst(converted[0])

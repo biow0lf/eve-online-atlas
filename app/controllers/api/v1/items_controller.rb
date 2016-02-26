@@ -50,6 +50,19 @@ module Api
         render json: items.to_json
       end
 
+      def history
+        items = find_item_by_name(params[:name])
+        return render json: { error: 'Invalid item names', status: :bad_request }, status: :bad_request if items.count == 0
+        result = []
+        items.each do |item|
+          to_push = {}
+          to_push['typeID'] = item.typeID
+          to_push['history'] = item.itemhistories.select('id,orderCount,lowPrice,highPrice,avgPrice,volume,date').as_json
+          result << to_push
+        end
+        render json: result.to_json
+      end
+
       private
 
       def get_items_from_system(item_list)
