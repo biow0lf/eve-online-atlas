@@ -18,6 +18,7 @@ gem 'httparty'
 gem 'composite_primary_keys'
 gem 'omniauth'
 gem 'omniauth-crest'
+gem 'activerecord-import'
 # gem 'reve', :git => 'git@github.com:lisa/reve.git'
 
 source 'https://rails-assets.org' do

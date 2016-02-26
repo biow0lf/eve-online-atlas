@@ -56,15 +56,13 @@ module Api
         items = JSON.parse item_list
         items_from_system = []
         items['items'].each do |i|
-          station = Station.find_by(stationID: i['location']['id'].to_i)
+          station = Station.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
           if station.nil?
             # check to see if player stations need to be updated
             check_playerstations
-            station = Playerstation.find_by(stationID: i['location']['id'].to_i)
+            station = Playerstation.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
           end
-          if station.solarsystem.solarSystemID == @solarsystem.solarSystemID
-            items_from_system.push(i)
-          end
+          items_from_system.push(i) unless station.nil?
         end
         items_from_system
       end
