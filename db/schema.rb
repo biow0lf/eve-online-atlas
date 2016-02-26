@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223221106) do
+ActiveRecord::Schema.define(version: 20160225034612) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -859,6 +859,19 @@ ActiveRecord::Schema.define(version: 20160223221106) do
     t.string  "languageID", limit: 50,         null: false
     t.text    "text",       limit: 4294967295, null: false
   end
+
+  create_table "users", force: :cascade do |t|
+    t.integer  "characterID",  limit: 4
+    t.integer  "uid",          limit: 4
+    t.string   "refreshToken", limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.string   "name",         limit: 255
+    t.string   "token",        limit: 255
+    t.datetime "expiry"
+  end
+
+  add_index "users", ["characterID"], name: "index_users_on_characterID", unique: true, using: :btree
 
   create_table "warCombatZoneSystems", primary_key: "solarSystemID", force: :cascade do |t|
     t.integer "combatZoneID", limit: 4
