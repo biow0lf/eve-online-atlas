@@ -11,13 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225034612) do
+ActiveRecord::Schema.define(version: 20160226220251) do
 
-  create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
-    t.string "agentType", limit: 50
-  end
-
-  create_table "agtAgents", primary_key: "agentID", force: :cascade do |t|
+  create_table "agtagents", primary_key: "agentID", force: :cascade do |t|
     t.integer "divisionID",    limit: 1
     t.integer "corporationID", limit: 4
     t.integer "locationID",    limit: 4
@@ -30,26 +26,30 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "agtagents", ["corporationID"], name: "agtAgents_IX_corporation", using: :btree
   add_index "agtagents", ["locationID"], name: "agtAgents_IX_station", using: :btree
 
-  create_table "agtResearchAgents", id: false, force: :cascade do |t|
+  create_table "agtagenttypes", primary_key: "agentTypeID", force: :cascade do |t|
+    t.string "agentType", limit: 50
+  end
+
+  create_table "agtresearchagents", id: false, force: :cascade do |t|
     t.integer "agentID", limit: 4, null: false
     t.integer "typeID",  limit: 4, null: false
   end
 
   add_index "agtresearchagents", ["typeID"], name: "agtResearchAgents_IX_type", using: :btree
 
-  create_table "certCerts", primary_key: "certID", force: :cascade do |t|
+  create_table "certcerts", primary_key: "certID", force: :cascade do |t|
     t.text    "description", limit: 4294967295
     t.integer "groupID",     limit: 4
     t.string  "name",        limit: 255
   end
 
-  create_table "certMasteries", id: false, force: :cascade do |t|
+  create_table "certmasteries", id: false, force: :cascade do |t|
     t.integer "typeID",       limit: 4
     t.integer "masteryLevel", limit: 4
     t.integer "certID",       limit: 4
   end
 
-  create_table "certSkills", id: false, force: :cascade do |t|
+  create_table "certskills", id: false, force: :cascade do |t|
     t.integer "certID",        limit: 4
     t.integer "skillID",       limit: 4
     t.integer "certLevelInt",  limit: 4
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "certskills", ["certID"], name: "ix_certSkills_certID", using: :btree
 
-  create_table "chrAncestries", primary_key: "ancestryID", force: :cascade do |t|
+  create_table "chrancestries", primary_key: "ancestryID", force: :cascade do |t|
     t.string  "ancestryName",     limit: 100
     t.integer "bloodlineID",      limit: 1
     t.string  "description",      limit: 1000
@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.string  "shortDescription", limit: 500
   end
 
-  create_table "chrAttributes", primary_key: "attributeID", force: :cascade do |t|
+  create_table "chrattributes", primary_key: "attributeID", force: :cascade do |t|
     t.string  "attributeName",    limit: 100
     t.string  "description",      limit: 1000
     t.integer "iconID",           limit: 4
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.string  "notes",            limit: 500
   end
 
-  create_table "chrBloodlines", primary_key: "bloodlineID", force: :cascade do |t|
+  create_table "chrbloodlines", primary_key: "bloodlineID", force: :cascade do |t|
     t.string  "bloodlineName",          limit: 100
     t.integer "raceID",                 limit: 1
     t.string  "description",            limit: 1000
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.string  "shortFemaleDescription", limit: 500
   end
 
-  create_table "chrFactions", primary_key: "factionID", force: :cascade do |t|
+  create_table "chrfactions", primary_key: "factionID", force: :cascade do |t|
     t.string  "factionName",          limit: 100
     t.string  "description",          limit: 1000
     t.integer "raceIDs",              limit: 4
@@ -112,35 +112,30 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "iconID",               limit: 4
   end
 
-  create_table "chrRaces", primary_key: "raceID", force: :cascade do |t|
+  create_table "chrraces", primary_key: "raceID", force: :cascade do |t|
     t.string  "raceName",         limit: 100
     t.string  "description",      limit: 1000
     t.integer "iconID",           limit: 4
     t.string  "shortDescription", limit: 500
   end
 
-  create_table "crpActivities", primary_key: "activityID", force: :cascade do |t|
+  create_table "crpactivities", primary_key: "activityID", force: :cascade do |t|
     t.string "activityName", limit: 100
     t.string "description",  limit: 1000
   end
 
-  create_table "crpNPCCorporationDivisions", id: false, force: :cascade do |t|
+  create_table "crpnpccorporationdivisions", id: false, force: :cascade do |t|
     t.integer "corporationID", limit: 4, null: false
     t.integer "divisionID",    limit: 1, null: false
     t.integer "size",          limit: 1
   end
 
-  create_table "crpNPCCorporationResearchFields", id: false, force: :cascade do |t|
+  create_table "crpnpccorporationresearchfields", id: false, force: :cascade do |t|
     t.integer "skillID",       limit: 4, null: false
     t.integer "corporationID", limit: 4, null: false
   end
 
-  create_table "crpNPCCorporationTrades", id: false, force: :cascade do |t|
-    t.integer "corporationID", limit: 4, null: false
-    t.integer "typeID",        limit: 4, null: false
-  end
-
-  create_table "crpNPCCorporations", primary_key: "corporationID", force: :cascade do |t|
+  create_table "crpnpccorporations", primary_key: "corporationID", force: :cascade do |t|
     t.string  "size",               limit: 1
     t.string  "extent",             limit: 1
     t.integer "solarSystemID",      limit: 4
@@ -170,18 +165,23 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "iconID",             limit: 4
   end
 
-  create_table "crpNPCDivisions", primary_key: "divisionID", force: :cascade do |t|
+  create_table "crpnpccorporationtrades", id: false, force: :cascade do |t|
+    t.integer "corporationID", limit: 4, null: false
+    t.integer "typeID",        limit: 4, null: false
+  end
+
+  create_table "crpnpcdivisions", primary_key: "divisionID", force: :cascade do |t|
     t.string "divisionName", limit: 100
     t.string "description",  limit: 1000
     t.string "leaderType",   limit: 100
   end
 
-  create_table "dgmAttributeCategories", primary_key: "categoryID", force: :cascade do |t|
+  create_table "dgmattributecategories", primary_key: "categoryID", force: :cascade do |t|
     t.string "categoryName",        limit: 50
     t.string "categoryDescription", limit: 200
   end
 
-  create_table "dgmAttributeTypes", primary_key: "attributeID", force: :cascade do |t|
+  create_table "dgmattributetypes", primary_key: "attributeID", force: :cascade do |t|
     t.string  "attributeName", limit: 100
     t.string  "description",   limit: 1000
     t.integer "iconID",        limit: 4
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "categoryID",    limit: 1
   end
 
-  create_table "dgmEffects", primary_key: "effectID", force: :cascade do |t|
+  create_table "dgmeffects", primary_key: "effectID", force: :cascade do |t|
     t.string  "effectName",                     limit: 400
     t.integer "effectCategory",                 limit: 2
     t.integer "preExpression",                  limit: 4
@@ -224,7 +224,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.text    "modifierInfo",                   limit: 4294967295
   end
 
-  create_table "dgmExpressions", primary_key: "expressionID", force: :cascade do |t|
+  create_table "dgmexpressions", primary_key: "expressionID", force: :cascade do |t|
     t.integer "operandID",             limit: 4
     t.integer "arg1",                  limit: 4
     t.integer "arg2",                  limit: 4
@@ -236,20 +236,20 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "expressionAttributeID", limit: 2
   end
 
-  create_table "dgmTypeAttributes", id: false, force: :cascade do |t|
+  create_table "dgmtypeattributes", id: false, force: :cascade do |t|
     t.integer "typeID",      limit: 4,  null: false
     t.integer "attributeID", limit: 2,  null: false
     t.integer "valueInt",    limit: 4
     t.float   "valueFloat",  limit: 53
   end
 
-  create_table "dgmTypeEffects", id: false, force: :cascade do |t|
+  create_table "dgmtypeeffects", id: false, force: :cascade do |t|
     t.integer "typeID",    limit: 4, null: false
     t.integer "effectID",  limit: 2, null: false
     t.boolean "isDefault", limit: 1
   end
 
-  create_table "eveGraphics", primary_key: "graphicID", force: :cascade do |t|
+  create_table "evegraphics", primary_key: "graphicID", force: :cascade do |t|
     t.string "sofFactionName", limit: 100
     t.string "graphicFile",    limit: 100
     t.string "sofHullName",    limit: 100
@@ -257,18 +257,18 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.text   "description",    limit: 4294967295
   end
 
-  create_table "eveIcons", primary_key: "iconID", force: :cascade do |t|
+  create_table "eveicons", primary_key: "iconID", force: :cascade do |t|
     t.string "iconFile",    limit: 500
     t.text   "description", limit: 4294967295
   end
 
-  create_table "eveUnits", primary_key: "unitID", force: :cascade do |t|
+  create_table "eveunits", primary_key: "unitID", force: :cascade do |t|
     t.string "unitName",    limit: 100
     t.string "displayName", limit: 50
     t.string "description", limit: 1000
   end
 
-  create_table "industryActivity", id: false, force: :cascade do |t|
+  create_table "industryactivity", id: false, force: :cascade do |t|
     t.integer "typeID",     limit: 4, null: false
     t.integer "activityID", limit: 4, null: false
     t.integer "time",       limit: 4
@@ -276,7 +276,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "industryactivity", ["activityID"], name: "ix_industryActivity_activityID", using: :btree
 
-  create_table "industryActivityMaterials", id: false, force: :cascade do |t|
+  create_table "industryactivitymaterials", id: false, force: :cascade do |t|
     t.integer "typeID",         limit: 4
     t.integer "activityID",     limit: 4
     t.integer "materialTypeID", limit: 4
@@ -286,7 +286,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "industryactivitymaterials", ["typeID", "activityID"], name: "industryActivityMaterials_idx1", using: :btree
   add_index "industryactivitymaterials", ["typeID"], name: "ix_industryActivityMaterials_typeID", using: :btree
 
-  create_table "industryActivityProbabilities", id: false, force: :cascade do |t|
+  create_table "industryactivityprobabilities", id: false, force: :cascade do |t|
     t.integer "typeID",        limit: 4
     t.integer "activityID",    limit: 4
     t.integer "productTypeID", limit: 4
@@ -296,7 +296,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "industryactivityprobabilities", ["productTypeID"], name: "ix_industryActivityProbabilities_productTypeID", using: :btree
   add_index "industryactivityprobabilities", ["typeID"], name: "ix_industryActivityProbabilities_typeID", using: :btree
 
-  create_table "industryActivityProducts", id: false, force: :cascade do |t|
+  create_table "industryactivityproducts", id: false, force: :cascade do |t|
     t.integer "typeID",        limit: 4
     t.integer "activityID",    limit: 4
     t.integer "productTypeID", limit: 4
@@ -307,7 +307,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "industryactivityproducts", ["typeID", "activityID"], name: "industryActivityProduct_idx1", using: :btree
   add_index "industryactivityproducts", ["typeID"], name: "ix_industryActivityProducts_typeID", using: :btree
 
-  create_table "industryActivitySkills", id: false, force: :cascade do |t|
+  create_table "industryactivityskills", id: false, force: :cascade do |t|
     t.integer "typeID",     limit: 4
     t.integer "activityID", limit: 4
     t.integer "skillID",    limit: 4
@@ -318,17 +318,17 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "industryactivityskills", ["typeID", "activityID"], name: "industryActivitySkills_idx1", using: :btree
   add_index "industryactivityskills", ["typeID"], name: "ix_industryActivitySkills_typeID", using: :btree
 
-  create_table "industryBlueprints", primary_key: "typeID", force: :cascade do |t|
+  create_table "industryblueprints", primary_key: "typeID", force: :cascade do |t|
     t.integer "maxProductionLimit", limit: 4
   end
 
-  create_table "invCategories", primary_key: "categoryID", force: :cascade do |t|
+  create_table "invcategories", primary_key: "categoryID", force: :cascade do |t|
     t.string  "categoryName", limit: 100
     t.integer "iconID",       limit: 8
     t.boolean "published",    limit: 1
   end
 
-  create_table "invContrabandTypes", id: false, force: :cascade do |t|
+  create_table "invcontrabandtypes", id: false, force: :cascade do |t|
     t.integer "factionID",        limit: 4,  null: false
     t.integer "typeID",           limit: 4,  null: false
     t.float   "standingLoss",     limit: 53
@@ -339,11 +339,11 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "invcontrabandtypes", ["typeID"], name: "invContrabandTypes_IX_type", using: :btree
 
-  create_table "invControlTowerResourcePurposes", primary_key: "purpose", force: :cascade do |t|
+  create_table "invcontroltowerresourcepurposes", primary_key: "purpose", force: :cascade do |t|
     t.string "purposeText", limit: 100
   end
 
-  create_table "invControlTowerResources", id: false, force: :cascade do |t|
+  create_table "invcontroltowerresources", id: false, force: :cascade do |t|
     t.integer "controlTowerTypeID", limit: 4,  null: false
     t.integer "resourceTypeID",     limit: 4,  null: false
     t.integer "purpose",            limit: 1
@@ -352,13 +352,13 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "factionID",          limit: 4
   end
 
-  create_table "invFlags", primary_key: "flagID", force: :cascade do |t|
+  create_table "invflags", primary_key: "flagID", force: :cascade do |t|
     t.string  "flagName", limit: 200
     t.string  "flagText", limit: 100
     t.integer "orderID",  limit: 4
   end
 
-  create_table "invGroups", primary_key: "groupID", force: :cascade do |t|
+  create_table "invgroups", primary_key: "groupID", force: :cascade do |t|
     t.integer "categoryID",           limit: 4
     t.string  "groupName",            limit: 100
     t.integer "iconID",               limit: 8
@@ -371,7 +371,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "invgroups", ["categoryID"], name: "invTypes_categoryid", using: :btree
 
-  create_table "invItems", primary_key: "itemID", force: :cascade do |t|
+  create_table "invitems", primary_key: "itemID", force: :cascade do |t|
     t.integer "typeID",     limit: 4, null: false
     t.integer "ownerID",    limit: 4, null: false
     t.integer "locationID", limit: 8, null: false
@@ -382,7 +382,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "invitems", ["locationID"], name: "items_IX_Location", using: :btree
   add_index "invitems", ["ownerID", "locationID"], name: "items_IX_OwnerLocation", using: :btree
 
-  create_table "invMarketGroups", primary_key: "marketGroupID", force: :cascade do |t|
+  create_table "invmarketgroups", primary_key: "marketGroupID", force: :cascade do |t|
     t.integer "parentGroupID",   limit: 4
     t.string  "marketGroupName", limit: 100
     t.string  "description",     limit: 3000
@@ -390,22 +390,22 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.boolean "hasTypes",        limit: 1
   end
 
-  create_table "invMetaGroups", primary_key: "metaGroupID", force: :cascade do |t|
+  create_table "invmetagroups", primary_key: "metaGroupID", force: :cascade do |t|
     t.string  "metaGroupName", limit: 100
     t.string  "description",   limit: 1000
     t.integer "iconID",        limit: 4
   end
 
-  create_table "invMetaTypes", primary_key: "typeID", force: :cascade do |t|
+  create_table "invmetatypes", primary_key: "typeID", force: :cascade do |t|
     t.integer "parentTypeID", limit: 4
     t.integer "metaGroupID",  limit: 2
   end
 
-  create_table "invNames", primary_key: "itemID", force: :cascade do |t|
+  create_table "invnames", primary_key: "itemID", force: :cascade do |t|
     t.string "itemName", limit: 200, null: false
   end
 
-  create_table "invPositions", primary_key: "itemID", force: :cascade do |t|
+  create_table "invpositions", primary_key: "itemID", force: :cascade do |t|
     t.float "x",     limit: 53, default: 0.0, null: false
     t.float "y",     limit: 53, default: 0.0, null: false
     t.float "z",     limit: 53, default: 0.0, null: false
@@ -414,7 +414,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float "roll",  limit: 24
   end
 
-  create_table "invTraits", primary_key: "traitID", force: :cascade do |t|
+  create_table "invtraits", primary_key: "traitID", force: :cascade do |t|
     t.integer "typeID",    limit: 4
     t.integer "skillID",   limit: 4
     t.float   "bonus",     limit: 53
@@ -422,20 +422,20 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "unitID",    limit: 4
   end
 
-  create_table "invTypeMaterials", id: false, force: :cascade do |t|
+  create_table "invtypematerials", id: false, force: :cascade do |t|
     t.integer "typeID",         limit: 4,             null: false
     t.integer "materialTypeID", limit: 4,             null: false
     t.integer "quantity",       limit: 4, default: 0, null: false
   end
 
-  create_table "invTypeReactions", id: false, force: :cascade do |t|
+  create_table "invtypereactions", id: false, force: :cascade do |t|
     t.integer "reactionTypeID", limit: 4, null: false
     t.boolean "input",          limit: 1, null: false
     t.integer "typeID",         limit: 4, null: false
     t.integer "quantity",       limit: 2
   end
 
-  create_table "invTypes", primary_key: "typeID", force: :cascade do |t|
+  create_table "invtypes", primary_key: "typeID", force: :cascade do |t|
     t.integer "groupID",       limit: 4
     t.string  "typeName",      limit: 100
     t.text    "description",   limit: 4294967295
@@ -454,7 +454,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "invtypes", ["groupID"], name: "invTypes_groupid", using: :btree
 
-  create_table "invUniqueNames", primary_key: "itemID", force: :cascade do |t|
+  create_table "invuniquenames", primary_key: "itemID", force: :cascade do |t|
     t.string  "itemName", limit: 200, null: false
     t.integer "groupID",  limit: 4
   end
@@ -462,7 +462,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "invuniquenames", ["groupID", "itemName"], name: "invUniqueNames_IX_GroupName", using: :btree
   add_index "invuniquenames", ["itemName"], name: "invUniqueNames_UQ", unique: true, using: :btree
 
-  create_table "mapCelestialStatistics", primary_key: "celestialID", force: :cascade do |t|
+  create_table "mapcelestialstatistics", primary_key: "celestialID", force: :cascade do |t|
     t.float   "temperature",    limit: 53
     t.string  "spectralClass",  limit: 10
     t.float   "luminosity",     limit: 53
@@ -484,14 +484,14 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "mass",           limit: 4
   end
 
-  create_table "mapConstellationJumps", id: false, force: :cascade do |t|
+  create_table "mapconstellationjumps", id: false, force: :cascade do |t|
     t.integer "fromRegionID",        limit: 8
     t.integer "fromConstellationID", limit: 8, null: false
     t.integer "toConstellationID",   limit: 8, null: false
     t.integer "toRegionID",          limit: 8
   end
 
-  create_table "mapConstellations", primary_key: "constellationID", force: :cascade do |t|
+  create_table "mapconstellations", primary_key: "constellationID", force: :cascade do |t|
     t.integer "regionID",          limit: 4
     t.string  "constellationName", limit: 100
     t.float   "x",                 limit: 53
@@ -509,7 +509,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "mapconstellations", ["regionID"], name: "mapConstellations_IX_region", using: :btree
 
-  create_table "mapDenormalize", primary_key: "itemID", force: :cascade do |t|
+  create_table "mapdenormalize", primary_key: "itemID", force: :cascade do |t|
     t.integer "typeID",          limit: 4
     t.integer "groupID",         limit: 4
     t.integer "solarSystemID",   limit: 4
@@ -535,11 +535,25 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "mapdenormalize", ["solarSystemID", "x", "y", "z", "itemName", "itemID"], name: "mapDenormalize_gis", length: {"solarSystemID"=>nil, "x"=>nil, "y"=>nil, "z"=>nil, "itemName"=>40, "itemID"=>nil}, using: :btree
   add_index "mapdenormalize", ["solarSystemID"], name: "mapDenormalize_IX_system", using: :btree
 
-  create_table "mapJumps", primary_key: "stargateID", force: :cascade do |t|
+  create_table "mapjumps", primary_key: "stargateID", force: :cascade do |t|
     t.integer "destinationID", limit: 8
   end
 
-  create_table "mapLandmarks", primary_key: "landmarkID", force: :cascade do |t|
+  create_table "mapjumpscurrent", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipJumps",     limit: 4
+    t.datetime "cachedUntil"
+  end
+
+  create_table "mapkillscurrent", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipKills",     limit: 4
+    t.integer  "factionKills",  limit: 4
+    t.integer  "podKills",      limit: 4
+    t.datetime "cachedUntil"
+  end
+
+  create_table "maplandmarks", primary_key: "landmarkID", force: :cascade do |t|
     t.string  "landmarkName", limit: 100
     t.text    "description",  limit: 4294967295
     t.integer "locationID",   limit: 8
@@ -549,20 +563,44 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "iconID",       limit: 8
   end
 
-  create_table "mapLocationScenes", primary_key: "locationID", force: :cascade do |t|
+  create_table "maplocationscenes", primary_key: "locationID", force: :cascade do |t|
     t.integer "graphicID", limit: 4
   end
 
-  create_table "mapLocationWormholeClasses", primary_key: "locationID", force: :cascade do |t|
+  create_table "maplocationwormholeclasses", primary_key: "locationID", force: :cascade do |t|
     t.integer "wormholeClassID", limit: 4
   end
 
-  create_table "mapRegionJumps", id: false, force: :cascade do |t|
+  create_table "mapmoons", primary_key: "moonID", force: :cascade do |t|
+    t.boolean "atm",  limit: 1, default: false
+    t.boolean "eva",  limit: 1, default: false
+    t.boolean "hyd",  limit: 1, default: false
+    t.boolean "sil",  limit: 1, default: false
+    t.boolean "cob",  limit: 1, default: false
+    t.boolean "sca",  limit: 1, default: false
+    t.boolean "tit",  limit: 1, default: false
+    t.boolean "tun",  limit: 1, default: false
+    t.boolean "cad",  limit: 1, default: false
+    t.boolean "van",  limit: 1, default: false
+    t.boolean "chr",  limit: 1, default: false
+    t.boolean "pla",  limit: 1, default: false
+    t.boolean "cae",  limit: 1, default: false
+    t.boolean "tec",  limit: 1, default: false
+    t.boolean "haf",  limit: 1, default: false
+    t.boolean "mer",  limit: 1, default: false
+    t.boolean "pro",  limit: 1, default: false
+    t.boolean "dys",  limit: 1, default: false
+    t.boolean "neo",  limit: 1, default: false
+    t.boolean "thu",  limit: 1, default: false
+    t.boolean "scan", limit: 1, default: false
+  end
+
+  create_table "mapregionjumps", id: false, force: :cascade do |t|
     t.integer "fromRegionID", limit: 8, null: false
     t.integer "toRegionID",   limit: 8, null: false
   end
 
-  create_table "mapRegions", primary_key: "regionID", force: :cascade do |t|
+  create_table "mapregions", primary_key: "regionID", force: :cascade do |t|
     t.string  "regionName", limit: 100
     t.float   "x",          limit: 53
     t.float   "y",          limit: 53
@@ -579,7 +617,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "mapregions", ["regionID"], name: "mapRegions_IX_region", using: :btree
 
-  create_table "mapSolarSystemJumps", id: false, force: :cascade do |t|
+  create_table "mapsolarsystemjumps", id: false, force: :cascade do |t|
     t.integer "fromRegionID",        limit: 8
     t.integer "fromConstellationID", limit: 8
     t.integer "fromSolarSystemID",   limit: 8, null: false
@@ -588,7 +626,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "toRegionID",          limit: 8
   end
 
-  create_table "mapSolarSystems", primary_key: "solarSystemID", force: :cascade do |t|
+  create_table "mapsolarsystems", primary_key: "solarSystemID", force: :cascade do |t|
     t.integer "regionID",        limit: 4
     t.integer "constellationID", limit: 4
     t.string  "solarSystemName", limit: 100
@@ -621,7 +659,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "mapsolarsystems", ["security"], name: "mapSolarSystems_IX_security", using: :btree
   add_index "mapsolarsystems", ["solarSystemName"], name: "mss_name", length: {"solarSystemName"=>40}, using: :btree
 
-  create_table "mapUniverse", primary_key: "universeID", force: :cascade do |t|
+  create_table "mapuniverse", primary_key: "universeID", force: :cascade do |t|
     t.string "universeName", limit: 100
     t.float  "x",            limit: 53
     t.float  "y",            limit: 53
@@ -635,42 +673,17 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float  "radius",       limit: 53
   end
 
-  create_table "mapmoons", id: false, force: :cascade do |t|
-    t.integer "moonID", limit: 4
-    t.integer "atm",    limit: 1, default: -1
-    t.integer "eva",    limit: 1, default: -1
-    t.integer "hyd",    limit: 1, default: -1
-    t.integer "sil",    limit: 1, default: -1
-    t.integer "cob",    limit: 1, default: -1
-    t.integer "sca",    limit: 1, default: -1
-    t.integer "tit",    limit: 1, default: -1
-    t.integer "tun",    limit: 1, default: -1
-    t.integer "cad",    limit: 1, default: -1
-    t.integer "van",    limit: 1, default: -1
-    t.integer "chr",    limit: 1, default: -1
-    t.integer "pla",    limit: 1, default: -1
-    t.integer "cae",    limit: 1, default: -1
-    t.integer "tec",    limit: 1, default: -1
-    t.integer "haf",    limit: 1, default: -1
-    t.integer "mer",    limit: 1, default: -1
-    t.integer "pro",    limit: 1, default: -1
-    t.integer "dys",    limit: 1, default: -1
-    t.integer "neo",    limit: 1, default: -1
-    t.integer "thu",    limit: 1, default: -1
-    t.integer "scan",   limit: 1, default: -1
-  end
-
-  create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
+  create_table "planetschematics", primary_key: "schematicID", force: :cascade do |t|
     t.string  "schematicName", limit: 255
     t.integer "cycleTime",     limit: 4
   end
 
-  create_table "planetSchematicsPinMap", id: false, force: :cascade do |t|
+  create_table "planetschematicspinmap", id: false, force: :cascade do |t|
     t.integer "schematicID", limit: 2, null: false
     t.integer "pinTypeID",   limit: 4, null: false
   end
 
-  create_table "planetSchematicsTypeMap", id: false, force: :cascade do |t|
+  create_table "planetschematicstypemap", id: false, force: :cascade do |t|
     t.integer "schematicID", limit: 2, null: false
     t.integer "typeID",      limit: 4, null: false
     t.integer "quantity",    limit: 2
@@ -691,14 +704,14 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.datetime "updated_at",                  null: false
   end
 
-  create_table "ramActivities", primary_key: "activityID", force: :cascade do |t|
+  create_table "ramactivities", primary_key: "activityID", force: :cascade do |t|
     t.string  "activityName", limit: 100
     t.string  "iconNo",       limit: 5
     t.string  "description",  limit: 1000
     t.boolean "published",    limit: 1
   end
 
-  create_table "ramAssemblyLineStations", id: false, force: :cascade do |t|
+  create_table "ramassemblylinestations", id: false, force: :cascade do |t|
     t.integer "stationID",          limit: 4, null: false
     t.integer "assemblyLineTypeID", limit: 1, null: false
     t.integer "quantity",           limit: 1
@@ -711,7 +724,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "ramassemblylinestations", ["ownerID"], name: "ramAssemblyLineStations_IX_owner", using: :btree
   add_index "ramassemblylinestations", ["regionID"], name: "ramAssemblyLineStations_IX_region", using: :btree
 
-  create_table "ramAssemblyLineTypeDetailPerCategory", id: false, force: :cascade do |t|
+  create_table "ramassemblylinetypedetailpercategory", id: false, force: :cascade do |t|
     t.integer "assemblyLineTypeID", limit: 1,  null: false
     t.integer "categoryID",         limit: 4,  null: false
     t.float   "timeMultiplier",     limit: 53
@@ -719,7 +732,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float   "costMultiplier",     limit: 53
   end
 
-  create_table "ramAssemblyLineTypeDetailPerGroup", id: false, force: :cascade do |t|
+  create_table "ramassemblylinetypedetailpergroup", id: false, force: :cascade do |t|
     t.integer "assemblyLineTypeID", limit: 1,  null: false
     t.integer "groupID",            limit: 4,  null: false
     t.float   "timeMultiplier",     limit: 53
@@ -727,7 +740,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float   "costMultiplier",     limit: 53
   end
 
-  create_table "ramAssemblyLineTypes", primary_key: "assemblyLineTypeID", force: :cascade do |t|
+  create_table "ramassemblylinetypes", primary_key: "assemblyLineTypeID", force: :cascade do |t|
     t.string  "assemblyLineTypeName",   limit: 100
     t.string  "description",            limit: 1000
     t.float   "baseTimeMultiplier",     limit: 53
@@ -738,23 +751,28 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.float   "minCostPerHour",         limit: 53
   end
 
-  create_table "ramInstallationTypeContents", id: false, force: :cascade do |t|
+  create_table "raminstallationtypecontents", id: false, force: :cascade do |t|
     t.integer "installationTypeID", limit: 4, null: false
     t.integer "assemblyLineTypeID", limit: 1, null: false
     t.integer "quantity",           limit: 1
   end
 
-  create_table "skinLicense", primary_key: "licenseTypeID", force: :cascade do |t|
+  create_table "skinlicense", primary_key: "licenseTypeID", force: :cascade do |t|
     t.integer "duration", limit: 4
     t.integer "skinID",   limit: 4
   end
 
-  create_table "skinMaterials", primary_key: "skinMaterialID", force: :cascade do |t|
+  create_table "skinmaterials", primary_key: "skinMaterialID", force: :cascade do |t|
     t.integer "displayNameID", limit: 4
     t.integer "materialSetID", limit: 4
   end
 
-  create_table "skinShip", id: false, force: :cascade do |t|
+  create_table "skins", primary_key: "skinID", force: :cascade do |t|
+    t.string  "internalName",   limit: 70
+    t.integer "skinMaterialID", limit: 4
+  end
+
+  create_table "skinship", id: false, force: :cascade do |t|
     t.integer "skinID", limit: 4
     t.integer "typeID", limit: 4
   end
@@ -762,17 +780,7 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "skinship", ["skinID"], name: "ix_skinShip_skinID", using: :btree
   add_index "skinship", ["typeID"], name: "ix_skinShip_typeID", using: :btree
 
-  create_table "skins", primary_key: "skinID", force: :cascade do |t|
-    t.string  "internalName",   limit: 70
-    t.integer "skinMaterialID", limit: 4
-  end
-
-  create_table "staOperationServices", id: false, force: :cascade do |t|
-    t.integer "operationID", limit: 1, null: false
-    t.integer "serviceID",   limit: 4, null: false
-  end
-
-  create_table "staOperations", primary_key: "operationID", force: :cascade do |t|
+  create_table "staoperations", primary_key: "operationID", force: :cascade do |t|
     t.integer "activityID",            limit: 1
     t.string  "operationName",         limit: 100
     t.string  "description",           limit: 1000
@@ -788,25 +796,17 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "joveStationTypeID",     limit: 4
   end
 
-  create_table "staServices", primary_key: "serviceID", force: :cascade do |t|
+  create_table "staoperationservices", id: false, force: :cascade do |t|
+    t.integer "operationID", limit: 1, null: false
+    t.integer "serviceID",   limit: 4, null: false
+  end
+
+  create_table "staservices", primary_key: "serviceID", force: :cascade do |t|
     t.string "serviceName", limit: 100
     t.string "description", limit: 1000
   end
 
-  create_table "staStationTypes", primary_key: "stationTypeID", force: :cascade do |t|
-    t.float   "dockEntryX",             limit: 53
-    t.float   "dockEntryY",             limit: 53
-    t.float   "dockEntryZ",             limit: 53
-    t.float   "dockOrientationX",       limit: 53
-    t.float   "dockOrientationY",       limit: 53
-    t.float   "dockOrientationZ",       limit: 53
-    t.integer "operationID",            limit: 1
-    t.integer "officeSlots",            limit: 1
-    t.float   "reprocessingEfficiency", limit: 53
-    t.boolean "conquerable",            limit: 1
-  end
-
-  create_table "staStations", primary_key: "stationID", force: :cascade do |t|
+  create_table "stastations", primary_key: "stationID", force: :cascade do |t|
     t.integer "security",                 limit: 2
     t.float   "dockingCostPerVolume",     limit: 53
     t.float   "maxShipVolumeDockable",    limit: 53
@@ -833,7 +833,20 @@ ActiveRecord::Schema.define(version: 20160225034612) do
   add_index "stastations", ["solarSystemID"], name: "staStations_IX_system", using: :btree
   add_index "stastations", ["stationTypeID"], name: "staStations_IX_type", using: :btree
 
-  create_table "translationTables", id: false, force: :cascade do |t|
+  create_table "stastationtypes", primary_key: "stationTypeID", force: :cascade do |t|
+    t.float   "dockEntryX",             limit: 53
+    t.float   "dockEntryY",             limit: 53
+    t.float   "dockEntryZ",             limit: 53
+    t.float   "dockOrientationX",       limit: 53
+    t.float   "dockOrientationY",       limit: 53
+    t.float   "dockOrientationZ",       limit: 53
+    t.integer "operationID",            limit: 1
+    t.integer "officeSlots",            limit: 1
+    t.float   "reprocessingEfficiency", limit: 53
+    t.boolean "conquerable",            limit: 1
+  end
+
+  create_table "translationtables", id: false, force: :cascade do |t|
     t.string  "sourceTable",      limit: 200, null: false
     t.string  "destinationTable", limit: 200
     t.string  "translatedKey",    limit: 200, null: false
@@ -841,19 +854,19 @@ ActiveRecord::Schema.define(version: 20160225034612) do
     t.integer "tcID",             limit: 4
   end
 
-  create_table "trnTranslationColumns", primary_key: "tcID", force: :cascade do |t|
+  create_table "trntranslationcolumns", primary_key: "tcID", force: :cascade do |t|
     t.integer "tcGroupID",  limit: 2
     t.string  "tableName",  limit: 256, null: false
     t.string  "columnName", limit: 128, null: false
     t.string  "masterID",   limit: 128
   end
 
-  create_table "trnTranslationLanguages", primary_key: "numericLanguageID", force: :cascade do |t|
+  create_table "trntranslationlanguages", primary_key: "numericLanguageID", force: :cascade do |t|
     t.string "languageID",   limit: 50
     t.string "languageName", limit: 200
   end
 
-  create_table "trnTranslations", id: false, force: :cascade do |t|
+  create_table "trntranslations", id: false, force: :cascade do |t|
     t.integer "tcID",       limit: 2,          null: false
     t.integer "keyID",      limit: 4,          null: false
     t.string  "languageID", limit: 50,         null: false
@@ -873,15 +886,15 @@ ActiveRecord::Schema.define(version: 20160225034612) do
 
   add_index "users", ["characterID"], name: "index_users_on_characterID", unique: true, using: :btree
 
-  create_table "warCombatZoneSystems", primary_key: "solarSystemID", force: :cascade do |t|
-    t.integer "combatZoneID", limit: 4
-  end
-
-  create_table "warCombatZones", primary_key: "combatZoneID", force: :cascade do |t|
+  create_table "warcombatzones", primary_key: "combatZoneID", force: :cascade do |t|
     t.string  "combatZoneName", limit: 100
     t.integer "factionID",      limit: 4
     t.integer "centerSystemID", limit: 4
     t.string  "description",    limit: 500
+  end
+
+  create_table "warcombatzonesystems", primary_key: "solarSystemID", force: :cascade do |t|
+    t.integer "combatZoneID", limit: 4
   end
 
 end
