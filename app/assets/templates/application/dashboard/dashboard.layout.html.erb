@@ -1,5 +1,39 @@
-<div flex layout="column" ng-controller="dashboardCtrl as dc">
-	<p> SolarSystemID:  {{dc.solarSystemID}} </p>
-	
-	<p> You are in:  {{dc.systemName}} </p>
+<div flex layout="row" ng-controller="dashboardCtrl as dc">
+  <md-card flex="40" layout="column" style="margin-right: 0;">
+    <div layout id="system-info" layout-align="start center">
+      <h3 class="md-headline" style="margin-top: 0; margin-bottom: 0; padding-left: 16px;">{{dc.systemName}} - {{dc.constellationName}} - {{dc.regionName}}</h3>
+    </div>
+    <div flex="60" layout layout-margin>
+      Map goes here
+    </div>
+    <div flex="40" layout layout-margin>
+      System stuff goes here
+    </div>
+  </md-card>
+  <md-card layout="column" flex>
+    <md-tabs flex md-border-bottom>
+      <md-tab label="Celestials" flex>
+        <div layout flex>
+          <div flex="20" layout="column" id="celestials-column">
+            <md-list>
+              <md-list-item ng-repeat="celestial in dc.celestials">
+                <div class="md-list-item-text" layout="column">
+                  {{celestial.name}}
+                </div>
+              </md-list-item>
+            </md-list>
+          </div>
+          <div flex="80" layout="column" layout-padding>
+            Main Stuff
+          </div>
+        </div>
+      </md-tab>
+      <md-tab label="Systems">
+
+      </md-tab>
+      <md-tab label="Stations">
+
+      </md-tab>
+    </md-tabs>
+  </md-card>
 </div>

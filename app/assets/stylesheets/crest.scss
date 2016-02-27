@@ -32,3 +32,16 @@ md-content {
 .sell-order {
   background-color: #FFC48C;
 }
+
+#celestials-column {
+  border-right: 1px solid rgba(0, 0, 0, 0.117647);
+}
+
+#system-info {
+  height: 48px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.117647);
+}
+
+md-tab-content div {
+  height: 100% !important;
+}
