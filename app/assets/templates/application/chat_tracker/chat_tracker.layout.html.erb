@@ -43,7 +43,7 @@
         <div flex></div>
         <div ng-show="ctc.datapointsLg.length && ctc.chartType=='monthly'">
           <h4>Average Price of {{ctc.marketItem}} at Jita (Weekly Average)</h4>
-          <c3chart bindto-id="chart" chart-data="ctc.datapointsLg" chart-columns="ctc.datacolumns" chart-x="ctc.datax">
+          <c3chart bindto-id="chart" chart-data="ctc.datapointsLg" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
             <chart-axis>
               <chart-axis-x axis-id="date" axis-type="timeseries">
                 <chart-axis-x-tick format-time="%m-%d-%Y"/>
@@ -59,7 +59,7 @@
         </div>
         <div ng-show="ctc.datapointsSm.length && ctc.chartType=='weekly'">
           <h4>Average Price of {{ctc.marketItem}} at Jita (Monthly Average)</h4>
-          <c3chart bindto-id="chart2" chart-data="ctc.datapointsSm" chart-columns="ctc.datacolumns" chart-x="ctc.datax">
+          <c3chart bindto-id="chart2" chart-data="ctc.datapointsSm" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
             <chart-axis>
               <chart-axis-x axis-id="date" axis-type="timeseries">
                 <chart-axis-x-tick format-time="%m-%d-%Y"/>

@@ -12,9 +12,10 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @datapointsSm = []
   @datapointsLg = []
   @chartType = 'monthly'
-  @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}, {id: 'high', type: 'spline', name: 'High Price', color: 'red'}, {id: 'low', type: 'spline', name: 'Low Price', color: 'green'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#B5FFFC'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#A5FEE3'}]
+  @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}, {id: 'high', type: 'spline', name: 'High Price', color: 'red'}, {id: 'low', type: 'spline', name: 'Low Price', color: 'green'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#DBEBFF'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#BDFFEA'}]
   @datax = {id: 'date'}
   @marketItem = ''
+  @charts = []
 
   @selected =
     market: []
@@ -119,7 +120,10 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     else
       price = price.toFixed(2).toString()
     return price
-    
+
+  handleCallback = (chartObj) =>
+    @charts.push(chartObj)
+
   readFile = (file) =>
     if file.size != 0
       fileReader = new FileReader
@@ -357,6 +361,16 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     # need to update commandsToShow with things
     return
 
+  # flush the shown chart on returning to market screen otherwise axes aren't shown
+  $scope.$watch (=> @selectedTab), (newValue, oldValue) =>
+    if newValue == 0 && @charts.length == 2
+      if @chartType == 'monthly'
+        console.log 'flushed monthly'
+        @charts[0].flush()
+      else if @chartType == 'weekly'
+        console.log 'flushed weekly'
+        @charts[1].flush()
+
   #-- Public Functions
 
   @setFile = setFile
@@ -372,6 +386,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @clearTable = clearTable
   @priceToIsk = priceToIsk
   @changeChartType = changeChartType
+  @handleCallback = handleCallback
 
   return
 ]
