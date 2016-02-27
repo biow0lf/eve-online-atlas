@@ -31,8 +31,8 @@
             <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.market">
               <td md-cell>{{command.item.system}}</td>
               <td md-cell>{{command.item.name}}</td>
-              <td md-cell>{{command.item.buy_price}}</td>
-              <td md-cell>{{command.item.sell_price}}</td>
+              <td md-cell>{{command.item.buy_price}} isk</td>
+              <td md-cell>{{command.item.sell_price}} isk</td>
               <td md-cell am-time-ago="command.time"></td>
             </tr>
             </tbody>
@@ -40,14 +40,20 @@
         </md-table-container>
         <md-table-pagination md-limit="ctc.query.market.limit" md-page="ctc.query.market.page" md-total="{{ctc.commands.market.length}}" md-on-paginate="ctc.onMarketPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
         <div flex></div>
-        <div ng-show="ctc.datapoints.length">
+        <div ng-show="ctc.datapointsLg.length">
           <h4>Average Price of {{ctc.marketItem}} at Jita</h4>
-          <c3chart bindto-id="chart" chart-data="ctc.datapoints" chart-columns="ctc.datacolumns" chart-x="ctc.datax">
+          <c3chart bindto-id="chart" chart-data="ctc.datapointsLg" chart-columns="ctc.datacolumns" chart-x="ctc.datax">
             <chart-axis>
-              <chart-axis-x axis-id="date" axis-type="timeseries" axis-x-format="%m-%Y">
-                <chart-axis-x-tick tick-format-time="%m-%Y"/>
+              <chart-axis-x axis-id="date" axis-type="timeseries">
+                <chart-axis-x-tick format-time="%m-%d-%Y"/>
               </chart-axis-x>
+              <chart-axis-y axis-id="y" axis-label="Price (isk)">
+                <chart-axis-y-tick tick-format-function="ctc.priceToIsk"></chart-axis-y-tick>
+              </chart-axis-y>
+              <chart-axis-y axis-id="y2" axis-label="Item Quantity"></chart-axis-y>
             </chart-axis>
+            <chart-axes y="avg,high,low" y2="order,volume"/>
+            <chart-legend legend-position="inset" legend-inset="top-left"/>
           </c3chart>
         </div>
       </md-tab>
@@ -150,5 +156,4 @@
       </md-tab>
     </md-tabs>
   </md-card>
-
 </div>

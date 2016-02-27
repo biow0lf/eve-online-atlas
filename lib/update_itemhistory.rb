@@ -10,7 +10,7 @@ module UpdateItemhistory
     end
 
     base_url = 'https://public-crest.eveonline.com/market/10000002/types' # 34/history/'
-    id_list.in_groups_of(10).each do |ids|
+    id_list.in_groups_of(100).each do |ids|
       threads = []
       puts ids
       ids.each do |id|

@@ -9,8 +9,9 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @system = 'Jita'
   @theraOrigin = ''
 
-  @datapoints = []
-  @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}]
+  @datapointsSm = []
+  @datapointsLg = []
+  @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}, {id: 'high', type: 'spline', name: 'High Price', color: 'red'}, {id: 'low', type: 'spline', name: 'Low Price', color: 'green'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#B5FFFC'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#A5FEE3'}]
   @datax = {id: 'date'}
   @marketItem = ''
 
@@ -80,6 +81,9 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     @selected[tab] = []
     @commands[tab] = []
     @commandsToShow[tab] = []
+    if tab == 'market'
+      @datapointsSm = []
+      @datapointsLg = []
     console.log @selected, @commands, @commandsToShow
 
   tick = =>
@@ -98,15 +102,15 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   priceToIsk = (price) ->
     if price >= 1000000000
       price /= 1000000000
-      price = price.toFixed(2).toString() + 'B isk'
+      price = price.toFixed(2).toString() + 'B'
     else if price >= 1000000
       price /= 1000000
-      price = price.toFixed(2).toString() + 'M isk'
+      price = price.toFixed(2).toString() + 'M'
     else if price >= 1000
       price /= 1000
-      price = price.toFixed(2).toString() + 'K isk'
+      price = price.toFixed(2).toString() + 'K'
     else
-      price = price.toFixed(2).toString() + ' isk'
+      price = price.toFixed(2).toString()
     return price
     
   readFile = (file) =>
@@ -197,15 +201,30 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                     @datapoints = []
                     for item in response.data
                       # sort items into month groups
-                      groups = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
-                      result = []
-                      for key, val of groups
+                      groupsSm = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
+                      groupsLg = _.groupBy(item.history, (h) -> moment(h['date']).week() + ' ' + moment(h['date']).year())
+                      resultSm = []
+                      resultLg = []
+                      for key, val of groupsSm
                         avg = _.mean(_.map(val, (v) -> v['avgPrice']))
-                        result.push({date: moment(key, 'MM YYYY').toDate(), value: avg.toFixed(2)})
-                      result = result.sort((a, b) -> new Date(a.date) - new Date(b.date))
-                      for r in result
-                        @datapoints.push({date: r.date, avg: r.value})
-                      console.log result
+                        avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
+                        avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
+                        avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
+                        avgVolume = _.mean(_.map(val, (v) -> v['volume']))
+                        resultSm.push({date: moment(key, 'M YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
+                      for key, val of groupsLg
+                        avg = _.mean(_.map(val, (v) -> v['avgPrice']))
+                        avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
+                        avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
+                        avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
+                        avgVolume = _.mean(_.map(val, (v) -> v['volume']))
+                        resultLg.push({date: moment(key, 'w YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
+                      resultSm = resultSm.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                      resultLg = resultLg.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                      for r in resultSm
+                        @datapointsSm.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
+                      for r in resultLg
+                        @datapointsLg.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
 
                 else if command.indexOf('!thera') >= 0
                   @theraOrigin = _.upperFirst(converted[0])
@@ -339,6 +358,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @onCommandReorder = onCommandReorder
   @removeFilter = removeFilter
   @clearTable = clearTable
+  @priceToIsk = priceToIsk
 
   return
 ]
