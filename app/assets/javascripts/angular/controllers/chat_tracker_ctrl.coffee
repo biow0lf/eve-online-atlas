@@ -232,9 +232,11 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                       @datapointsSm = []
                       @datapointsLg = []
                       for r in resultSm
-                        @datapointsSm.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
+                        if moment(r.date).year() >= 2015
+                          @datapointsSm.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
                       for r in resultLg
-                        @datapointsLg.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
+                        if moment(r.date).year() >= 2015
+                          @datapointsLg.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
 
                 else if command.indexOf('!thera') >= 0
                   @theraOrigin = _.upperFirst(converted[0])
