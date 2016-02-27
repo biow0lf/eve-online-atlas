@@ -10,8 +10,9 @@
       <md-tab label="Market" flex>
         <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
           <div class="md-toolbar-tools">
-            <h2>Market Commands ({{ctc.system}}){{ctc.commandTime.market > 0 ? ' - Last Command Time - ' +
-              ctc.timeStamp(ctc.commandTime.market) : ''}}</h2>
+            <h2>Market Commands ({{ctc.system}}) {{ctc.commandTime.market > 0 ? ' - ' : ''}}
+              <span ng-show="ctc.commandTime.market > 0" am-time-ago="ctc.commandTime.market"></span>
+            </h2>
             <div flex></div>
             <md-button ng-show="ctc.commands.market.length" ng-click="ctc.changeChartType()">Chart Timescale</md-button>
             <md-button ng-show="ctc.commands.market.length" ng-click="ctc.clearTable('market')">Clear Table</md-button>
@@ -41,11 +42,11 @@
         </md-table-container>
         <md-table-pagination md-limit="ctc.query.market.limit" md-page="ctc.query.market.page" md-total="{{ctc.commands.market.length}}" md-on-paginate="ctc.onMarketPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
         <div flex></div>
-        <div ng-show="ctc.datapointsLg.length && ctc.chartType=='monthly'">
-          <h4>Average Price of {{ctc.marketItem}} at Jita (Weekly Average)</h4>
-          <c3chart bindto-id="chart" chart-data="ctc.datapointsLg" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
+        <div ng-show="ctc.datapointsWeekly.length && ctc.chartType=='weekly'">
+          <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{ctc.marketItem}} at Jita (Weekly Average)</h4>
+          <c3chart bindto-id="chart" chart-data="ctc.datapointsWeekly" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
             <chart-axis>
-              <chart-axis-x axis-id="date" axis-type="timeseries">
+              <chart-axis-x axis-id="date" axis-type="timeseries" axis-label="Date" axis-position="outer-center">
                 <chart-axis-x-tick format-time="%m-%d-%Y"/>
               </chart-axis-x>
               <chart-axis-y axis-id="y" axis-label="Price (isk)">
@@ -57,11 +58,11 @@
             <chart-legend legend-position="inset" legend-inset="top-left" legend-inset-x="20"/>
           </c3chart>
         </div>
-        <div ng-show="ctc.datapointsSm.length && ctc.chartType=='weekly'">
-          <h4>Average Price of {{ctc.marketItem}} at Jita (Monthly Average)</h4>
-          <c3chart bindto-id="chart2" chart-data="ctc.datapointsSm" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
+        <div ng-show="ctc.datapointsMonthly.length && ctc.chartType=='monthly'">
+          <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{ctc.marketItem}} at Jita (Monthly Average)</h4>
+          <c3chart bindto-id="chart2" chart-data="ctc.datapointsMonthly" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
             <chart-axis>
-              <chart-axis-x axis-id="date" axis-type="timeseries">
+              <chart-axis-x axis-id="date" axis-type="timeseries" axis-label="Date" axis-position="outer-center">
                 <chart-axis-x-tick format-time="%m-%d-%Y"/>
               </chart-axis-x>
               <chart-axis-y axis-id="y" axis-label="Price (isk)">
@@ -78,7 +79,9 @@
       <md-tab label="thera" flex>
         <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
           <div class="md-toolbar-tools">
-            <h2>Thera Connections {{ctc.theraOrigin != '' ? ' from ' + ctc.theraOrigin : ''}}</h2>
+            <h2>Thera Connections {{ctc.theraOrigin != '' ? ' from ' + ctc.theraOrigin + ' ' : ''}}
+              <span ng-show="ctc.commandTime.thera > 0" am-time-ago="ctc.commandTime.thera"></span>
+            </h2>
             <div flex></div>
             <md-button ng-show="ctc.commands.thera.length" ng-click="ctc.clearTable('thera')">Clear Table</md-button>
           </div>

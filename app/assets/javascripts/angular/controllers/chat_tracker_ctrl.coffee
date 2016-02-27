@@ -9,8 +9,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @system = 'Jita'
   @theraOrigin = ''
 
-  @datapointsSm = []
-  @datapointsLg = []
+  @datapointsMonthly = []
+  @datapointsWeekly = []
   @chartType = 'monthly'
   @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}, {id: 'high', type: 'spline', name: 'High Price', color: 'red'}, {id: 'low', type: 'spline', name: 'Low Price', color: 'green'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#DBEBFF'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#BDFFEA'}]
   @datax = {id: 'date'}
@@ -84,8 +84,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     @commands[tab] = []
     @commandsToShow[tab] = []
     if tab == 'market'
-      @datapointsSm = []
-      @datapointsLg = []
+      @datapointsMonthly = []
+      @datapointsWeekly = []
     console.log @selected, @commands, @commandsToShow
 
   changeChartType = =>
@@ -212,35 +212,35 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                     @datapoints = []
                     for item in response.data
                       # sort items into month groups
-                      groupsSm = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
-                      groupsLg = _.groupBy(item.history, (h) -> moment(h['date']).week() + ' ' + moment(h['date']).year())
-                      resultSm = []
-                      resultLg = []
-                      for key, val of groupsSm
+                      groupsMonthly = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
+                      groupsWeekly = _.groupBy(item.history, (h) -> moment(h['date']).week() + ' ' + moment(h['date']).year())
+                      resultMonthly = []
+                      resultWeekly = []
+                      for key, val of groupsMonthly
                         avg = _.mean(_.map(val, (v) -> v['avgPrice']))
                         avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
                         avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
                         avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
                         avgVolume = _.mean(_.map(val, (v) -> v['volume']))
-                        resultSm.push({date: moment(key, 'M YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
-                      for key, val of groupsLg
+                        resultMonthly.push({date: moment(key, 'M YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
+                      for key, val of groupsWeekly
                         avg = _.mean(_.map(val, (v) -> v['avgPrice']))
                         avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
                         avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
                         avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
                         avgVolume = _.mean(_.map(val, (v) -> v['volume']))
-                        resultLg.push({date: moment(key, 'w YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
-                      resultSm = resultSm.sort((a, b) -> new Date(a.date) - new Date(b.date))
-                      resultLg = resultLg.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                        resultWeekly.push({date: moment(key, 'w YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
+                      resultMonthly = resultMonthly.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                      resultWeekly = resultWeekly.sort((a, b) -> new Date(a.date) - new Date(b.date))
                       # reset datapoints arrays
-                      @datapointsSm = []
-                      @datapointsLg = []
-                      for r in resultSm
+                      @datapointsMonthly = []
+                      @datapointsWeekly = []
+                      for r in resultMonthly
                         if moment(r.date).year() >= 2015
-                          @datapointsSm.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
-                      for r in resultLg
+                          @datapointsMonthly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
+                      for r in resultWeekly
                         if moment(r.date).year() >= 2015
-                          @datapointsLg.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
+                          @datapointsWeekly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
 
                 else if command.indexOf('!thera') >= 0
                   @theraOrigin = _.upperFirst(converted[0])
@@ -366,10 +366,10 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     if newValue == 0 && @charts.length == 2
       if @chartType == 'monthly'
         console.log 'flushed monthly'
-        @charts[0].flush()
+        @charts[1].flush()
       else if @chartType == 'weekly'
         console.log 'flushed weekly'
-        @charts[1].flush()
+        @charts[0].flush()
 
   #-- Public Functions
 
