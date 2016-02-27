@@ -228,6 +228,9 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                         resultLg.push({date: moment(key, 'w YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
                       resultSm = resultSm.sort((a, b) -> new Date(a.date) - new Date(b.date))
                       resultLg = resultLg.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                      # reset datapoints arrays
+                      @datapointsSm = []
+                      @datapointsLg = []
                       for r in resultSm
                         @datapointsSm.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
                       for r in resultLg
