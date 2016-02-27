@@ -4,10 +4,10 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', ($scope, $ht
   @constellationName = 'Kimotoro'
   @regionName = 'The Forge'
 
-  @celestials = []
+  @systems = []
 
   for idx in [0..5]
-    @celestials.push({name: "Celestial #{idx}"})
+    @systems.push({name: "System #{idx}"})
 
   crestService.getSolarSystem(@solarSystemID).then (response) => console.log response
 

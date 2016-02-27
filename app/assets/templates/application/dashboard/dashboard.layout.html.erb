@@ -12,26 +12,26 @@
   </md-card>
   <md-card layout="column" flex>
     <md-tabs flex md-border-bottom>
-      <md-tab label="Celestials" flex>
+      <md-tab label="Systems">
         <div layout flex>
-          <div flex="20" layout="column" id="celestials-column">
+          <div layout="column" class="selector-column">
             <md-list>
-              <md-list-item ng-repeat="celestial in dc.celestials">
+              <md-list-item ng-repeat="system in dc.systems">
                 <div class="md-list-item-text" layout="column">
-                  {{celestial.name}}
+                  {{system.name}}
                 </div>
               </md-list-item>
             </md-list>
           </div>
-          <div flex="80" layout="column" layout-padding>
+          <div flex layout="column" layout-padding>
             Main Stuff
           </div>
         </div>
       </md-tab>
-      <md-tab label="Systems">
+      <md-tab label="Stations">
 
       </md-tab>
-      <md-tab label="Stations">
+      <md-tab label="Celestials" flex>
 
       </md-tab>
     </md-tabs>
