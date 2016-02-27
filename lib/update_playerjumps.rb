@@ -16,18 +16,16 @@ module UpdatePlayerJumps
     xmlData = {}
     cachedUntil = DateTime.parse(data['eveapi']['cachedUntil'])
     data['eveapi']['result']['rowset']['row'].each do |row|
-      xmlData["#{row['solarSystemID'].to_i}"] = row['shipJumps'].to_i
+      xmlData[row['solarSystemID'].to_i.to_s] = row['shipJumps'].to_i
     end
 
     solarSystemIDsAll.each do |id|
-      if xmlData.key?("#{id}")
-        result << Jumpcurrent.new(solarSystemID: id, shipJumps: xmlData["#{id}"], cachedUntil: cachedUntil)
-      else
-        result << Jumpcurrent.new(solarSystemID: id, shipJumps: 0, cachedUntil: cachedUntil)
-      end
+      result << if xmlData.key?(id.to_s)
+                  Jumpcurrent.new(solarSystemID: id, shipJumps: xmlData[id.to_s], cachedUntil: cachedUntil)
+                else
+                  Jumpcurrent.new(solarSystemID: id, shipJumps: 0, cachedUntil: cachedUntil)
+                end
     end
-
-
 
     Jumpcurrent.import result
   end
