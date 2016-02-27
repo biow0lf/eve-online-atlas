@@ -40,6 +40,11 @@ md-content {
 #system-info {
   height: 48px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.117647);
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 16px;
+  }
 }
 
 md-tab-content div {
