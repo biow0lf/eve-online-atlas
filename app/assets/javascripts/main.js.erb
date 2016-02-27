@@ -41,23 +41,32 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
       'sidenav@root': {
         templateUrl: 'application/root/root.sidenav.html'
       }
-    }
+    },
+    sticky: true
   };
 
   var dashboard = {
     name: 'root.dashboard',
     parent: root,
     url: '/',
-    templateUrl: 'application/dashboard/dashboard.layout.html'
+    views: {
+      'dashboard': {
+        templateUrl: 'application/dashboard/dashboard.layout.html'
+      }
+    },
+    sticky: true
   };
 
   var chat_tracker = {
     name: 'root.chat_tracker',
     parent: root,
     url: '/chat_tracker',
-    templateUrl: 'application/chat_tracker/chat_tracker.layout.html',
-    sticky: true,
-    dsr: true
+    views: {
+      'chat_tracker': {
+        templateUrl: 'application/chat_tracker/chat_tracker.layout.html'
+      }
+    },
+    sticky: true
   };
 
   $stateProvider
@@ -71,7 +80,4 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     var $state = $injector.get("$state");
     $state.go('root.dashboard');
   });
-
-  // $stickyStateProvider.enableDebug(true);
-
 }]);
