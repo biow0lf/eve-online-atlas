@@ -13,6 +13,7 @@
             <h2>Market Commands ({{ctc.system}}){{ctc.commandTime.market > 0 ? ' - Last Command Time - ' +
               ctc.timeStamp(ctc.commandTime.market) : ''}}</h2>
             <div flex></div>
+            <md-button ng-show="ctc.commands.market.length" ng-click="ctc.changeChartType()">Chart Timescale</md-button>
             <md-button ng-show="ctc.commands.market.length" ng-click="ctc.clearTable('market')">Clear Table</md-button>
           </div>
         </md-toolbar>
@@ -40,9 +41,25 @@
         </md-table-container>
         <md-table-pagination md-limit="ctc.query.market.limit" md-page="ctc.query.market.page" md-total="{{ctc.commands.market.length}}" md-on-paginate="ctc.onMarketPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
         <div flex></div>
-        <div ng-show="ctc.datapointsLg.length">
-          <h4>Average Price of {{ctc.marketItem}} at Jita</h4>
+        <div ng-show="ctc.datapointsLg.length && ctc.chartType=='monthly'">
+          <h4>Average Price of {{ctc.marketItem}} at Jita (Weekly Average)</h4>
           <c3chart bindto-id="chart" chart-data="ctc.datapointsLg" chart-columns="ctc.datacolumns" chart-x="ctc.datax">
+            <chart-axis>
+              <chart-axis-x axis-id="date" axis-type="timeseries">
+                <chart-axis-x-tick format-time="%m-%d-%Y"/>
+              </chart-axis-x>
+              <chart-axis-y axis-id="y" axis-label="Price (isk)">
+                <chart-axis-y-tick tick-format-function="ctc.priceToIsk"></chart-axis-y-tick>
+              </chart-axis-y>
+              <chart-axis-y axis-id="y2" axis-label="Item Quantity"></chart-axis-y>
+            </chart-axis>
+            <chart-axes y="avg,high,low" y2="order,volume"/>
+            <chart-legend legend-position="inset" legend-inset="top-left"/>
+          </c3chart>
+        </div>
+        <div ng-show="ctc.datapointsSm.length && ctc.chartType=='weekly'">
+          <h4>Average Price of {{ctc.marketItem}} at Jita (Monthly Average)</h4>
+          <c3chart bindto-id="chart2" chart-data="ctc.datapointsSm" chart-columns="ctc.datacolumns" chart-x="ctc.datax">
             <chart-axis>
               <chart-axis-x axis-id="date" axis-type="timeseries">
                 <chart-axis-x-tick format-time="%m-%d-%Y"/>

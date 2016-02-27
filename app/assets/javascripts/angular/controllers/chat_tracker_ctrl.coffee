@@ -11,6 +11,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   @datapointsSm = []
   @datapointsLg = []
+  @chartType = 'monthly'
   @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}, {id: 'high', type: 'spline', name: 'High Price', color: 'red'}, {id: 'low', type: 'spline', name: 'Low Price', color: 'green'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#B5FFFC'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#A5FEE3'}]
   @datax = {id: 'date'}
   @marketItem = ''
@@ -85,6 +86,12 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       @datapointsSm = []
       @datapointsLg = []
     console.log @selected, @commands, @commandsToShow
+
+  changeChartType = =>
+    if @chartType == 'monthly'
+      @chartType = 'weekly'
+    else
+      @chartType = 'monthly'
 
   tick = =>
     currentTime = new Date
@@ -359,6 +366,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @removeFilter = removeFilter
   @clearTable = clearTable
   @priceToIsk = priceToIsk
+  @changeChartType = changeChartType
 
   return
 ]
