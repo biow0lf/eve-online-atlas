@@ -9,4 +9,5 @@ class Solarsystem < ActiveRecord::Base
   has_many :celestials, foreign_key: 'solarSystemID'
   has_many :planets, through: :celestials, foreign_key: 'solarSystemID'
   has_one :wormholeclass, foreign_key: 'locationID', primary_key: 'regionID'
+  has_one :systemcostindex, foreign_key: 'solarSystemID'
 end

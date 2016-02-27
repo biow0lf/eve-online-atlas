@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226220251) do
+ActiveRecord::Schema.define(version: 20160227134438) do
 
   create_table "agtagents", primary_key: "agentID", force: :cascade do |t|
     t.integer "divisionID",    limit: 1
@@ -844,6 +844,15 @@ ActiveRecord::Schema.define(version: 20160226220251) do
     t.integer "officeSlots",            limit: 1
     t.float   "reprocessingEfficiency", limit: 53
     t.boolean "conquerable",            limit: 1
+  end
+
+  create_table "systemcostindex", force: :cascade do |t|
+    t.integer "solarSystemID",         limit: 4
+    t.string  "inventionIndex",        limit: 255
+    t.string  "manufacturingIndex",    limit: 255
+    t.string  "copyingIndex",          limit: 255
+    t.string  "timeResearchIndex",     limit: 255
+    t.string  "materialResearchIndex", limit: 255
   end
 
   create_table "translationtables", id: false, force: :cascade do |t|
