@@ -1,7 +1,7 @@
 app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', 'moment', ($scope, $http, $interval, crestService, $rootScope, moment) -> do =>
   @bookmark = 1
   @selectedTab = 0
-  @characters = []
+  @character = ''
 
   @file = new File([""], "")
   @interval = null
@@ -141,8 +141,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                 c = _.map(line.split(':'), (l) -> return _.trim(l))[1]
                 @commands.char.push {name: c, time: Date.now()}
                 onCharPaginate(@query.char.page, @query.char.limit)
-                @selectedTab = @query.char.tab
                 console.log 'Added character:', c
+                @character = c
 
           command = ''
           set = ''
