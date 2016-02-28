@@ -1,7 +1,7 @@
 <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
   <div class="md-toolbar-tools">
     <h2>Market Commands ({{market.system}}) {{market.commandTime > 0 ? ' - ' : ''}}
-      <span ng-show="market.commandTime.market > 0" am-time-ago="market.commandTime"></span>
+      <span ng-show="market.commandTime > 0" am-time-ago="market.commandTime"></span>
     </h2>
     <div flex></div>
     <md-button ng-show="market.commands.length" ng-click="market.changeChartType()">Chart Timescale</md-button>

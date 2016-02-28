@@ -1,4 +1,4 @@
-app.controller 'chatTrackerTheraCtrl', ['$scope', '$http', 'crestService', ($scope, $http, crestService) -> do =>
+app.controller 'chatTrackerTheraCtrl', ['$scope', 'crestService', ($scope, crestService) -> do =>
 
   # datatable variables
   @selected = []

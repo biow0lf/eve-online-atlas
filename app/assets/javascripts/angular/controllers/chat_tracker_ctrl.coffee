@@ -1,4 +1,4 @@
-app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', 'moment', ($scope, $http, $interval, crestService, $rootScope, moment) -> do =>
+app.controller 'chatTrackerCtrl', ['$scope', '$interval', ($scope, $interval) -> do =>
   @bookmark = 1
   @selectedTab = 0
   @listener = ''
@@ -43,16 +43,13 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   parseCommand = (line) =>
     command = null
-    set = null
     # just grab first word with !
     words = _.split(line, ' ')
     for word in words
       if word.indexOf('!') == 0
         command = word
-        set = 'blah'
         break
-
-    return [command, set]
+    return command
 
   readFile = (file) =>
     if file.size != 0
@@ -72,8 +69,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
               @listener = listener
               $scope.$broadcast 'setListener', listener
 
-          # check to see if line contains a command
-          [command, set] = parseCommand(line)
+          # check to see if line contains a command and find time of line
+          command = parseCommand(line)
           commandTime = parseTime(line)
 
           if !_.isNull(command) and commandTime.getTime() > @lastCommandTime
@@ -103,7 +100,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
               else
                 converted = [_.trim(value)]
 
-              console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
+              console.log 'command from', character_name, ':', command, 'argument', converted
 
               # executor, command, argument, time
               $scope.$broadcast 'command', [character_name, command, converted, commandTime]
@@ -123,7 +120,7 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   # receieve commands from child controllers and rebroadcast to commandCtrl
   $scope.$on 'sendCommandList', (event, arg) =>
-    $rootScope.$broadcast 'addCommand', arg
+    $scope.$broadcast 'addCommand', arg
 
   # flush the shown chart on returning to market screen otherwise axes aren't shown
   $scope.$watch (=> @selectedTab), (newValue, oldValue) =>

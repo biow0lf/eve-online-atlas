@@ -4,8 +4,7 @@
       <md-button class="md-primary md-raised" ngf-select="ctc.setFile($file)">Click to set log file</md-button>
       <p> Log file: {{ctc.file.name.length > 0 ? ctc.file.name : 'No file selected'}} </p>
       <div flex></div>
-      <md-button ng-click="ctc.test()">Test</md-button>
-      <h4 class="md-title" style="margin-top: 0; margin-bottom: 0; margin-right: 16px;" ng-show="ctc.character.length">{{ctc.character}}</h4>
+      <h4 class="md-title" style="margin-top: 0; margin-bottom: 0; margin-right: 16px;" ng-show="ctc.listener">{{ctc.listener}}</h4>
     </div>
     <md-tabs flex md-selected="ctc.selectedTab" style="margin-top: 0;">
       <md-tab label="Market" flex>
