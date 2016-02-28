@@ -83,7 +83,7 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', '$http', 'crestService', (
     onPaginate()
 
   init = =>
-    console.log 'ctcc init'
+    console.log 'characterCtrl init'
     return
 
   # has to be at the end because otherwise functions wont exist yet

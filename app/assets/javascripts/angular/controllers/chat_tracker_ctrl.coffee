@@ -8,7 +8,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @interval = null
   @lastMod = @file.lastModifiedDate
   @system = 'Jita'
-  @theraOrigin = ''
 
   @datapointsMonthly = []
   @datapointsWeekly = []
@@ -22,28 +21,22 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   @selected =
     market: []
-    thera: []
     command: []
 
   @commandTime =
     market: new Date('1969.12.31 18:00:00')
-    thera: new Date('1969.12.31 18:00:00')
     command: new Date('1969.12.31 18:00:00')
 
   @commandList =
     market: ['!market', '!pc', '!system']
-    thera: ['!thera']
     command: ['!commands', '!help']
 
   @commands =
     market: []
-    thera: []
     command: []
 
   @commandsToShow =
     market: []
-    thera: []
-    char: []
     command: []
 
   @filter = {
@@ -59,12 +52,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       limit: 5,
       page: 1
       tab: 0
-    thera:
-      filter: '',
-      order: '',
-      limit: 5,
-      page: 1
-      tab: 1
     command:
       filter: '',
       order: '',
@@ -260,15 +247,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
                       if moment(r.date).year() >= 2015
                         @datapointsWeekly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
 
-              else if command.indexOf('!thera') >= 0
-                @theraOrigin = _.upperFirst(converted[0])
-                crestService.getTheraInfo(converted[0]).then (response) =>
-                  @commands.thera = []
-                  for item in response.data
-                    @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
-                  onTheraPaginate(@query.thera.page, @query.thera.limit)
-                  @selectedTab = @query.thera.tab
-
       fileReader.readAsText file
 
   onPaginate = (page, limit, tab) =>
@@ -295,8 +273,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     if order.indexOf('-') >= 0
       order = order.substr(1, order.length)
       @commands[tab].sort((a, b) ->
-        if tab == 'thera' and order.indexOf('jumps') >= 0 and (a[order] == 0 or b[order] == 0) then return -1
-        # if tab == 'thera' and order.indexOf('jumps') >= 0 and b[order] == 0 then return -1
         if a[order] < b[order] then return -1
         if a[order] > b[order] then return 1
         return 0
@@ -337,10 +313,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     @commands.command.push({name: '!market', set: 'Market', argument: '', description: 'Switches to the market tab'})
     @commands.command.push({name: '!pc', set: 'Market', argument: 'List of item names separated by comma or doublespace', description: 'Price checks an item in the current market system'})
     @commands.command.push({name: '!system', set: 'Market', argument: '[system name]', description: 'Sets the current market system for checking prices. Does not change if system name is invalid.'})
-    @commands.command.push({name: '!thera', set: 'Thera', argument: '[system name]', description: 'Finds distances to Thera wormholes from given system'})
-    @commands.command.push({name: '!char', set: 'Character', argument: '', description: 'Switches to the character tab'})
-    @commands.command.push({name: '!allow', set: 'Character', argument: '[character name]', description: 'Adds [character name] to set of characters allowed to use commands'})
-    @commands.command.push({name: '!remove', set: 'Character', argument: '[character name] or \'self\'', description: 'Removes [character name] form set of characters allowed to use commands. Removes current character if \'self\''})
     @commands.command.push({name: '!commands', set: 'Command', argument: '', description: 'Switches to the command tab'})
     @commands.command.push({name: '!help', set: 'Command', argument: '', description: 'Switches to the command tab'})
     onCommandPaginate(@query.command.page, @query.command.limit)
@@ -371,10 +343,8 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   @setFile = setFile
   @onMarketPaginate = onMarketPaginate
-  @onTheraPaginate = onTheraPaginate
   @onCommandPaginate = onCommandPaginate
   @onMarketReorder = onMarketReorder
-  @onTheraReorder = onTheraReorder
   @onCommandReorder = onCommandReorder
   @removeFilter = removeFilter
   @clearTable = clearTable

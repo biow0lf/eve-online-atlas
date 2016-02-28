@@ -1,15 +1,14 @@
 <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
   <div class="md-toolbar-tools">
-    <h2>Thera Connections {{ctc.theraOrigin != '' ? ' from ' + ctc.theraOrigin + ' ' : ''}}
-      <span ng-show="ctc.commandTime.thera > 0" am-time-ago="ctc.commandTime.thera"></span>
+    <h2>Thera Connections {{thera.theraOrigin != '' ? ' from ' + thera.theraOrigin + ' ' : ''}}
+      <span ng-show="thera.commandTime > 0" am-time-ago="thera.commandTime"></span>
     </h2>
     <div flex></div>
-    <md-button ng-show="ctc.commands.thera.length" ng-click="ctc.clearTable('thera')">Clear Table</md-button>
   </div>
 </md-toolbar>
 <md-table-container style="margin-bottom: 0; margin-top: 0;">
-  <table md-table md-row-select ng-model="ctc.selected.market">
-    <thead md-head md-order="ctc.query.thera.order" md-on-reorder="ctc.onTheraReorder">
+  <table md-table md-row-select ng-model="thera.selected">
+    <thead md-head md-order="thera.query.order" md-on-reorder="thera.onReorder">
     <tr md-row>
       <th md-column><span>Region</span></th>
       <th md-column><span>System</span></th>
@@ -22,7 +21,7 @@
     </tr>
     </thead>
     <tbody md-body>
-    <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.thera">
+    <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in thera.commandsToShow">
       <td md-cell>{{command.region}}</td>
       <td md-cell>{{command.system}}</td>
       <td md-cell>{{command.jumps}}</td>
@@ -35,4 +34,4 @@
     </tbody>
   </table>
 </md-table-container>
-<md-table-pagination md-limit="ctc.query.thera.limit" md-page="ctc.query.thera.page" md-total="{{ctc.commands.thera.length}}" md-on-paginate="ctc.onTheraPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+<md-table-pagination md-limit="thera.query.limit" md-page="thera.query.page" md-total="{{thera.commands.length}}" md-on-paginate="thera.onPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
