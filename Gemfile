@@ -36,6 +36,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-moment'
   gem 'rails-assets-angular-moment', '1.0.0.beta.4'
   gem 'rails-assets-c3-angular', '1.0.1'
+  gem 'rails-assets-angular-sanitize'
 end
 
 group :development do

@@ -97,7 +97,9 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', ($scope) -> do =>
       set: 'character'
       argument: '{character name}'
       description: 'Adds [character name] to set of characters allowed to use commands; multiple names must be separated by commas or two spaces'
-      example: '!allow Aes Sayyadina | !allow Aes Sayyadina, Blacksmoke16 | !allow Aes Sayyadina  Blacksmoke16'
+      example: '!allow Aes Sayyadina' +
+        '\n!allow Aes Sayyadina, Blacksmoke16' +
+        '\n!allow Aes Sayyadina  Blacksmoke16'
       fn: allowCharacter
     }
     {
@@ -105,7 +107,11 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', ($scope) -> do =>
       set: 'character'
       argument: '{character name} | \'self\' | \'all\''
       description: 'Removes [character name] from set of characters allowed to use commands; multiple names must be separated by commas or two spaces; removes current character if \'self\'; removes all but listener if \'all\''
-      example: '!remove Aes Sayyadina | !remove Aes Sayyadina, Blacksmoke16 | !remove Aes Sayyadina  Blacksmoke16 | !remove self | !remove all'
+      example: '!remove Aes Sayyadina' +
+        '\n!remove Aes Sayyadina, Blacksmoke16' +
+        '\n!remove Aes Sayyadina  Blacksmoke16' +
+        '\n!remove self' +
+        '\n!remove all'
       fn: removeCharacter
     }
   ]

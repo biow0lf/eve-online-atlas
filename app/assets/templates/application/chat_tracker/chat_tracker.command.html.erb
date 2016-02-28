@@ -21,7 +21,7 @@
       <td md-cell>{{cmd.set}}</td>
       <td md-cell>{{cmd.argument}}</td>
       <td md-cell>{{cmd.description}}</td>
-      <td md-cell>{{cmd.example}}</td>
+      <td md-cell><span ng-bind-html="cmd.example | formatText"></span></td>
     </tr>
     </tbody>
   </table>

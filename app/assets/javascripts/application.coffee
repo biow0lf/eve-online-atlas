@@ -15,6 +15,7 @@
 #= require hacktimerworker
 #= require lodash
 #= require angular
+#= require angular-sanitize
 #= require angular-ui-router
 #= require ui-router-extras
 #= require moment

@@ -156,7 +156,9 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', ($s
       set: 'market'
       argument: '{item}'
       description: 'Price checks an item in the current market system; items must be separated by commas or two spaces'
-      example: '!pc tritanium | !pc legion, ishtar | !pc oracle  harbinger'
+      example: '!pc tritanium' +
+        '\n!pc legion, ishtar' +
+        '\n!pc oracle  harbinger'
       fn: priceCheck
     }
     {
