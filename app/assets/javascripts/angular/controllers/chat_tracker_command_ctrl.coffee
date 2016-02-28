@@ -78,14 +78,7 @@ app.controller 'chatTrackerCommandCtrl', ['$scope', '$http', 'crestService', '$r
     }
   ]
 
-  init = =>
-    console.log 'commandCtrl init'
-    @commands = @commandsList
-    onPaginate()
-    $scope.$emit 'commandListReady'
-    return
-
-  #-- Listeners
+  #-- Listeners & Broadcasters
 
   $scope.$on 'addCommand', (event, arg) =>
     for cmd in arg
@@ -96,6 +89,15 @@ app.controller 'chatTrackerCommandCtrl', ['$scope', '$http', 'crestService', '$r
   $scope.$on 'command', (event, arg) =>
     # destructure arg
     executeCommand(arg...)
+
+  #-- Init
+
+  init = =>
+    console.log 'init commandCtrl'
+    @commands = @commandsList
+    onPaginate()
+    $scope.$emit 'commandListReady'
+    return
 
   init()
 

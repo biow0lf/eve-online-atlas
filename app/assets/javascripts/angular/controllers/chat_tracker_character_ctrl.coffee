@@ -110,13 +110,7 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', '$http', 'crestService', (
     }
   ]
 
-  init = =>
-    console.log 'characterCtrl init'
-    return
-
-  init()
-
-  #-- Listeners
+  #-- Listeners & Broadcasters
 
   $scope.$on 'getCommandList', (event, arg) =>
     $scope.$emit 'sendCommandList', @commandsList
@@ -131,6 +125,14 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', '$http', 'crestService', (
     @characterNames = [@listener]
     onPaginate()
     $scope.$emit 'setCharacters', @characterNames
+
+  #-- init
+
+  init = =>
+    console.log 'init characterCtrl'
+    return
+
+  init()
 
   #-- Public Functions
 

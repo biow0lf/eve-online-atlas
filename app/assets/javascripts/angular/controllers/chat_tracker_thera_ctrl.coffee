@@ -68,10 +68,6 @@ app.controller 'chatTrackerTheraCtrl', ['$scope', '$http', 'crestService', ($sco
     @commands.reverse() if reverse
     onPaginate()
 
-  init = =>
-    console.log 'theraCtrl init'
-    return
-
   # has to be at the end because otherwise functions wont exist yet
   @commandsList = [
     {
@@ -84,9 +80,7 @@ app.controller 'chatTrackerTheraCtrl', ['$scope', '$http', 'crestService', ($sco
     }
   ]
 
-  init()
-
-  #-- Listeners
+  #-- Listeners & Broadcasters
 
   $scope.$on 'getCommandList', (event, arg) =>
     $scope.$emit 'sendCommandList', @commandsList
@@ -94,6 +88,14 @@ app.controller 'chatTrackerTheraCtrl', ['$scope', '$http', 'crestService', ($sco
   $scope.$on 'command', (event, arg) =>
     # destructure arg
     executeCommand(arg...)
+
+  #-- Init
+
+  init = =>
+    console.log 'init theraCtrl'
+    return
+
+  init()
 
   #-- Public Functions
 

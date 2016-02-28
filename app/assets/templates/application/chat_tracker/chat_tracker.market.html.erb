@@ -1,16 +1,16 @@
 <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
   <div class="md-toolbar-tools">
-    <h2>Market Commands ({{ctc.system}}) {{ctc.commandTime.market > 0 ? ' - ' : ''}}
-      <span ng-show="ctc.commandTime.market > 0" am-time-ago="ctc.commandTime.market"></span>
+    <h2>Market Commands ({{market.system}}) {{market.commandTime > 0 ? ' - ' : ''}}
+      <span ng-show="market.commandTime.market > 0" am-time-ago="market.commandTime"></span>
     </h2>
     <div flex></div>
-    <md-button ng-show="ctc.commands.market.length" ng-click="ctc.changeChartType()">Chart Timescale</md-button>
-    <md-button ng-show="ctc.commands.market.length" ng-click="ctc.clearTable('market')">Clear Table</md-button>
+    <md-button ng-show="market.commands.length" ng-click="market.changeChartType()">Chart Timescale</md-button>
+    <md-button ng-show="market.commands.length" ng-click="market.clearTable()">Clear Table</md-button>
   </div>
 </md-toolbar>
 <md-table-container style="margin-bottom: 0; margin-top: 0;">
-  <table md-table md-row-select ng-model="ctc.selected.market">
-    <thead md-head md-order="ctc.query.market.order" md-on-reorder="ctc.onMarketReorder">
+  <table md-table md-row-select ng-model="market.selected">
+    <thead md-head md-order="market.query.order" md-on-reorder="market.onReorder">
     <tr md-row>
       <th md-column><span>System</span></th>
       <th md-column><span>Item</span></th>
@@ -20,7 +20,7 @@
     </tr>
     </thead>
     <tbody md-body>
-    <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.market">
+    <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in market.commandsToShow">
       <td md-cell>{{command.item.system}}</td>
       <td md-cell>{{command.item.name}}</td>
       <td md-cell>{{command.item.buy_price}} isk</td>
@@ -30,17 +30,17 @@
     </tbody>
   </table>
 </md-table-container>
-<md-table-pagination md-limit="ctc.query.market.limit" md-page="ctc.query.market.page" md-total="{{ctc.commands.market.length}}" md-on-paginate="ctc.onMarketPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+<md-table-pagination md-limit="market.query.limit" md-page="market.query.page" md-total="{{market.commands.length}}" md-on-paginate="market.onPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
 <div flex></div>
-<div ng-show="ctc.datapointsWeekly.length && ctc.chartType=='weekly'">
-  <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{ctc.marketItem}} at Jita (Weekly Average)</h4>
-  <c3chart bindto-id="chart" chart-data="ctc.datapointsWeekly" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
+<div ng-show="market.datapointsWeekly.length && market.chartType=='weekly'">
+  <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{market.marketItem}} at Jita (Weekly Average)</h4>
+  <c3chart bindto-id="chart" chart-data="market.datapointsWeekly" chart-columns="market.datacolumns" chart-x="market.datax" callback-function="market.handleCallback">
     <chart-axis>
       <chart-axis-x axis-id="date" axis-type="timeseries" axis-label="Date" axis-position="outer-center">
         <chart-axis-x-tick format-time="%m-%d-%Y"/>
       </chart-axis-x>
       <chart-axis-y axis-id="y" axis-label="Price (isk)">
-        <chart-axis-y-tick tick-format-function="ctc.priceToIsk"></chart-axis-y-tick>
+        <chart-axis-y-tick tick-format-function="market.priceToIsk"></chart-axis-y-tick>
       </chart-axis-y>
       <chart-axis-y axis-id="y2" axis-label="Item Quantity"></chart-axis-y>
     </chart-axis>
@@ -48,15 +48,15 @@
     <chart-legend legend-position="inset" legend-inset="top-left" legend-inset-x="20"/>
   </c3chart>
 </div>
-<div ng-show="ctc.datapointsMonthly.length && ctc.chartType=='monthly'">
-  <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{ctc.marketItem}} at Jita (Monthly Average)</h4>
-  <c3chart bindto-id="chart2" chart-data="ctc.datapointsMonthly" chart-columns="ctc.datacolumns" chart-x="ctc.datax" callback-function="ctc.handleCallback">
+<div ng-show="market.datapointsMonthly.length && market.chartType=='monthly'">
+  <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{market.marketItem}} at Jita (Monthly Average)</h4>
+  <c3chart bindto-id="chart2" chart-data="market.datapointsMonthly" chart-columns="market.datacolumns" chart-x="market.datax" callback-function="market.handleCallback">
     <chart-axis>
       <chart-axis-x axis-id="date" axis-type="timeseries" axis-label="Date" axis-position="outer-center">
         <chart-axis-x-tick format-time="%m-%d-%Y"/>
       </chart-axis-x>
       <chart-axis-y axis-id="y" axis-label="Price (isk)">
-        <chart-axis-y-tick tick-format-function="ctc.priceToIsk"></chart-axis-y-tick>
+        <chart-axis-y-tick tick-format-function="market.priceToIsk"></chart-axis-y-tick>
       </chart-axis-y>
       <chart-axis-y axis-id="y2" axis-label="Item Quantity"></chart-axis-y>
     </chart-axis>
