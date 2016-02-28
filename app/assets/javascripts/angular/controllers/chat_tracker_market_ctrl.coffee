@@ -28,7 +28,7 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', ($s
     toExecute = _.find(@commandsList, {'name': command})
     unless _.isUndefined(toExecute)
       for arg in argument
-        toExecute['fn'](executor, arg)
+        toExecute['fn'](executor, arg, time)
         @commandTime = time
 
   focusTab = =>
@@ -45,11 +45,11 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', ($s
       results.push({date: moment(key, momentTimeKey).toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
     return results.sort((a, b) -> new Date(a.date) - new Date(b.date))
 
-  priceCheck = (executor, item) =>
+  priceCheck = (executor, item, time) =>
     crestService.getPrices(@system, item).then (response) =>
       for item in response.data
         @commandNumber += 1
-        @commands.unshift({id: @commandNumber, time: Date.now(), item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
+        @commands.unshift({id: @commandNumber, time: time, item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
         @marketItem = item.typeName
       onPaginate()
     crestService.getHistories(item).then (response) =>
@@ -164,7 +164,7 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', ($s
       set: 'market'
       argument: '{system name}'
       description: 'Sets the market system for checking prices. Does not change if argument system is invalid'
-      example: '!market jita'
+      example: '!system jita'
       fn: changeSystem
     }
   ]
@@ -176,7 +176,6 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', ($s
 
   $scope.$on 'command', (event, arg) =>
     # destructure arg
-    console.log 'received command', arg
     executeCommand(arg...)
 
   $scope.$on 'flushChart', (event, arg) =>

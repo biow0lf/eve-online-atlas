@@ -28,7 +28,7 @@ app.controller 'chatTrackerTheraCtrl', ['$scope', 'crestService', ($scope, crest
     crestService.getTheraInfo(system).then (response) =>
       @commands.thera = []
       for item in response.data
-        @commands.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
+        @commands.push({id: @commands.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
       @theraOrigin = _.upperFirst(system)
       onPaginate()
       focusTab()

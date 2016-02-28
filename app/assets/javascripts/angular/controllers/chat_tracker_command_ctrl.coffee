@@ -14,7 +14,7 @@ app.controller 'chatTrackerCommandCtrl', ['$scope', ($scope) -> do =>
   @commandTime = new Date('1969.12.31 18:00:00')
 
   executeCommand = (executor, command, argument, time) =>
-    toExecute = _.find(@commandsList, {'name': command})
+    toExecute = _.find(@commandsList, {'name': command, set: 'commands'})
     unless _.isUndefined(toExecute)
       for arg in argument
         toExecute['fn'](executor, arg)
@@ -82,8 +82,7 @@ app.controller 'chatTrackerCommandCtrl', ['$scope', ($scope) -> do =>
 
   $scope.$on 'addCommand', (event, arg) =>
     for cmd in arg
-      @commandsList.push(cmd)
-    @commands = @commandsList
+      @commands.push(cmd)
     onPaginate()
 
   $scope.$on 'command', (event, arg) =>
@@ -94,7 +93,7 @@ app.controller 'chatTrackerCommandCtrl', ['$scope', ($scope) -> do =>
 
   init = =>
     console.log 'init commandCtrl'
-    @commands = @commandsList
+    angular.copy(@commandsList, @commands)
     onPaginate()
     $scope.$emit 'commandListReady'
     return
