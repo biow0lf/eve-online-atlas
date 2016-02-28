@@ -1,0 +1,27 @@
+<md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+  <div class="md-toolbar-tools">
+    <h2>Commands</h2>
+    <div flex></div>
+  </div>
+</md-toolbar>
+<md-table-container style="margin-bottom: 0; margin-top: 0;">
+  <table md-table md-row-select ng-model="ctc.selected.command">
+    <thead md-head md-order="ctc.query.command.order" md-on-reorder="ctc.onCommandReorder">
+    <tr md-row>
+      <th md-column><span>Name</span></th>
+      <th md-column><span>Tab</span></th>
+      <th md-column><span>Arguments</span></th>
+      <th md-column><span>Description</span></th>
+    </tr>
+    </thead>
+    <tbody md-body>
+    <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.command">
+      <td md-cell>{{command.name}}</td>
+      <td md-cell>{{command.set}}</td>
+      <td md-cell>{{command.argument}}</td>
+      <td md-cell>{{command.description}}</td>
+    </tr>
+    </tbody>
+  </table>
+</md-table-container>
+<md-table-pagination md-limit="ctc.query.command.limit" md-page="ctc.query.command.page" md-total="{{ctc.commands.command.length}}" md-on-paginate="ctc.onCommandPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>

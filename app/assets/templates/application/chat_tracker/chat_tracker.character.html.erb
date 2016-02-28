@@ -1,0 +1,25 @@
+<md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+  <div class="md-toolbar-tools">
+    <h2>Character Listeners {{character.commandTime > 0 ? ' - ' : ''}}
+      <span ng-show="character.commandTime > 0" am-time-ago="character.commandTime"></span>
+    </h2>
+    <div flex></div>
+  </div>
+</md-toolbar>
+<md-table-container style="margin-bottom: 0; margin-top: 0;">
+  <table md-table md-row-select ng-model="character.selected">
+    <thead md-head md-order="character.query.order" md-on-reorder="character.onReorder">
+    <tr md-row>
+      <th md-column><span>Name</span></th>
+      <th md-column><span>Added</span></th>
+    </tr>
+    </thead>
+    <tbody md-body>
+    <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in character.commandsToShow">
+      <td md-cell>{{command.name}}</td>
+      <td md-cell am-time-ago="command.time"></td>
+    </tr>
+    </tbody>
+  </table>
+</md-table-container>
+<md-table-pagination md-limit="character.query.limit" md-page="character.query.page" md-total="{{character.commands.length}}" md-on-paginate="character.onPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>

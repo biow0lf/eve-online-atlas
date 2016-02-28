@@ -1,7 +1,8 @@
 app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', 'moment', ($scope, $http, $interval, crestService, $rootScope, moment) -> do =>
   @bookmark = 1
   @selectedTab = 0
-  @character = ''
+  @listener = ''
+  @characters = []
 
   @file = new File([""], "")
   @interval = null
@@ -17,28 +18,26 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   @marketItem = ''
   @charts = []
 
+  @lastCommandTime = new Date('1969.12.31 18:00:00')
+
   @selected =
     market: []
     thera: []
-    char: []
     command: []
 
   @commandTime =
     market: new Date('1969.12.31 18:00:00')
     thera: new Date('1969.12.31 18:00:00')
-    char: new Date('1969.12.31 18:00:00')
     command: new Date('1969.12.31 18:00:00')
 
   @commandList =
     market: ['!market', '!pc', '!system']
     thera: ['!thera']
-    char: ['!char', '!allow', '!remove']
     command: ['!commands', '!help']
 
   @commands =
     market: []
     thera: []
-    char: []
     command: []
 
   @commandsToShow =
@@ -66,12 +65,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       limit: 5,
       page: 1
       tab: 1
-    char:
-      filter: '',
-      order: '',
-      limit: 5,
-      page: 1
-      tab: 2
     command:
       filter: '',
       order: '',
@@ -124,150 +117,157 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   handleCallback = (chartObj) =>
     @charts.push(chartObj)
 
+  parseTime = (line) =>
+    t = line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
+    unless _.isEmpty(t)
+      return new Date(t[0])
+    else
+      return new Date('1969.12.31 18:00:00')
+
+  parseCharacter = (line) =>
+    return line.substr(line.indexOf(']')+2, line.indexOf('>')-1-(line.indexOf(']')+2))
+
+  parseListener = (line) =>
+    # can't be the Listener line if there is a date
+    return null if line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
+    # must contain Listener: in the line
+    return null unless line.indexOf('Listener:') >= 0
+    # return everything (trimmed) after the :
+    return _.map(line.split(':'), (l) -> return _.trim(l))[1]
+
+  parseCommand = (line) =>
+    command = null
+    set = null
+    for commandSet, commands of @commandList
+      tmp = _.filter(commands, (command) -> return line.indexOf(command) >= 0)
+      unless _.isEmpty(tmp)
+        command = tmp[0]
+        set = commandSet
+    # otherwise just grab first word with !
+    if command == null
+      words = _.split(line, ' ')
+      for word in words
+        if word.indexOf('!') == 0
+          command = word
+          set = 'blah'
+          break
+
+    return [command, set]
+
   readFile = (file) =>
     if file.size != 0
       fileReader = new FileReader
       fileReader.onload = (e) =>
         text = e.target.result;
-        # console.log text
         lines = text.split(/[\r\n]+/g); # tolerate both Windows and Unix linebreaks
         for line in lines
           # strip out whitespace on either side
           line = _.trim(line)
+
+          # if listener not set, set it
+          if @listener is ''
+            listener = parseListener(line)
+            unless _.isNull(listener)
+              console.log 'Added character:', listener
+              @listener = listener
+              $scope.$broadcast 'setListener', listener
+
           # check to see if line contains a command
+          [command, set] = parseCommand(line)
+          commandTime = parseTime(line)
 
-          # if character not set, set it
-          if _.isEmpty(@commands.char)
-            # make sure that we get the Listener: {character name} line and not a regular log line
-            unless line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
-              if line.indexOf('Listener:') >= 0
-                # add Listener character
-                c = _.map(line.split(':'), (l) -> return _.trim(l))[1]
-                @commands.char.push {name: c, time: Date.now()}
-                onCharPaginate(@query.char.page, @query.char.limit)
-                console.log 'Added character:', c
-                @character = c
-
-          command = ''
-          set = ''
-          for commandSet, commands of @commandList
-            tmp = _.filter(commands, (command) -> return line.indexOf(command) >= 0)
-            if tmp.length > 0
-              command = tmp[0]
-              set = commandSet
-
-          if command.length > 0
+          if !_.isNull(command) and commandTime.getTime() > @lastCommandTime
+            # if command is after newest command timestamp, save command time and execute command
+            @lastCommandTime = commandTime
             # verify character
-            character_name = line.substr(line.indexOf(']')+2, line.indexOf('>')-1-(line.indexOf(']')+2))
-            if _.some(@commands.char, (char) -> return _.lowerCase(char.name) == _.lowerCase(character_name))
-              commandTime = new Date(line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)[0])
-              if commandTime.getTime() > @commandTime[set].getTime()
-                # if command is after newest command timestamp, save command time and execute command
-                @commandTime[set] = commandTime
-                value = line.substr(line.indexOf(command)+command.length+1, line.length)
-                converted = []
+            character_name = parseCharacter(line)
+            if character_name in @characters
+              value = line.substr(line.indexOf(command)+command.length+1, line.length)
+              converted = []
 
-                # two ways to imput items to parse
-                # first, by typing in items delimited by comma
-                # second, by dragging items to bar there are two spaces between items
-                splitChar = null
-                if value.indexOf(',') >= 0 then splitChar = ','
-                if value.indexOf('  ') >= 0 then splitChar = '  '
-                if splitChar != null
-                  value = _.split(value, splitChar)
-                  converted = _.map(value, (s) ->
-                    int = _.parseInt(s)
-                    if _.isNaN(int)
-                      return _.trim(s)
-                    else
-                      return int
-                  )
-                else
-                  converted = [_.trim(value)]
-
-                console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
-
-                if command.indexOf('!market') >= 0
-                  @selectedTab = @query.market.tab
-
-                else if command.indexOf('!char') >= 0
-                  @selectedTab = @query.char.tab
-
-                else if command.indexOf('!commands') >= 0 or command.indexOf('!help') >= 0
-                  @selectedTab = @query.command.tab
-
-                else if command.indexOf('!system') >= 0
-                  crestService.isValidSystem(converted[0]).then (response) =>
-                    if response.data != null
-                      @system = response.data.solarSystemName
-
-                else if command.indexOf('!pc') >= 0
-                  crestService.getPrices(@system, converted).then (response) =>
-                    for item in response.data
-                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
-                      @marketItem = item.typeName
-                    onMarketPaginate(@query.market.page, @query.market.limit)
-                    @selectedTab = @query.market.tab
-                  crestService.getHistories(converted).then (response) =>
-                    @datapoints = []
-                    for item in response.data
-                      # sort items into month groups
-                      groupsMonthly = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
-                      groupsWeekly = _.groupBy(item.history, (h) -> moment(h['date']).week() + ' ' + moment(h['date']).year())
-                      resultMonthly = []
-                      resultWeekly = []
-                      for key, val of groupsMonthly
-                        avg = _.mean(_.map(val, (v) -> v['avgPrice']))
-                        avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
-                        avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
-                        avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
-                        avgVolume = _.mean(_.map(val, (v) -> v['volume']))
-                        resultMonthly.push({date: moment(key, 'M YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
-                      for key, val of groupsWeekly
-                        avg = _.mean(_.map(val, (v) -> v['avgPrice']))
-                        avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
-                        avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
-                        avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
-                        avgVolume = _.mean(_.map(val, (v) -> v['volume']))
-                        resultWeekly.push({date: moment(key, 'w YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
-                      resultMonthly = resultMonthly.sort((a, b) -> new Date(a.date) - new Date(b.date))
-                      resultWeekly = resultWeekly.sort((a, b) -> new Date(a.date) - new Date(b.date))
-                      # reset datapoints arrays
-                      @datapointsMonthly = []
-                      @datapointsWeekly = []
-                      for r in resultMonthly
-                        if moment(r.date).year() >= 2015
-                          @datapointsMonthly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
-                      for r in resultWeekly
-                        if moment(r.date).year() >= 2015
-                          @datapointsWeekly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
-
-                else if command.indexOf('!thera') >= 0
-                  @theraOrigin = _.upperFirst(converted[0])
-                  crestService.getTheraInfo(converted[0]).then (response) =>
-                    @commands.thera = []
-                    for item in response.data
-                      @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
-                    onTheraPaginate(@query.thera.page, @query.thera.limit)
-                    @selectedTab = @query.thera.tab
-
-                else if command.indexOf('!allow') >= 0
-                  @commands.char.unshift {name: converted[0], time: Date.now()}
-                  onCharPaginate(@query.char.page, @query.char.limit)
-                  @selectedTab = @query.char.tab
-                  console.log 'Added character:', converted[0]
-
-                else if command.indexOf('!remove') >= 0
-                  if @commands.char.length > 1
-                    if converted[0] == 'self'
-                      converted[0] = character_name
-                    @commands.char = _.filter(@commands.char, (char) -> return _.toLower(char.name) != _.toLower(converted[0]))
-                    onCharPaginate(@query.char.page, @query.char.limit)
-                    @selectedTab = @query.char.tab
-                    console.log @commands.char
-                    console.log 'Removed character:', converted[0]
+              # two ways to imput items to parse
+              # first, by typing in items delimited by comma
+              # second, by dragging items to bar there are two spaces between items
+              splitChar = null
+              if value.indexOf(',') >= 0 then splitChar = ','
+              if value.indexOf('  ') >= 0 then splitChar = '  '
+              if splitChar != null
+                value = _.split(value, splitChar)
+                converted = _.map(value, (s) ->
+                  int = _.parseInt(s)
+                  if _.isNaN(int)
+                    return _.trim(s)
                   else
-                    console.log 'Cannot remove last character'
+                    return int
+                )
+              else
+                converted = [_.trim(value)]
+
+              console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
+
+              # executor, command, argument, time
+              $scope.$broadcast 'command', [character_name, command, converted, commandTime]
+
+              if command.indexOf('!market') >= 0
+                @selectedTab = @query.market.tab
+
+              else if command.indexOf('!commands') >= 0 or command.indexOf('!help') >= 0
+                @selectedTab = @query.command.tab
+
+              else if command.indexOf('!system') >= 0
+                crestService.isValidSystem(converted[0]).then (response) =>
+                  if response.data != null
+                    @system = response.data.solarSystemName
+
+              else if command.indexOf('!pc') >= 0
+                crestService.getPrices(@system, converted).then (response) =>
+                  for item in response.data
+                    @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
+                    @marketItem = item.typeName
+                  onMarketPaginate(@query.market.page, @query.market.limit)
+                  @selectedTab = @query.market.tab
+                crestService.getHistories(converted).then (response) =>
+                  @datapoints = []
+                  for item in response.data
+                    # sort items into month groups
+                    groupsMonthly = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
+                    groupsWeekly = _.groupBy(item.history, (h) -> moment(h['date']).week() + ' ' + moment(h['date']).year())
+                    resultMonthly = []
+                    resultWeekly = []
+                    for key, val of groupsMonthly
+                      avg = _.mean(_.map(val, (v) -> v['avgPrice']))
+                      avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
+                      avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
+                      avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
+                      avgVolume = _.mean(_.map(val, (v) -> v['volume']))
+                      resultMonthly.push({date: moment(key, 'M YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
+                    for key, val of groupsWeekly
+                      avg = _.mean(_.map(val, (v) -> v['avgPrice']))
+                      avgHigh = _.mean(_.map(val, (v) -> v['highPrice']))
+                      avgLow = _.mean(_.map(val, (v) -> v['lowPrice']))
+                      avgOrder = _.mean(_.map(val, (v) -> v['orderCount']))
+                      avgVolume = _.mean(_.map(val, (v) -> v['volume']))
+                      resultWeekly.push({date: moment(key, 'w YYYY').toDate(), avg: avg.toFixed(2), high: avgHigh.toFixed(2), low: avgLow.toFixed(2), order: Math.round(avgOrder), volume: Math.round(avgVolume)})
+                    resultMonthly = resultMonthly.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                    resultWeekly = resultWeekly.sort((a, b) -> new Date(a.date) - new Date(b.date))
+                    # reset datapoints arrays
+                    @datapointsMonthly = []
+                    @datapointsWeekly = []
+                    for r in resultMonthly
+                      if moment(r.date).year() >= 2015
+                        @datapointsMonthly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
+                    for r in resultWeekly
+                      if moment(r.date).year() >= 2015
+                        @datapointsWeekly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
+
+              else if command.indexOf('!thera') >= 0
+                @theraOrigin = _.upperFirst(converted[0])
+                crestService.getTheraInfo(converted[0]).then (response) =>
+                  @commands.thera = []
+                  for item in response.data
+                    @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
+                  onTheraPaginate(@query.thera.page, @query.thera.limit)
+                  @selectedTab = @query.thera.tab
 
       fileReader.readAsText file
 
@@ -316,9 +316,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   onTheraPaginate = (page, limit) =>
     onPaginate(page, limit, 'thera')
 
-  onCharPaginate = (page, limit) =>
-    onPaginate(page, limit, 'char')
-
   onCommandPaginate = (page, limit) =>
     onPaginate(page, limit, 'command')
 
@@ -327,9 +324,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   onTheraReorder = (order) =>
     onReorder(order, 'thera')
-
-  onCharReorder = (order) =>
-    onReorder(order, 'char')
 
   onCommandReorder = (order) =>
     onReorder(order, 'command')
@@ -354,12 +348,11 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   init()
 
-  $scope.$watch (=> @query.filter), (newValue, oldValue) =>
-    if !oldValue then @bookmark = @query.page
-    if newValue != oldValue then @query.page = 1
-    if !newValue then @query.page = @bookmark
-    # need to update commandsToShow with things
-    return
+  $scope.$on 'changeTab', (event, arg) =>
+    @selectedTab = arg
+
+  $scope.$on 'setCharacters', (event, arg) =>
+    @characters = arg
 
   # flush the shown chart on returning to market screen otherwise axes aren't shown
   $scope.$watch (=> @selectedTab), (newValue, oldValue) =>
@@ -371,22 +364,24 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
         console.log 'flushed weekly'
         @charts[0].flush()
 
+  test = =>
+    $scope.$broadcast 'command', ['someone', 'someCmd', ['arg0'], Date.now()]
+
   #-- Public Functions
 
   @setFile = setFile
   @onMarketPaginate = onMarketPaginate
   @onTheraPaginate = onTheraPaginate
-  @onCharPaginate = onCharPaginate
   @onCommandPaginate = onCommandPaginate
   @onMarketReorder = onMarketReorder
   @onTheraReorder = onTheraReorder
-  @onCharReorder = onCharReorder
   @onCommandReorder = onCommandReorder
   @removeFilter = removeFilter
   @clearTable = clearTable
   @priceToIsk = priceToIsk
   @changeChartType = changeChartType
   @handleCallback = handleCallback
+  @test = test
 
   return
 ]
