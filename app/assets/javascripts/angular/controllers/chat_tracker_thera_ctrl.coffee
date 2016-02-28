@@ -76,6 +76,7 @@ app.controller 'chatTrackerTheraCtrl', ['$scope', '$http', 'crestService', ($sco
   @commandsList = [
     {
       name: '!thera'
+      set: 'thera'
       argument: '{system name}'
       description: 'Switches to the thera tab and finds distances to Thera wormholes from given system'
       example: '!thera Jita'
@@ -84,6 +85,11 @@ app.controller 'chatTrackerTheraCtrl', ['$scope', '$http', 'crestService', ($sco
   ]
 
   init()
+
+  #-- Listeners
+
+  $scope.$on 'getCommandList', (event, arg) =>
+    $scope.$emit 'sendCommandList', @commandsList
 
   $scope.$on 'command', (event, arg) =>
     # destructure arg

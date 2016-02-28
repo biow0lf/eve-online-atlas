@@ -82,14 +82,11 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', '$http', 'crestService', (
     @commands.reverse() if reverse
     onPaginate()
 
-  init = =>
-    console.log 'characterCtrl init'
-    return
-
   # has to be at the end because otherwise functions wont exist yet
   @commandsList = [
     {
       name: '!char'
+      set: 'character'
       argument: ''
       description: 'Switches to the character tab'
       example: '!char'
@@ -97,6 +94,7 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', '$http', 'crestService', (
     }
     {
       name: '!allow'
+      set: 'character'
       argument: '{character name}'
       description: 'Adds [character name] to set of characters allowed to use commands; multiple names must be separated by commas or two spaces'
       example: '!allow Aes Sayyadina | !allow Aes Sayyadina, Blacksmoke16 | !allow Aes Sayyadina  Blacksmoke16'
@@ -104,17 +102,25 @@ app.controller 'chatTrackerCharacterCtrl', ['$scope', '$http', 'crestService', (
     }
     {
       name: '!remove'
-      argument: '{character name} or \'self\''
+      set: 'character'
+      argument: '{character name} | \'self\' | \'all\''
       description: 'Removes [character name] from set of characters allowed to use commands; multiple names must be separated by commas or two spaces; removes current character if \'self\'; removes all but listener if \'all\''
       example: '!remove Aes Sayyadina | !remove Aes Sayyadina, Blacksmoke16 | !remove Aes Sayyadina  Blacksmoke16 | !remove self | !remove all'
       fn: removeCharacter
     }
   ]
 
+  init = =>
+    console.log 'characterCtrl init'
+    return
+
   init()
 
   #-- Listeners
-  
+
+  $scope.$on 'getCommandList', (event, arg) =>
+    $scope.$emit 'sendCommandList', @commandsList
+
   $scope.$on 'command', (event, arg) =>
     # destructure arg
     executeCommand(arg...)

@@ -21,23 +21,18 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   @selected =
     market: []
-    command: []
 
   @commandTime =
     market: new Date('1969.12.31 18:00:00')
-    command: new Date('1969.12.31 18:00:00')
 
   @commandList =
     market: ['!market', '!pc', '!system']
-    command: ['!commands', '!help']
 
   @commands =
     market: []
-    command: []
 
   @commandsToShow =
     market: []
-    command: []
 
   @filter = {
     options: {
@@ -52,12 +47,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
       limit: 5,
       page: 1
       tab: 0
-    command:
-      filter: '',
-      order: '',
-      limit: 5,
-      page: 1
-      tab: 3
 
   clearTable = (tab) =>
     @selected[tab] = []
@@ -198,9 +187,6 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
               if command.indexOf('!market') >= 0
                 @selectedTab = @query.market.tab
 
-              else if command.indexOf('!commands') >= 0 or command.indexOf('!help') >= 0
-                @selectedTab = @query.command.tab
-
               else if command.indexOf('!system') >= 0
                 crestService.isValidSystem(converted[0]).then (response) =>
                   if response.data != null
@@ -289,33 +275,18 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
   onMarketPaginate = (page, limit) =>
     onPaginate(page, limit, 'market')
 
-  onTheraPaginate = (page, limit) =>
-    onPaginate(page, limit, 'thera')
-
-  onCommandPaginate = (page, limit) =>
-    onPaginate(page, limit, 'command')
-
   onMarketReorder = (order) =>
     onReorder(order, 'market')
-
-  onTheraReorder = (order) =>
-    onReorder(order, 'thera')
-
-  onCommandReorder = (order) =>
-    onReorder(order, 'command')
 
   removeFilter = =>
     # @filter.show = false
     @query.filter = ''
 
   init = =>
-    console.log 'initializing'
-    @commands.command.push({name: '!market', set: 'Market', argument: '', description: 'Switches to the market tab'})
-    @commands.command.push({name: '!pc', set: 'Market', argument: 'List of item names separated by comma or doublespace', description: 'Price checks an item in the current market system'})
-    @commands.command.push({name: '!system', set: 'Market', argument: '[system name]', description: 'Sets the current market system for checking prices. Does not change if system name is invalid.'})
-    @commands.command.push({name: '!commands', set: 'Command', argument: '', description: 'Switches to the command tab'})
-    @commands.command.push({name: '!help', set: 'Command', argument: '', description: 'Switches to the command tab'})
-    onCommandPaginate(@query.command.page, @query.command.limit)
+    console.log 'initializing chatTrackerCtrl'
+#    @commands.command.push({name: '!market', set: 'Market', argument: '', description: 'Switches to the market tab'})
+#    @commands.command.push({name: '!pc', set: 'Market', argument: 'List of item names separated by comma or doublespace', description: 'Price checks an item in the current market system'})
+#    @commands.command.push({name: '!system', set: 'Market', argument: '[system name]', description: 'Sets the current market system for checking prices. Does not change if system name is invalid.'})
     return
 
   init()
@@ -325,6 +296,13 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
 
   $scope.$on 'setCharacters', (event, arg) =>
     @characters = arg
+
+  $scope.$on 'commandListReady', (event, arg) =>
+    $scope.$broadcast 'getCommandList'
+
+  # receieve commands from child controllers and rebroadcast to commandCtrl
+  $scope.$on 'sendCommandList', (event, arg) =>
+    $rootScope.$broadcast 'addCommand', arg
 
   # flush the shown chart on returning to market screen otherwise axes aren't shown
   $scope.$watch (=> @selectedTab), (newValue, oldValue) =>
@@ -336,22 +314,16 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
         console.log 'flushed weekly'
         @charts[0].flush()
 
-  test = =>
-    $scope.$broadcast 'command', ['someone', 'someCmd', ['arg0'], Date.now()]
-
   #-- Public Functions
 
   @setFile = setFile
   @onMarketPaginate = onMarketPaginate
-  @onCommandPaginate = onCommandPaginate
   @onMarketReorder = onMarketReorder
-  @onCommandReorder = onCommandReorder
   @removeFilter = removeFilter
   @clearTable = clearTable
   @priceToIsk = priceToIsk
   @changeChartType = changeChartType
   @handleCallback = handleCallback
-  @test = test
 
   return
 ]
