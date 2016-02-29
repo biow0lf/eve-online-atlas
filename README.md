@@ -29,3 +29,10 @@ Welcome to the EDA? (Eve Digital Assistant)
 
 * Repo owner or admin
 * Other community or team contact
+
+### SDE Issues ###
+*  mapCelestialStatistics orbitPeriod given in deciseconds?
+*  maplocationwormholeclasses contains region, constellation and system IDs?
+*  Out of the 471,577 planets in mapCelestialStatistics all of them have fragmented and mass = 0.
+*  No way to get station services from outposts.
+*  Planets/moons should be in their own table.
