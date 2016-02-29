@@ -1,4 +1,4 @@
-app.controller 'chatTrackerCommandCtrl', ['$scope', ($scope) -> do =>
+app.controller 'chatTrackerCommandCtrl', ['$scope', 'utilsService', ($scope, utilsService) -> do =>
 
   # datatable variables
   @selected = []
@@ -24,38 +24,10 @@ app.controller 'chatTrackerCommandCtrl', ['$scope', ($scope) -> do =>
     $scope.$emit 'changeTab', @query.tab
 
   onPaginate = (page, limit) =>
-  # console.log 'commands: page', page, 'limit', limit
-    if page is undefined
-      page = @query.page
-    else
-      @query.page = page
-    if limit is undefined
-      limit = @query.limit
-    else
-      @query.limit = limit
-    initial = (page - 1) * limit
-    # case 1 - there are enough commands to paginate
-    if initial < @commands.length
-      if @commands.length - initial >= limit
-        # and there are enough commands left to show at least the limit
-        @commandsToShow = @commands.slice(initial, initial + limit)
-      else
-        # or there aren't enough, and just show what's left
-        @commandsToShow = @commands.slice(initial, @commands.length)
-    else
-      # case 2 - not enough to paginate, so decrement page and try again
-      onPaginate(page - 1, limit)
+    [@commandsToShow, @query.page] = utilsService.paginate(@commands, page || @query.page, limit || @query.limit)
 
   onReorder = (order) =>
-    reverse = false
-    if order.indexOf('-') >= 0
-      order = _.replace(order, '-', '')
-      reverse = true
-    @commands.sort (a, b) ->
-      if a[order] < b[order] then return -1
-      if a[order] > b[order] then return 1
-      return 0
-    @commands.reverse() if reverse
+    @commands = utilsService.reorder(@commands, order)
     onPaginate()
 
   # has to be at the end because otherwise functions wont exist yet
