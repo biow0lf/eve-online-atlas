@@ -1,144 +1,24 @@
 <div flex layout="column" ng-controller="chatTrackerCtrl as ctc" ng-cloak>
-  <div layout="row">
-    <md-button class="md-primary md-raised" ngf-select="ctc.setFile($file)">Click to set log file</md-button>
-    <p> Log file: {{ctc.file.name.length > 0 ? ctc.file.name : 'No file selected'}} </p>
-    <div flex></div>
-  </div>
-
   <md-card layout="column" flex layout-margin class="md-whiteframe-z2">
-    <md-tabs flex md-selected="ctc.selectedTab">
+    <div layout="row" style="margin-bottom: 0;" layout-align="center center">
+      <md-button class="md-primary md-raised" ngf-select="ctc.setFile($file)">Click to set log file</md-button>
+      <p> Log file: {{ctc.file.name.length > 0 ? ctc.file.name : 'No file selected'}} </p>
+      <div flex></div>
+      <h4 class="md-title" style="margin-top: 0; margin-bottom: 0; margin-right: 16px;" ng-show="ctc.listener">{{ctc.listener}}</h4>
+    </div>
+    <md-tabs flex md-selected="ctc.selectedTab" style="margin-top: 0;">
       <md-tab label="Market" flex>
-        <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
-          <div class="md-toolbar-tools">
-            <h2>Market Commands ({{ctc.system}}){{ctc.commandTime.market > 0 ? ' - Last Command Time - ' +
-              ctc.timeStamp(ctc.commandTime.market) : ''}}</h2>
-            <div flex></div>
-            <md-button ng-show="ctc.commands.market.length" ng-click="ctc.clearTable('market')">Clear Table</md-button>
-          </div>
-        </md-toolbar>
-        <md-table-container style="margin-bottom: 0; margin-top: 0;">
-          <table md-table md-row-select ng-model="ctc.selected.market">
-            <thead md-head md-order="ctc.query.market.order" md-on-reorder="ctc.onMarketReorder">
-            <tr md-row>
-              <th md-column><span>System</span></th>
-              <th md-column><span>Item</span></th>
-              <th md-column><span>Buy Price</span></th>
-              <th md-column><span>Sell Price</span></th>
-              <th md-column><span>Time</span></th>
-            </tr>
-            </thead>
-            <tbody md-body>
-            <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.market">
-              <td md-cell>{{command.item.system}}</td>
-              <td md-cell>{{command.item.name}}</td>
-              <td md-cell>{{command.item.buy_price}}</td>
-              <td md-cell>{{command.item.sell_price}}</td>
-              <td md-cell am-time-ago="command.time"></td>
-            </tr>
-            </tbody>
-          </table>
-        </md-table-container>
-        <md-table-pagination md-limit="ctc.query.market.limit" md-page="ctc.query.market.page" md-total="{{ctc.commands.market.length}}" md-on-paginate="ctc.onMarketPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+        <ng-include src="'application/chat_tracker/chat_tracker.market.html'" ng-controller="chatTrackerMarketCtrl as market"></ng-include>
       </md-tab>
-
       <md-tab label="thera" flex>
-        <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
-          <div class="md-toolbar-tools">
-            <h2>Thera Connections {{ctc.theraOrigin != '' ? ' from ' + ctc.theraOrigin : ''}}</h2>
-            <div flex></div>
-            <md-button ng-show="ctc.commands.thera.length" ng-click="ctc.clearTable('thera')">Clear Table</md-button>
-          </div>
-        </md-toolbar>
-        <md-table-container style="margin-bottom: 0; margin-top: 0;">
-          <table md-table md-row-select ng-model="ctc.selected.market">
-            <thead md-head md-order="ctc.query.thera.order" md-on-reorder="ctc.onTheraReorder">
-            <tr md-row>
-              <th md-column><span>Region</span></th>
-              <th md-column><span>System</span></th>
-              <th md-column md-order-by="jumps"><span>Jumps</span></th>
-              <th md-column><span>Type</span></th>
-              <th md-column><span>Out Sig</span></th>
-              <th md-column><span>In Sig</span></th>
-              <th md-column md-numeric><span>Estimated Life</span></th>
-              <th md-column md-numeric><span>Updated</span></th>
-            </tr>
-            </thead>
-            <tbody md-body>
-            <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.thera">
-              <td md-cell>{{command.region}}</td>
-              <td md-cell>{{command.system}}</td>
-              <td md-cell>{{command.jumps}}</td>
-              <td md-cell>{{command.type}}</td>
-              <td md-cell>{{command.outSig}}</td>
-              <td md-cell>{{command.inSig}}</td>
-              <td md-cell>{{command.estimatedLife | amDifference : null : 'hours' }} hours</td>
-              <td md-cell am-time-ago="command.updated"></td>
-            </tr>
-            </tbody>
-          </table>
-        </md-table-container>
-        <md-table-pagination md-limit="ctc.query.thera.limit" md-page="ctc.query.thera.page" md-total="{{ctc.commands.thera.length}}" md-on-paginate="ctc.onTheraPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+        <ng-include src="'application/chat_tracker/chat_tracker.thera.html'" ng-controller="chatTrackerTheraCtrl as thera"></ng-include>
       </md-tab>
-
       <md-tab label="Characters" flex>
-        <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
-          <div class="md-toolbar-tools">
-            <h2>Character Listeners {{ctc.commandTime.chat > 0 ? ' - Last Command Time - ' +
-              ctc.timeStamp(ctc.commandTime.chat) : ''}}</h2>
-            <div flex></div>
-            <md-button ng-show="ctc.commands.chat.length" ng-click="ctc.clearTable('char')">Clear Table</md-button>
-          </div>
-        </md-toolbar>
-        <md-table-container style="margin-bottom: 0; margin-top: 0;">
-          <table md-table md-row-select ng-model="ctc.selected.char">
-            <thead md-head md-order="ctc.query.thera.order" md-on-reorder="ctc.onCharReorder">
-            <tr md-row>
-              <th md-column><span>Name</span></th>
-              <th md-column><span>Added</span></th>
-            </tr>
-            </thead>
-            <tbody md-body>
-            <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.char">
-              <td md-cell>{{command.name}}</td>
-              <td md-cell am-time-ago="command.time"></td>
-            </tr>
-            </tbody>
-          </table>
-        </md-table-container>
-        <md-table-pagination md-limit="ctc.query.char.limit" md-page="ctc.query.char.page" md-total="{{ctc.commands.char.length}}" md-on-paginate="ctc.onCharPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+        <ng-include src="'application/chat_tracker/chat_tracker.character.html'" ng-controller="chatTrackerCharacterCtrl as character"></ng-include>
       </md-tab>
-
       <md-tab label="Commands" flex>
-        <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
-          <div class="md-toolbar-tools">
-            <h2>Commands</h2>
-            <div flex></div>
-          </div>
-        </md-toolbar>
-        <md-table-container style="margin-bottom: 0; margin-top: 0;">
-          <table md-table md-row-select ng-model="ctc.selected.command">
-            <thead md-head md-order="ctc.query.command.order" md-on-reorder="ctc.onCommandReorder">
-            <tr md-row>
-              <th md-column><span>Name</span></th>
-              <th md-column><span>Tab</span></th>
-              <th md-column><span>Arguments</span></th>
-              <th md-column><span>Description</span></th>
-            </tr>
-            </thead>
-            <tbody md-body>
-            <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in ctc.commandsToShow.command">
-              <td md-cell>{{command.name}}</td>
-              <td md-cell>{{command.set}}</td>
-              <td md-cell>{{command.argument}}</td>
-              <td md-cell>{{command.description}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </md-table-container>
-        <md-table-pagination md-limit="ctc.query.command.limit" md-page="ctc.query.command.page" md-total="{{ctc.commands.command.length}}" md-on-paginate="ctc.onCommandPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+        <ng-include src="'application/chat_tracker/chat_tracker.command.html'" ng-controller="chatTrackerCommandCtrl as command"></ng-include>
       </md-tab>
-
     </md-tabs>
   </md-card>
-
 </div>

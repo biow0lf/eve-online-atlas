@@ -9,6 +9,10 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
     names = encodeURI(items)
     return $http.get("/api/v1/items/price?name=#{names}&system=#{system}&buy&sell")
 
+  factory.getHistories = (items) ->
+    names = encodeURI(items)
+    return $http.get("/api/v1/items/history?name=#{names}")
+
   factory.getTheraInfo = (system) ->
     return $http.get("/thera?system=#{system}")
 	

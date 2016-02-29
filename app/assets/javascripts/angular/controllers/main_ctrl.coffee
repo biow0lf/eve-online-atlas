@@ -21,9 +21,10 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
     init = =>
       @version = '0.0.1'
       crestService.getUser().then (response) =>
-        angular.copy(response.data, @user)
-        if @user.hasOwnProperty('characterID')
-          @user.image = "https://image.eveonline.com/Character/#{@user.characterID}_64.jpg"
+        if _.keys(response.data).length > 0
+          angular.copy(response.data, @user)
+          if @user.hasOwnProperty('characterID')
+            @user.image = "https://image.eveonline.com/Character/#{@user.characterID}_64.jpg"
 
     init()
 
@@ -33,6 +34,7 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
     @openSidenav = openSidenav
     @signin = signin
     @signout = signout
+    @$state = $state
 
     return
 ]

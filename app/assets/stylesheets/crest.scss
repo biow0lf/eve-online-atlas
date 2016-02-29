@@ -32,3 +32,7 @@ md-content {
 .sell-order {
   background-color: #FFC48C;
 }
+
+md-select-menu md-content {
+  background-color: $white !important;
+}

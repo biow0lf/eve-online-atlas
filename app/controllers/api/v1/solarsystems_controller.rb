@@ -5,12 +5,12 @@ module Api
       before_action :find_solarsystem
 
       def index
-        return render json: @solarsystem.to_json if @solarsystem
+        return render json: @solarsystem if @solarsystem
+        return render json: [], status: :bad_request if params[:name]
         render json: Solarsystem.all
       end
 
       def show
-        return render status: :bad_request unless @solarsystem
         planet_ids = @solarsystem.planets.pluck(:itemID)
         result = @solarsystem.as_json
         result['class'] = @solarsystem.wormholeclass.wormholeClassID
@@ -20,19 +20,9 @@ module Api
 
       private
 
-      def solarsystem_params
-        params.permit(:id, :name)
-      end
-
       def find_solarsystem
-        @ssp = solarsystem_params
-        if @ssp.key?(:name)
-          @solarsystem = Solarsystem.find_by(solarSystemName: @ssp[:name])
-        elsif @ssp[:id]
-          @solarsystem = Solarsystem.find(@ssp[:id])
-        end
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Solarsystem not found', status: :bad_request }, status: :bad_request
+        return @solarsystem = Solarsystem.find_by(solarSystemName: params[:name]) if params.key?(:name)
+        @solarsystem = Solarsystem.find(params[:id]) if params[:id]
       end
     end
   end
