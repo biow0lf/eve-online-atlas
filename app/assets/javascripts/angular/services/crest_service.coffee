@@ -13,13 +13,20 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
     return $http.get("/thera?system=#{system}")
 	
   factory.getAgents = (system) ->
-    return $http.get("api/v1/agents?")
+    return $http.get("api/v1/agents?#{system}")
 	
   factory.getSolarSystem = (locationID) ->
 	  return $http.get("api/v1/solarsystems/#{locationID}")
-	
+
   factory.getPlanet = (solarSystemID, planetID) ->
-	  return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}")
+    if planetID != undefined
+      return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}")
+    else return $http.get("api/v1/solarsystems/#{solarSystemID}/planets")
+
+  factory.getStation = (solarSystemID, stationID) ->
+    if stationID != undefined
+      return $http.get("api/v1/solarsystems/#{solarSystemID}/stations/#{stationID}")
+    else return $http.get("api/v1/solarsystems/#{solarSystemID}/stations")
 	
   factory.getMoon = (solarSystemID, planetID, moonID) ->
 	  return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}/moons/#{moonID}")

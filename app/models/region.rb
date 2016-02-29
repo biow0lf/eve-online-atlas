@@ -3,4 +3,5 @@ class Region < ActiveRecord::Base
   self.primary_key = 'regionID'
 
   has_many :solarsystems, foreign_key: 'regionID'
+  has_many :constellations, foreign_key: 'constellationID'
 end

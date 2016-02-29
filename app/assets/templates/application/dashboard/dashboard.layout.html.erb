@@ -1,38 +1,170 @@
 <div flex layout="row" ng-controller="dashboardCtrl as dc">
-  <md-card flex="40" layout="column" style="margin-right: 0;">
+  <md-card flex="40" layout="column" style="margin-right: 0;" flex>
     <div layout id="system-info" layout-align="start center">
-      <h3 class="md-headline">{{dc.systemName}} - {{dc.constellationName}} - {{dc.regionName}}</h3>
+      <h3 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}}</h3>
     </div>
     <div flex="60" layout layout-margin>
       Map goes here
     </div>
     <div flex="40" layout layout-margin>
-      System stuff goes here
+      <table md-table md-row-select>
+        <thead md-head>
+        <tr md-row>
+          <td md-headline md-column colspan="5">System Cost Indexes</td>
+        </tr>
+        <tr md-row>
+          <td md-column><%= image_tag 'manufacturing.png', title: 'Manufacturing Cost Index', style: 'height: 26px; width: 26px; background:black' %></td>
+          <td md-column><%= image_tag 'researchMaterial.png', title: 'Time Efficiency Research Cost Index', style: 'height: 26px; width: 26px; background:black' %></td>
+          <td md-column><%= image_tag 'researchTime.png', title: 'Material Efficiency Research Cost Index', style: 'height: 26px; width: 26px; background:black' %></td>
+          <td md-column><%= image_tag 'invention.png', title: 'Invention Cost Index', style: 'height: 26px; width: 26px; background:black' %></td>
+          <td md-column><%= image_tag 'copying.png', title: 'Copying Cost Index', style: 'height: 26px; width: 26px; background:black' %></td>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr>
+          <td md-cell>{{dc.systemData.costIndexes.manufacturingIndex * 100 | number}}%</td>
+          <td md-cell>{{dc.systemData.costIndexes.materialResearchIndex * 100 | number}}%</td>
+          <td md-cell>{{dc.systemData.costIndexes.timeResearchIndex * 100 | number}}%</td>
+          <td md-cell>{{dc.systemData.costIndexes.inventionIndex * 100 | number}}%</td>
+          <td md-cell>{{dc.systemData.costIndexes.copyingIndex * 100 | number}}%</td>
+        </tr>
+        </tbody>
+      </table>
+
+
     </div>
   </md-card>
   <md-card layout="column" flex>
     <md-tabs flex md-border-bottom>
-      <md-tab label="Systems">
+      <md-tab label="Celestials" flex>
+        <div layout>
+          <div layout="column" class="selector-column">
+            <md-list>
+              <md-list-item ng-repeat="planet in dc.planetData" ng-init="dc.selectPlanet(0)" ng-click="dc.selectPlanet($index)">
+                <div class="md-list-item-text" layout="column">
+               {{planet.itemName}} ({{planet.type}})
+                </div>
+              </md-list-item>
+            </md-list>
+          </div>
+          <div>
+            <img style="width: 64px; height: 64px" ng-src="https://imageserver.eveonline.com/Type/{{dc.selectedPlanet.typeID}}_64.png" />
+
+            <h3 >{{dc.selectedPlanet.itemName}}</h3>
+
+            <table md-table md-row-select>
+              <thead md-head>
+              <tr md-row>
+                <td md-headline md-column colspan="5">Planet Details</td>
+              </tr>
+              <tr md-row>
+                <th md-column>Diameter </th>
+                <th md-column>Temperature </th>
+                <th md-column>Orbit Radius </th>
+                <th md-column>Eccentricity </th>
+              </tr>
+              </thead>
+              <tbody md-body>
+              <tr>
+                <td md-cell>{{dc.selectedPlanet.statistics.radius / 1000 | number}} km</td>
+                <td md-cell>{{dc.selectedPlanet.statistics.temperature | number}} K</td>
+                <td md-cell>{{dc.selectedPlanet.statistics.orbitRadius / 149597870691 | number}} AU</td>
+                <td md-cell>{{dc.selectedPlanet.statistics.eccentricity | number}}</td>
+              </tr>
+              </tbody>
+            </table>
+
+
+            <table md-table md-row-select>
+              <thead md-head>
+              <tr md-row>
+                <th md-column>Escape Velocity </th>
+                <th md-column>Orbit Period </th>
+                <th md-column>Rotation Rate </th>
+                <th md-column>Density </th>
+              </tr>
+              </thead>
+              <tbody md-body>
+              <tr>
+                <td md-cell>{{dc.selectedPlanet.statistics.escapeVelocity / 1000 | number}}km/s</td>
+                <td md-cell>{{dc.selectedPlanet.statistics.orbitPeriod / (600*24*60) | number}}</td>
+                <td md-cell>{{dc.selectedPlanet.statistics.density | number}} kg/m3</td>
+                <td md-cell>{{dc.selectedPlanet.statistics.surfaceGravity | number}} m/s^2</td>
+              </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </md-tab>
+      <md-tab label="Station(s)">
         <div layout flex>
           <div layout="column" class="selector-column">
             <md-list>
-              <md-list-item ng-repeat="system in dc.systems">
+              <md-list-item ng-repeat="sys in dc.stationData" ng-init="dc.selectStation(0)" ng-click="dc.selectStation($index)">
                 <div class="md-list-item-text" layout="column">
-                  {{system.name}}
+                  {{sys.stationName}}
                 </div>
               </md-list-item>
             </md-list>
           </div>
           <div flex layout="column" layout-padding>
-            Main Stuff
+
+            <img style="width: 256px; height: 256px" ng-src="http://e.dotlan.net/images/Station/{{dc.selectedStation.stationTypeID}}_256.png" />
+
+            <h3>{{dc.selectedStation.stationName}}</h3>
+
+            <table md-table md-row-select>
+              <thead md-head>
+              <tr md-row>
+                <td md-headline md-column colspan="5">Planet Details</td>
+              </tr>
+              <tr md-row>
+                <th md-column>Diameter </th>
+                <th md-column>Temperature </th>
+                <th md-column>Orbit Radius </th>
+                <th md-column>Eccentricity </th>
+              </tr>
+              </thead>
+              <tbody md-body>
+              <tr>
+                <td md-cell>{{dc.selectedStation.statistics.radius / 1000 | number}} km</td>
+                <td md-cell>{{dc.selectedStation.statistics.temperature | number}} K</td>
+                <td md-cell>{{dc.selectedStation.statistics.orbitRadius / 149597870691 | number}} AU</td>
+                <td md-cell>{{dc.selectedStation.statistics.eccentricity | number}}</td>
+              </tr>
+              </tbody>
+            </table>
+
+
+            <table md-table md-row-select>
+              <thead md-head>
+              <tr md-row>
+                <th md-column>Escape Velocity </th>
+                <th md-column>Orbit Period </th>
+                <th md-column>Rotation Rate </th>
+                <th md-column>Density </th>
+              </tr>
+              </thead>
+              <tbody md-body>
+              <tr>
+                <td md-cell>{{dc.selectedStation.statistics.escapeVelocity / 1000 | number}}km/s</td>
+                <td md-cell>{{dc.selectedStation.statistics.orbitPeriod / (600*24*60) | number}}</td>
+                <td md-cell>{{dc.selectedStation.statistics.density | number}} kg/m3</td>
+                <td md-cell>{{dc.selectedStation.statistics.surfaceGravity | number}} m/s^2</td>
+              </tr>
+              </tbody>
+            </table>
+
           </div>
         </div>
       </md-tab>
-      <md-tab label="Stations">
-
-      </md-tab>
-      <md-tab label="Celestials" flex>
-
+      <md-tab label="System">
+        <div layout flex>
+          <div flex layout="column" layout-padding>
+            Main Stuff
+          </div>
+        </div>
       </md-tab>
     </md-tabs>
   </md-card>

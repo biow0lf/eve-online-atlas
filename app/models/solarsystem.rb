@@ -2,6 +2,7 @@ class Solarsystem < ActiveRecord::Base
   self.table_name = 'mapSolarSystems'
   self.primary_key = 'solarSystemID'
   belongs_to :region, foreign_key: 'regionID'
+  belongs_to :constellation, foreign_key: 'constellationID'
   has_many :stations, foreign_key: 'solarSystemID'
   has_many :playerstations, foreign_key: 'solarSystemID'
   has_many :jumpcurrents, foreign_key: 'solarSystemID'
