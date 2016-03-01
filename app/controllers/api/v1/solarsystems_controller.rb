@@ -25,6 +25,10 @@ module Api
         render json: result
       end
 
+      def get_neighbors
+        render json: @solarsystem.tosolarsystems
+      end
+
       private
 
       def find_solarsystem

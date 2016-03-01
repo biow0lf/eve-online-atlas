@@ -40,6 +40,9 @@ Rails.application.routes.draw do
         resources :stations, only: [:index, :show] do
           resources :agents, only: [:index, :show]
         end
+        member do
+          get '/neighbors', to: 'solarsystems#get_neighbors'
+        end
       end
     end
   end

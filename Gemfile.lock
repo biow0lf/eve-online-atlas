@@ -303,6 +303,7 @@ GEM
     rails-assets-c3-angular (1.0.1)
       rails-assets-angular (~> 1.4)
       rails-assets-c3 (~> 0.4.10)
+    rails-assets-cytoscape (2.6.4)
     rails-assets-d3 (3.5.0)
     rails-assets-daniel-nagy--md-data-table (0.9.11)
       rails-assets-angular (>= 1.4.0, < 2)
@@ -423,6 +424,7 @@ DEPENDENCIES
   rails-assets-angular-sanitize!
   rails-assets-angular-ui-router!
   rails-assets-c3-angular (= 1.0.1)!
+  rails-assets-cytoscape!
   rails-assets-daniel-nagy--md-data-table!
   rails-assets-lodash!
   rails-assets-moment!

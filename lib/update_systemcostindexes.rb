@@ -1,7 +1,6 @@
 module UpdateCostIndexes
   def self.update_systemcostindexes
     include HTTParty
-    require 'pp'
 
     # remove old stations
     Systemcostindex.delete_all
