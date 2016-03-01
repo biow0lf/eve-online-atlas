@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   match '*any' => 'application#options', :via => [:options]
 
+  mount Crono::Web, at: '/crono'
+
   root 'crest#index'
 
   get '/thera' => 'crest#thera'

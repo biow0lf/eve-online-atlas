@@ -1,9 +1,7 @@
-require 'update_playerstations'
 module Api
   module V1
     class ItemsController < ApiController
       include HTTParty
-      include UpdatePlayerstations
       respond_to :json
 
       def index
@@ -90,12 +88,13 @@ module Api
       end
 
       def check_playerstations
-        # make sure there are entries in the table
-        if Playerstation.exists?
-          # do not update if created_at is more recent than an hour ago
-          return if Playerstation.first.created_at > Date.current - 1.hour
-        end
-        UpdatePlayerstations.update_playerstations
+        return true
+        # # make sure there are entries in the table
+        # if Playerstation.exists?
+        #   # do not update if created_at is more recent than an hour ago
+        #   return if Playerstation.first.created_at > Date.current - 1.hour
+        # end
+        # UpdatePlayerstations.update_playerstations
       end
 
       def find_item_by_name(names)
