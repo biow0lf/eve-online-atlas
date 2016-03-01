@@ -22,6 +22,9 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
   factory.getSolarSystem = (locationID) ->
 	  return $http.get("api/v1/solarsystems/#{locationID}")
 
+  factory.getNeighboringSystems = (locationID) ->
+    return $http.get("api/v1/solarsystems/#{locationID}/neighbors")
+
   factory.getPlanet = (solarSystemID, planetID) ->
     if planetID != undefined
       return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}")

@@ -21,6 +21,10 @@ md-list-item a {
   margin: 0 !important;
 }
 
+md-list {
+  padding-top: 0;
+}
+
 md-content {
   background-color: #CFD8DC !important;
 }
@@ -49,4 +53,8 @@ md-content {
 
 md-select-menu md-content {
   background-color: $white !important;
+}
+
+.selected {
+  background-color: lightseagreen !important;
 }

@@ -32,6 +32,7 @@
 #= require d3
 #= require c3
 #= require c3-angular
+#= require cytoscape
 #= require main
 #= require_tree .
 #= require_tree ../templates
