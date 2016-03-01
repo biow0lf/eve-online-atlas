@@ -29,6 +29,9 @@ Rails.application.routes.draw do
         collection do
           get '/price', to: 'items#price'
         end
+        collection do
+          get '/history', to: 'items#history'
+        end
       end
       resources :solarsystems, only: [:index, :show] do
         resources :planets, only: [:index, :show] do

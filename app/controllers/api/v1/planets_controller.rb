@@ -5,11 +5,10 @@ module Api
       before_action :find_solarsystem, :find_planet
 
       def index
-        render json: @solarsystem.planets.to_json if @solarsystem
+        render json: @solarsystem.planets.to_json
       end
 
       def show
-        return render json: { error: 'Planet not found', status: :bad_request }, status: :bad_request unless @solarsystem && @planet
         result = @planet.as_json
         moon_ids = @planet.moons.pluck(:itemID)
         result['type'] = Item.find_by(typeID: @planet.typeID).typeName[/\(([^)]+)\)/, 1]
@@ -20,21 +19,12 @@ module Api
 
       private
 
-      def planet_params
-        params.permit(:id, :solarsystem_id)
-      end
-
       def find_solarsystem
-        @pp = planet_params
-        @solarsystem = Solarsystem.find(@pp[:solarsystem_id]) if @pp[:solarsystem_id]
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Solarsystem not found', status: :bad_request }, status: :bad_request
+        @solarsystem = Solarsystem.find(params[:solarsystem_id])
       end
 
       def find_planet
-        @planet = @solarsystem.planets.find(@pp[:id]) if @pp[:id]
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Planet not found', status: :bad_request }, status: :bad_request
+        @planet = @solarsystem.planets.find(params[:id]) if params[:id]
       end
     end
   end

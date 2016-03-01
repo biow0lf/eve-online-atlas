@@ -4,5 +4,6 @@
 <!-- toolbar and primary application view -->
 <div layout="column" flex>
   <div ui-view="toolbar"></div>
-  <div ui-view layout flex></div>
+  <div ui-view="dashboard" ng-show="main.$state.includes('root.dashboard')" layout flex></div>
+  <div ui-view="chat_tracker" ng-show="main.$state.includes('root.chat_tracker')" layout flex></div>
 </div>

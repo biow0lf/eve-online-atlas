@@ -1,81 +1,14 @@
-app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService', '$rootScope', ($scope, $http, $interval, crestService, $rootScope) -> do =>
+app.controller 'chatTrackerCtrl', ['$scope', '$interval', ($scope, $interval) -> do =>
   @bookmark = 1
   @selectedTab = 0
+  @listener = ''
   @characters = []
 
   @file = new File([""], "")
   @interval = null
   @lastMod = @file.lastModifiedDate
-  @system = 'Jita'
-  @theraOrigin = ''
 
-  @selected =
-    market: []
-    thera: []
-    char: []
-    command: []
-
-  @commandTime =
-    market: new Date('1969.12.31 18:00:00')
-    thera: new Date('1969.12.31 18:00:00')
-    char: new Date('1969.12.31 18:00:00')
-    command: new Date('1969.12.31 18:00:00')
-
-  @commandList =
-    market: ['!market', '!pc', '!system']
-    thera: ['!thera']
-    char: ['!char', '!allow', '!remove']
-    command: ['!commands', '!help']
-
-  @commands =
-    market: []
-    thera: []
-    char: []
-    command: []
-
-  @commandsToShow =
-    market: []
-    thera: []
-    char: []
-    command: []
-
-  @filter = {
-    options: {
-      debounce: 500
-    }
-  }
-
-  @query =
-    market:
-      filter: '',
-      order: '',
-      limit: 5,
-      page: 1
-      tab: 0
-    thera:
-      filter: '',
-      order: '',
-      limit: 5,
-      page: 1
-      tab: 1
-    char:
-      filter: '',
-      order: '',
-      limit: 5,
-      page: 1
-      tab: 2
-    command:
-      filter: '',
-      order: '',
-      limit: 5,
-      page: 1
-      tab: 3
-
-  clearTable = (tab) =>
-    @selected[tab] = []
-    @commands[tab] = []
-    @commandsToShow[tab] = []
-    console.log @selected, @commands, @commandsToShow
+  @lastCommandTime = new Date('1969.12.31 18:00:00')
 
   tick = =>
     currentTime = new Date
@@ -90,238 +23,121 @@ app.controller 'chatTrackerCtrl', ['$scope', '$http', '$interval', 'crestService
     @interval = $interval(tick, 250)
     return
 
-  priceToIsk = (price) ->
-    console.log price
-    if price >= 1000000000
-      price /= 1000000000
-      price = price.toFixed(2).toString() + 'B isk'
-    else if price >= 1000000
-      price /= 1000000
-      price = price.toFixed(2).toString() + 'M isk'
-    else if price >= 1000
-      price /= 1000
-      price = price.toFixed(2).toString() + 'K isk'
+  parseTime = (line) =>
+    t = line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
+    unless _.isEmpty(t)
+      return new Date(t[0])
     else
-      price = price.toFixed(2).toString() + ' isk'
-    console.log price
-    return price
-    
+      return new Date('1969.12.31 18:00:00')
+
+  parseCharacter = (line) =>
+    return line.substr(line.indexOf(']')+2, line.indexOf('>')-1-(line.indexOf(']')+2))
+
+  parseListener = (line) =>
+    # can't be the Listener line if there is a date
+    return null if line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
+    # must contain Listener: in the line
+    return null unless line.indexOf('Listener:') >= 0
+    # return everything (trimmed) after the :
+    return _.map(line.split(':'), (l) -> return _.trim(l))[1]
+
+  parseCommand = (line) =>
+    command = null
+    # just grab first word with !
+    words = _.split(line, ' ')
+    for word in words
+      if word.indexOf('!') == 0
+        command = word
+        break
+    return command
+
   readFile = (file) =>
     if file.size != 0
       fileReader = new FileReader
       fileReader.onload = (e) =>
         text = e.target.result;
-        # console.log text
         lines = text.split(/[\r\n]+/g); # tolerate both Windows and Unix linebreaks
         for line in lines
           # strip out whitespace on either side
           line = _.trim(line)
-          # check to see if line contains a command
 
-          # if character not set, set it
-          if _.isEmpty(@commands.char)
-            # make sure that we get the Listener: {character name} line and not a regular log line
-            unless line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
-              if line.indexOf('Listener:') >= 0
-                # add Listener character
-                c = _.map(line.split(':'), (l) -> return _.trim(l))[1]
-                @commands.char.push {name: c, time: Date.now()}
-                onCharPaginate(@query.char.page, @query.char.limit)
-                @selectedTab = @query.char.tab
-                console.log 'Added character:', c
+          # if listener not set, set it
+          if @listener is ''
+            listener = parseListener(line)
+            unless _.isNull(listener)
+              console.log 'Added character:', listener
+              @listener = listener
+              $scope.$broadcast 'setListener', listener
 
-          command = ''
-          set = ''
-          for commandSet, commands of @commandList
-            tmp = _.filter(commands, (command) -> return line.indexOf(command) >= 0)
-            if tmp.length > 0
-              command = tmp[0]
-              set = commandSet
+          # check to see if line contains a command and find time of line
+          command = parseCommand(line)
+          commandTime = parseTime(line)
 
-          if command.length > 0
+          if !_.isNull(command) and commandTime.getTime() > @lastCommandTime
+            # if command is after newest command timestamp, save command time and execute command
+            @lastCommandTime = commandTime
             # verify character
-            character_name = line.substr(line.indexOf(']')+2, line.indexOf('>')-1-(line.indexOf(']')+2))
-            if _.some(@commands.char, (char) -> return _.lowerCase(char.name) == _.lowerCase(character_name))
-              commandTime = new Date(line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)[0])
-              if commandTime.getTime() > @commandTime[set].getTime()
-                # if command is after newest command timestamp, save command time and execute command
-                @commandTime[set] = commandTime
-                value = line.substr(line.indexOf(command)+command.length+1, line.length)
-                converted = []
+            character_name = parseCharacter(line)
+            if character_name in @characters
+              value = line.substr(line.indexOf(command)+command.length+1, line.length)
+              converted = []
 
-                # two ways to imput items to parse
-                # first, by typing in items delimited by comma
-                # second, by dragging items to bar there are two spaces between items
-                splitChar = null
-                if value.indexOf(',') >= 0 then splitChar = ','
-                if value.indexOf('  ') >= 0 then splitChar = '  '
-                if splitChar != null
-                  value = _.split(value, splitChar)
-                  converted = _.map(value, (s) ->
-                    int = _.parseInt(s)
-                    if _.isNaN(int)
-                      return _.trim(s)
-                    else
-                      return int
-                  )
-                else
-                  converted = [_.trim(value)]
-
-                console.log 'command from', character_name, ':', command, '(set:', set, ')', 'argument', converted
-
-                if command.indexOf('!market') >= 0
-                  @selectedTab = @query.market.tab
-
-                else if command.indexOf('!char') >= 0
-                  @selectedTab = @query.char.tab
-
-                else if command.indexOf('!commands') >= 0 or command.indexOf('!help') >= 0
-                  @selectedTab = @query.command.tab
-
-                else if command.indexOf('!system') >= 0
-                  crestService.isValidSystem(converted[0]).then (response) =>
-                    if response.data != null
-                      @system = response.data.solarSystemName
-
-                else if command.indexOf('!pc') >= 0
-                  crestService.getPrices(@system, converted).then (response) =>
-                    for item in response.data
-                      @commands.market.unshift({id: @commands.market.length, time: Date.now(), item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
-                    onMarketPaginate(@query.market.page, @query.market.limit)
-                    @selectedTab = @query.market.tab
-
-                else if command.indexOf('!thera') >= 0
-                  @theraOrigin = _.upperFirst(converted[0])
-                  crestService.getTheraInfo(converted[0]).then (response) =>
-                    @commands.thera = []
-                    for item in response.data
-                      @commands.thera.push({id: @commands.thera.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
-                    onTheraPaginate(@query.thera.page, @query.thera.limit)
-                    @selectedTab = @query.thera.tab
-
-                else if command.indexOf('!allow') >= 0
-                  @commands.char.unshift {name: converted[0], time: Date.now()}
-                  onCharPaginate(@query.char.page, @query.char.limit)
-                  @selectedTab = @query.char.tab
-                  console.log 'Added character:', converted[0]
-
-                else if command.indexOf('!remove') >= 0
-                  if @commands.char.length > 1
-                    if converted[0] == 'self'
-                      converted[0] = character_name
-                    @commands.char = _.filter(@commands.char, (char) -> return _.toLower(char.name) != _.toLower(converted[0]))
-                    onCharPaginate(@query.char.page, @query.char.limit)
-                    @selectedTab = @query.char.tab
-                    console.log @commands.char
-                    console.log 'Removed character:', converted[0]
+              # two ways to imput items to parse
+              # first, by typing in items delimited by comma
+              # second, by dragging items to bar there are two spaces between items
+              splitChar = null
+              if value.indexOf(',') >= 0 then splitChar = ','
+              if value.indexOf('  ') >= 0 then splitChar = '  '
+              if splitChar != null
+                value = _.split(value, splitChar)
+                converted = _.map(value, (s) ->
+                  int = _.parseInt(s)
+                  if _.isNaN(int)
+                    return _.trim(s)
                   else
-                    console.log 'Cannot remove last character'
+                    return int
+                )
+              else
+                converted = [_.trim(value)]
+
+              console.log 'command from', character_name, ':', command, 'argument', converted
+
+              # executor, command, argument, time
+              $scope.$broadcast 'command', [character_name, command, converted, commandTime]
 
       fileReader.readAsText file
 
-  onPaginate = (page, limit, tab) =>
-    # console.log 'market: page', page, 'limit', limit
-    if page != undefined and limit != undefined
-      @query[tab].page = page
-      @query[tab].limit = limit
-      initial = (page - 1) * limit
-      # case 1 - there are enough commands to paginate
-      if initial < @commands[tab].length
-        if @commands[tab].length - initial >= limit
-        # and there are enough commands left to show at least the limit
-          @commandsToShow[tab] = @commands[tab].slice(initial, initial + limit)
-        else
-        # or there aren't enough, and just show what's left
-          @commandsToShow[tab] = @commands[tab].slice(initial, @commands[tab].length)
-      else
-      # case 2 - not enough to paginate
-        @query[tab].page = 1
-        @commandsToShow[tab] = @commands[tab]
-        # console.log @query.page, @query.limit, initial, @commandsToShow
+  #-- Listeners & Broadcasters
 
-  onReorder = (order, tab) =>
-    if order.indexOf('-') >= 0
-      order = order.substr(1, order.length)
-      @commands[tab].sort((a, b) ->
-        if tab == 'thera' and order.indexOf('jumps') >= 0 and (a[order] == 0 or b[order] == 0) then return -1
-        # if tab == 'thera' and order.indexOf('jumps') >= 0 and b[order] == 0 then return -1
-        if a[order] < b[order] then return -1
-        if a[order] > b[order] then return 1
-        return 0
-      ).reverse()
-    else
-      @commands[tab].sort((a, b) ->
-        if a[order] < b[order] then return -1
-        if a[order] > b[order] then return 1
-        return 0
-      )
-    onPaginate(@query[tab].page, @query[tab].limit, tab)
-    return
+  $scope.$on 'changeTab', (event, arg) =>
+    @selectedTab = arg
 
-  onMarketPaginate = (page, limit) =>
-    onPaginate(page, limit, 'market')
+  $scope.$on 'setCharacters', (event, arg) =>
+    @characters = arg
 
-  onTheraPaginate = (page, limit) =>
-    onPaginate(page, limit, 'thera')
+  $scope.$on 'commandListReady', (event, arg) =>
+    $scope.$broadcast 'getCommandList'
 
-  onCharPaginate = (page, limit) =>
-    onPaginate(page, limit, 'char')
+  # receieve commands from child controllers and rebroadcast to commandCtrl
+  $scope.$on 'sendCommandList', (event, arg) =>
+    $scope.$broadcast 'addCommand', arg
 
-  onCommandPaginate = (page, limit) =>
-    onPaginate(page, limit, 'command')
+  # flush the shown chart on returning to market screen otherwise axes aren't shown
+  $scope.$watch (=> @selectedTab), (newValue, oldValue) =>
+    if newValue == 0
+      $scope.$broadcast 'flushChart'
 
-  onMarketReorder = (order) =>
-    onReorder(order, 'market')
-
-  onTheraReorder = (order) =>
-    onReorder(order, 'thera')
-
-  onCharReorder = (order) =>
-    onReorder(order, 'char')
-
-  onCommandReorder = (order) =>
-    onReorder(order, 'command')
-
-  removeFilter = =>
-    # @filter.show = false
-    @query.filter = ''
+  #-- Init
 
   init = =>
-    console.log 'initializing'
-    @commands.command.push({name: '!market', set: 'Market', argument: '', description: 'Switches to the market tab'})
-    @commands.command.push({name: '!pc', set: 'Market', argument: 'List of item names separated by comma or doublespace', description: 'Price checks an item in the current market system'})
-    @commands.command.push({name: '!system', set: 'Market', argument: '[system name]', description: 'Sets the current market system for checking prices. Does not change if system name is invalid.'})
-    @commands.command.push({name: '!thera', set: 'Thera', argument: '[system name]', description: 'Finds distances to Thera wormholes from given system'})
-    @commands.command.push({name: '!char', set: 'Character', argument: '', description: 'Switches to the character tab'})
-    @commands.command.push({name: '!allow', set: 'Character', argument: '[character name]', description: 'Adds [character name] to set of characters allowed to use commands'})
-    @commands.command.push({name: '!remove', set: 'Character', argument: '[character name] or \'self\'', description: 'Removes [character name] form set of characters allowed to use commands. Removes current character if \'self\''})
-    @commands.command.push({name: '!commands', set: 'Command', argument: '', description: 'Switches to the command tab'})
-    @commands.command.push({name: '!help', set: 'Command', argument: '', description: 'Switches to the command tab'})
-    onCommandPaginate(@query.command.page, @query.command.limit)
+    console.log 'init chartTrackingCtrl'
     return
 
   init()
 
-  $scope.$watch (=> @query.filter), (newValue, oldValue) =>
-    if !oldValue then @bookmark = @query.page
-    if newValue != oldValue then @query.page = 1
-    if !newValue then @query.page = @bookmark
-    # need to update commandsToShow with things
-    return
-
   #-- Public Functions
 
   @setFile = setFile
-  @onMarketPaginate = onMarketPaginate
-  @onTheraPaginate = onTheraPaginate
-  @onCharPaginate = onCharPaginate
-  @onCommandPaginate = onCommandPaginate
-  @onMarketReorder = onMarketReorder
-  @onTheraReorder = onTheraReorder
-  @onCharReorder = onCharReorder
-  @onCommandReorder = onCommandReorder
-  @removeFilter = removeFilter
-  @clearTable = clearTable
 
   return
 ]

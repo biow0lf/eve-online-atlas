@@ -1,0 +1,29 @@
+<md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+  <div class="md-toolbar-tools">
+    <h2>Commands</h2>
+    <div flex></div>
+  </div>
+</md-toolbar>
+<md-table-container style="margin-bottom: 0; margin-top: 0;">
+  <table md-table md-row-select ng-model="command.selected">
+    <thead md-head md-order="command.query.order" md-on-reorder="command.onReorder">
+    <tr md-row>
+      <th md-column><span>Name</span></th>
+      <th md-column><span>Tab</span></th>
+      <th md-column><span>Arguments</span></th>
+      <th md-column><span>Description</span></th>
+      <th md-column><span>Example</span></th>
+    </tr>
+    </thead>
+    <tbody md-body>
+    <tr md-row md-select="cmd" md-select-id="{{cmd.id}}" md-auto-select ng-repeat="cmd in command.commandsToShow">
+      <td md-cell>{{cmd.name}}</td>
+      <td md-cell>{{cmd.set}}</td>
+      <td md-cell>{{cmd.argument}}</td>
+      <td md-cell>{{cmd.description}}</td>
+      <td md-cell><span ng-bind-html="cmd.example | formatText"></span></td>
+    </tr>
+    </tbody>
+  </table>
+</md-table-container>
+<md-table-pagination md-limit="command.query.limit" md-page="command.query.page" md-total="{{command.commands.length}}" md-on-paginate="command.onPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>

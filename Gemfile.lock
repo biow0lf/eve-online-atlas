@@ -34,6 +34,10 @@ GEM
       arel (~> 6.0)
     activerecord-import (0.11.0)
       activerecord (>= 3.0)
+    activerecord-mysql-unsigned (0.3.1)
+      activerecord (>= 3.2, < 5.0)
+      activesupport (>= 3.2, < 5.0)
+      mysql2
     activesupport (4.2.0)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -290,8 +294,16 @@ GEM
     rails-assets-angular-permission (2.0.9)
       rails-assets-angular (~> 1.0)
       rails-assets-angular-ui-router (~> 0.2.0)
+    rails-assets-angular-sanitize (1.5.0)
+      rails-assets-angular (= 1.5.0)
     rails-assets-angular-ui-router (0.2.18)
       rails-assets-angular (>= 1.0.8, < 2)
+    rails-assets-c3 (0.4.10)
+      rails-assets-d3 (<= 3.5.0)
+    rails-assets-c3-angular (1.0.1)
+      rails-assets-angular (~> 1.4)
+      rails-assets-c3 (~> 0.4.10)
+    rails-assets-d3 (3.5.0)
     rails-assets-daniel-nagy--md-data-table (0.9.11)
       rails-assets-angular (>= 1.4.0, < 2)
       rails-assets-angular-material (>= 1.0.0, < 2)
@@ -384,6 +396,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  activerecord-mysql-unsigned
   angular-rails-templates (>= 1.0)
   coffee-rails
   compass-rails
@@ -407,7 +420,9 @@ DEPENDENCIES
   rails-assets-angular-mocks
   rails-assets-angular-moment (= 1.0.0.beta.4)!
   rails-assets-angular-permission!
+  rails-assets-angular-sanitize!
   rails-assets-angular-ui-router!
+  rails-assets-c3-angular (= 1.0.1)!
   rails-assets-daniel-nagy--md-data-table!
   rails-assets-lodash!
   rails-assets-moment!
