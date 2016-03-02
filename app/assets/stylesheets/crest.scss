@@ -47,16 +47,24 @@ md-toolbar {
 
 tr.md-selected td{
   color: rgb(50,50,50) !important;
+  background-color: rgb(200,200,200);
   span {
     color: rgb(50,50,50) !important;
+    background-color: rgb(200,200,200);
   }
 }
 
 tr:hover td {
+  background-color: rgb(200,200,200);
   color: rgb(50,50,50) !important;
   span {
     color: rgb(50,50,50) !important;
+    background-color: rgb(200,200,200);
   }
+}
+
+table.md-table.md-row-select tbody.md-body > tr.md-row {
+  transition: none !important;
 }
 
 tspan {
