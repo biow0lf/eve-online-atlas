@@ -22,13 +22,13 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
     getUserLocation = =>
       crestService.getUserLocation().then (response) =>
         console.log response
-        angular.merge({}, userService.user.solarSystem, response.data.solarSystem)
+        angular.merge({}, response.data.solarSystem, userService.user.solarSystem)
 
     init = =>
       @version = '0.0.1'
       crestService.getUser().then (response) =>
         if _.keys(response.data).length > 0
-          angular.merge({}, userService.user, response.data)
+          angular.merge({}, response.data, userService.user)
           console.log 'service', userService.user
           console.log 'user', @user
           if @user.hasOwnProperty('characterID')
