@@ -1,9 +1,7 @@
-app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window', 'crestService', '$interval'
-  ($scope, $http, $mdSidenav, $state, $window, crestService, $interval) -> do =>
+app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window', 'crestService', '$interval', 'userService',
+  ($scope, $http, $mdSidenav, $state, $window, crestService, $interval, userService) -> do =>
     @version = '0.0.0'
-    @user = 
-        name: ''
-        location: ''
+    @user = userService.user
     @interval = null
 
     closeSidenav = (componentId) =>
@@ -17,22 +15,20 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
 
     signout = =>
       crestService.signout().then (response) =>
-        @user =
-          name: ''
-          location: ''
         if @interval != null
           $interval.cancel(@interval)
+        angular.copy({ name: '', location: ''}, userService.user)
 
     getUserLocation = =>
-      crestService.getUserLocation().then (repsonse) =>
+      crestService.getUserLocation().then (response) =>
         console.log response
-        # @user.location
+        angular.merge({}, userService.user.solarSystem, response.data.solarSystem)
 
     init = =>
       @version = '0.0.1'
       crestService.getUser().then (response) =>
         if _.keys(response.data).length > 0
-          angular.copy(response.data, @user)
+          angular.merge({}, userService.user, response.data)
           if @user.hasOwnProperty('characterID')
             @user.image = "https://image.eveonline.com/Character/#{@user.characterID}_64.jpg"
           # cache timer is 10s

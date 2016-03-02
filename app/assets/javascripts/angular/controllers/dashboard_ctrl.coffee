@@ -1,10 +1,12 @@
-app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', ($scope, $http, crestService) -> do =>
+app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService', ($scope, $http, crestService, userService) -> do =>
   @solarSystemID = 30000001
   @systemData = []
   @planetData = []
   @stationData = []
   @selectedTab = 0
   @neighbors = []
+
+  @user = userService.user
 
   @indexData = []
   @datacolumns = [{id: 'manufacturing', type: 'bar', name: 'Manufacturing', color: 'blue'},
