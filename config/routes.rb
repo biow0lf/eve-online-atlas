@@ -35,7 +35,7 @@ Rails.application.routes.draw do
           get '/history', to: 'items#history'
         end
       end
-      resources :solarsystems, only: [:index, :show] do
+      resources :solar_systems, only: [:index, :show] do
         resources :planets, only: [:index, :show] do
           resources :moons, only: [:index, :show]
         end
@@ -43,7 +43,7 @@ Rails.application.routes.draw do
           resources :agents, only: [:index, :show]
         end
         member do
-          get '/neighbors', to: 'solarsystems#get_neighbors'
+          get '/neighbors', to: 'solar_systems#get_neighbors'
         end
       end
     end

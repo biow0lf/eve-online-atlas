@@ -55,7 +55,7 @@ module Api
         items.each do |item|
           to_push = {}
           to_push['typeID'] = item.typeID
-          to_push['history'] = item.itemhistories.select('id,orderCount,lowPrice,highPrice,avgPrice,volume,date').as_json
+          to_push['history'] = item.itemHistories.select('id,orderCount,lowPrice,highPrice,avgPrice,volume,date').as_json
           result << to_push
         end
         render json: result.to_json
@@ -69,9 +69,7 @@ module Api
         items['items'].each do |i|
           station = Station.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
           if station.nil?
-            # check to see if player stations need to be updated
-            check_playerstations
-            station = Playerstation.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
+            station = PlayerStation.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
           end
           items_from_system.push(i) unless station.nil?
         end
@@ -80,21 +78,11 @@ module Api
 
       def find_solarsystem
         @solarsystem = if params.key?(:system)
-                         Solarsystem.find_by(solarSystemName: params[:system])
+                         SolarSystem.find_by(solarSystemName: params[:system])
                        else
                          # Jita
-                         Solarsystem.find(30_000_142)
+                         SolarSystem.find(30_000_142)
                        end
-      end
-
-      def check_playerstations
-        return true
-        # # make sure there are entries in the table
-        # if Playerstation.exists?
-        #   # do not update if created_at is more recent than an hour ago
-        #   return if Playerstation.first.created_at > Date.current - 1.hour
-        # end
-        # UpdatePlayerstations.update_playerstations
       end
 
       def find_item_by_name(names)

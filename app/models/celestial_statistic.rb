@@ -1,5 +1,5 @@
-class Celestialstatistic < ActiveRecord::Base
-  self.table_name = 'mapcelestialstatistics'
+class CelestialStatistic < ActiveRecord::Base
+  self.table_name = 'mapCelestialStatistics'
   self.primary_key = 'celestialID'
 
   belongs_to :planet, foreign_key: 'itemID'

@@ -1,4 +1,4 @@
-class Moonmaterial < ActiveRecord::Base
+class MoonMaterial < ActiveRecord::Base
   self.table_name = 'mapmoons'
   self.primary_key = 'moonID'
 

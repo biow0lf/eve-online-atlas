@@ -3,7 +3,7 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
   factory = {}
 
   factory.isValidSystem = (system) ->
-    $http.get("/api/v1/solarsystems?name=#{system}")
+    $http.get("/api/v1/solar_systems?name=#{system}")
 
   factory.getPrices = (system, items) ->
     names = encodeURI(items)
@@ -20,23 +20,23 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
     return $http.get("api/v1/agents?#{system}")
 	
   factory.getSolarSystem = (locationID) ->
-	  return $http.get("api/v1/solarsystems/#{locationID}")
+	  return $http.get("api/v1/solar_systems/#{locationID}")
 
   factory.getNeighboringSystems = (locationID) ->
-    return $http.get("api/v1/solarsystems/#{locationID}/neighbors")
+    return $http.get("api/v1/solar_systems/#{locationID}/neighbors")
 
   factory.getPlanet = (solarSystemID, planetID) ->
     if planetID != undefined
-      return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}")
-    else return $http.get("api/v1/solarsystems/#{solarSystemID}/planets")
+      return $http.get("api/v1/solar_systems/#{solarSystemID}/planets/#{planetID}")
+    else return $http.get("api/v1/solar_systems/#{solarSystemID}/planets")
 
   factory.getStation = (solarSystemID, stationID) ->
     if stationID != undefined
-      return $http.get("api/v1/solarsystems/#{solarSystemID}/stations/#{stationID}")
-    else return $http.get("api/v1/solarsystems/#{solarSystemID}/stations")
+      return $http.get("api/v1/solar_systems/#{solarSystemID}/stations/#{stationID}")
+    else return $http.get("api/v1/solar_systems/#{solarSystemID}/stations")
 	
   factory.getMoon = (solarSystemID, planetID, moonID) ->
-	  return $http.get("api/v1/solarsystems/#{solarSystemID}/planets/#{planetID}/moons/#{moonID}")
+	  return $http.get("api/v1/solar_systems/#{solarSystemID}/planets/#{planetID}/moons/#{moonID}")
 
   factory.getUser = ->
     return $http.get("/users")

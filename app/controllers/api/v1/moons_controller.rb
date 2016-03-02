@@ -10,15 +10,15 @@ module Api
 
       def show
         result = @moon.as_json
-        result['statistics'] = @moon.celestialstatistic
-        result['materials'] = @moon.moonmaterial
+        result['statistics'] = @moon.celestialStatistic
+        result['materials'] = @moon.moonMaterial
         render json: result.as_json
       end
 
       private
 
       def find_solarsystem
-        @solarsystem = Solarsystem.find(params[:solarsystem_id])
+        @solarsystem = SolarSystem.find(params[:solar_system_id])
       end
 
       def find_planet

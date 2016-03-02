@@ -1,4 +1,4 @@
-class Itemhistory < ActiveRecord::Base
+class ItemHistory < ActiveRecord::Base
   self.table_name = 'itemHistory'
   self.primary_key = 'id'
 

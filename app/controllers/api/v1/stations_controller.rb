@@ -11,8 +11,8 @@ module Api
       def show
         result = {}
         result = @station.as_json
-        result['type'] = @station.stationoperation
-        result['services'] = @station.stationservices
+        result['type'] = @station.stationOperation
+        result['services'] = @station.stationServices
         render json: result.as_json
       end
 

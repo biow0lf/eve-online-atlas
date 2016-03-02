@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229205048) do
+ActiveRecord::Schema.define(version: 20160302015322) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -564,6 +564,14 @@ ActiveRecord::Schema.define(version: 20160229205048) do
     t.integer "destinationID", limit: 8
   end
 
+  create_table "mapJumpsHistory", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipJumps",     limit: 4
+    t.datetime "cachedUntil"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "mapLandmarks", primary_key: "landmarkID", force: :cascade do |t|
     t.string  "landmarkName", limit: 100
     t.text    "description",  limit: 4294967295
@@ -666,6 +674,16 @@ ActiveRecord::Schema.define(version: 20160229205048) do
     t.datetime "cachedUntil"
   end
 
+  create_table "mapkKllsHistory", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipKills",     limit: 4
+    t.integer  "factionKills",  limit: 4
+    t.integer  "podKills",      limit: 4
+    t.datetime "cachedUntil"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "mapkillscurrent", force: :cascade do |t|
     t.integer  "solarSystemID", limit: 4
     t.integer  "shipKills",     limit: 4
@@ -675,27 +693,27 @@ ActiveRecord::Schema.define(version: 20160229205048) do
   end
 
   create_table "mapmoons", primary_key: "moonID", force: :cascade do |t|
-    t.integer "atm",  limit: 1, default: -1
-    t.integer "eva",  limit: 1, default: -1
-    t.integer "hyd",  limit: 1, default: -1
-    t.integer "sil",  limit: 1, default: -1
-    t.integer "cob",  limit: 1, default: -1
-    t.integer "sca",  limit: 1, default: -1
-    t.integer "tit",  limit: 1, default: -1
-    t.integer "tun",  limit: 1, default: -1
-    t.integer "cad",  limit: 1, default: -1
-    t.integer "van",  limit: 1, default: -1
-    t.integer "chr",  limit: 1, default: -1
-    t.integer "pla",  limit: 1, default: -1
-    t.integer "cae",  limit: 1, default: -1
-    t.integer "tec",  limit: 1, default: -1
-    t.integer "haf",  limit: 1, default: -1
-    t.integer "mer",  limit: 1, default: -1
-    t.integer "pro",  limit: 1, default: -1
-    t.integer "dys",  limit: 1, default: -1
-    t.integer "neo",  limit: 1, default: -1
-    t.integer "thu",  limit: 1, default: -1
-    t.integer "scan", limit: 1, default: -1
+    t.integer "atm",  limit: 4, default: -1
+    t.integer "eva",  limit: 4, default: -1
+    t.integer "hyd",  limit: 4, default: -1
+    t.integer "sil",  limit: 4, default: -1
+    t.integer "cob",  limit: 4, default: -1
+    t.integer "sca",  limit: 4, default: -1
+    t.integer "tit",  limit: 4, default: -1
+    t.integer "tun",  limit: 4, default: -1
+    t.integer "cad",  limit: 4, default: -1
+    t.integer "van",  limit: 4, default: -1
+    t.integer "chr",  limit: 4, default: -1
+    t.integer "pla",  limit: 4, default: -1
+    t.integer "cae",  limit: 4, default: -1
+    t.integer "tec",  limit: 4, default: -1
+    t.integer "haf",  limit: 4, default: -1
+    t.integer "mer",  limit: 4, default: -1
+    t.integer "pro",  limit: 4, default: -1
+    t.integer "dys",  limit: 4, default: -1
+    t.integer "neo",  limit: 4, default: -1
+    t.integer "thu",  limit: 4, default: -1
+    t.integer "scan", limit: 4, default: -1
   end
 
   create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
@@ -713,6 +731,11 @@ ActiveRecord::Schema.define(version: 20160229205048) do
     t.integer "typeID",      limit: 4, null: false
     t.integer "quantity",    limit: 2
     t.boolean "isInput",     limit: 1
+  end
+
+  create_table "planetmaterials", force: :cascade do |t|
+    t.integer "typeID",       limit: 4
+    t.string  "materialType", limit: 255
   end
 
   create_table "playerstations", force: :cascade do |t|

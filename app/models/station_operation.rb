@@ -1,4 +1,4 @@
-class Stationoperation < ActiveRecord::Base
+class StationOperation < ActiveRecord::Base
   self.table_name = 'staoperations'
   self.primary_key = 'activityID'
 

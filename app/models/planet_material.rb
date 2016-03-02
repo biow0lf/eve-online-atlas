@@ -1,4 +1,4 @@
-class Planetmaterial < ActiveRecord::Base
+class PlanetMaterial < ActiveRecord::Base
   self.table_name = 'planetMaterials'
   self.primary_key = 'typeID'
 

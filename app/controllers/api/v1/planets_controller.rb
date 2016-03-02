@@ -11,8 +11,8 @@ module Api
           to_push = planet.as_json
           to_push['type'] = Item.find_by(typeID: planet.typeID).typeName[/\(([^)]+)\)/, 1]
           to_push['moonIDs'] = planet.moons.pluck(:itemID)
-          to_push['materials'] = planet.planetmaterials
-          to_push['statistics'] = planet.celestialstatistic
+          to_push['materials'] = planet.planetMaterials
+          to_push['statistics'] = planet.celestialStatistic
           result << to_push
         end
         render json: result
@@ -23,14 +23,14 @@ module Api
         moon_ids = @planet.moons.pluck(:itemID)
         result['type'] = Item.find_by(typeID: @planet.typeID).typeName[/\(([^)]+)\)/, 1]
         result['moonIDs'] = moon_ids
-        result['statistics'] = @planet.celestialstatistic
+        result['statistics'] = @planet.celestialStatistic
         render json: result.as_json
       end
 
       private
 
       def find_solarsystem
-        @solarsystem = Solarsystem.find(params[:solarsystem_id])
+        @solarsystem = SolarSystem.find(params[:solar_system_id])
       end
 
       def find_planet
