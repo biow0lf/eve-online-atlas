@@ -39,9 +39,11 @@ class UsersController < ApplicationController
     body = { grant_type: 'refresh_token', refresh_token: @user.refreshToken }
     response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.to_json, headers: headers)
 
+    data = JSON.parse(response.body)
+
     puts response.body
     puts response.body.inspect
 
-    @user.update(token: response.body['token'], expiry: response.body['expires_at'].to_i.seconds + DateTime.now)
+    @user.update(token: data['token'], expiry: DateTime.now + data['expires_at'].to_i.seconds)
   end
 end
