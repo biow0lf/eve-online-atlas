@@ -37,7 +37,7 @@ class UsersController < ApplicationController
     puts @user
     headers = { Authorization: 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}") }
     body = { grant_type: 'refresh_token', refresh_token: @user.refreshToken }
-    response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.to_json, headers: headers)
+    response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.as_json, headers: headers.as_json)
 
     data = JSON.parse(response.body)
 
