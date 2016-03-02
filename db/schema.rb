@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226023454) do
+ActiveRecord::Schema.define(version: 20160229205048) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -118,6 +118,17 @@ ActiveRecord::Schema.define(version: 20160226023454) do
     t.integer "iconID",           limit: 4
     t.string  "shortDescription", limit: 500
   end
+
+  create_table "crono_jobs", force: :cascade do |t|
+    t.string   "job_id",            limit: 255,   null: false
+    t.text     "log",               limit: 65535
+    t.datetime "last_performed_at"
+    t.boolean  "healthy",           limit: 1
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "crono_jobs", ["job_id"], name: "index_crono_jobs_on_job_id", unique: true, using: :btree
 
   create_table "crpActivities", primary_key: "activityID", force: :cascade do |t|
     t.string "activityName", limit: 100
@@ -649,28 +660,42 @@ ActiveRecord::Schema.define(version: 20160226023454) do
     t.float  "radius",       limit: 53
   end
 
+  create_table "mapjumpscurrent", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipJumps",     limit: 4
+    t.datetime "cachedUntil"
+  end
+
+  create_table "mapkillscurrent", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipKills",     limit: 4
+    t.integer  "factionKills",  limit: 4
+    t.integer  "podKills",      limit: 4
+    t.datetime "cachedUntil"
+  end
+
   create_table "mapmoons", primary_key: "moonID", force: :cascade do |t|
-    t.boolean "atm",  limit: 1, default: false
-    t.boolean "eva",  limit: 1, default: false
-    t.boolean "hyd",  limit: 1, default: false
-    t.boolean "sil",  limit: 1, default: false
-    t.boolean "cob",  limit: 1, default: false
-    t.boolean "sca",  limit: 1, default: false
-    t.boolean "tit",  limit: 1, default: false
-    t.boolean "tun",  limit: 1, default: false
-    t.boolean "cad",  limit: 1, default: false
-    t.boolean "van",  limit: 1, default: false
-    t.boolean "chr",  limit: 1, default: false
-    t.boolean "pla",  limit: 1, default: false
-    t.boolean "cae",  limit: 1, default: false
-    t.boolean "tec",  limit: 1, default: false
-    t.boolean "haf",  limit: 1, default: false
-    t.boolean "mer",  limit: 1, default: false
-    t.boolean "pro",  limit: 1, default: false
-    t.boolean "dys",  limit: 1, default: false
-    t.boolean "neo",  limit: 1, default: false
-    t.boolean "thu",  limit: 1, default: false
-    t.boolean "scan", limit: 1, default: false
+    t.integer "atm",  limit: 1, default: -1
+    t.integer "eva",  limit: 1, default: -1
+    t.integer "hyd",  limit: 1, default: -1
+    t.integer "sil",  limit: 1, default: -1
+    t.integer "cob",  limit: 1, default: -1
+    t.integer "sca",  limit: 1, default: -1
+    t.integer "tit",  limit: 1, default: -1
+    t.integer "tun",  limit: 1, default: -1
+    t.integer "cad",  limit: 1, default: -1
+    t.integer "van",  limit: 1, default: -1
+    t.integer "chr",  limit: 1, default: -1
+    t.integer "pla",  limit: 1, default: -1
+    t.integer "cae",  limit: 1, default: -1
+    t.integer "tec",  limit: 1, default: -1
+    t.integer "haf",  limit: 1, default: -1
+    t.integer "mer",  limit: 1, default: -1
+    t.integer "pro",  limit: 1, default: -1
+    t.integer "dys",  limit: 1, default: -1
+    t.integer "neo",  limit: 1, default: -1
+    t.integer "thu",  limit: 1, default: -1
+    t.integer "scan", limit: 1, default: -1
   end
 
   create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
@@ -845,6 +870,15 @@ ActiveRecord::Schema.define(version: 20160226023454) do
   add_index "stastations", ["regionID"], name: "staStations_IX_region", using: :btree
   add_index "stastations", ["solarSystemID"], name: "staStations_IX_system", using: :btree
   add_index "stastations", ["stationTypeID"], name: "staStations_IX_type", using: :btree
+
+  create_table "systemcostindex", force: :cascade do |t|
+    t.integer "solarSystemID",         limit: 4
+    t.string  "inventionIndex",        limit: 255
+    t.string  "manufacturingIndex",    limit: 255
+    t.string  "copyingIndex",          limit: 255
+    t.string  "timeResearchIndex",     limit: 255
+    t.string  "materialResearchIndex", limit: 255
+  end
 
   create_table "translationTables", id: false, force: :cascade do |t|
     t.string  "sourceTable",      limit: 200, null: false
