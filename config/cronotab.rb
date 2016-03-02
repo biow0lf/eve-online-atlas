@@ -1,10 +1,18 @@
 require 'rake'
 CrestApiContest::Application.load_tasks
 
-class Test
+class UpdatePlayerstations
   def perform
-    Rake::Task['update:test'].invoke
+    Rake::Task['update:playerstations'].invoke
   end
 end
 
-Crono.perform(Test).every 10.seconds
+class UpdateItemhistory
+  def perform
+    Rake::Task['update:itemhistory'].invoke
+  end
+end
+
+Crono.perform(UpdatePlayerstations).every 1.hour
+# 18:00 is UTC midnight in Central tz - so wait a couple of hours for downtime, etc.
+Crono.perform(UpdateItemhistory).every 1.day, at: {hour: 20, min: 0}
