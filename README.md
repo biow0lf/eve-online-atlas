@@ -1,9 +1,6 @@
 # README #
 
-Welcome to the EVE Online Atlas (EOA)!  
-
-
-### What is this repository for? ###
+### Welcome to the EVE Online Atlas (EOA)!  ###
 
 * Quick summary
 * Version
@@ -19,20 +16,20 @@ Welcome to the EVE Online Atlas (EOA)!
 * Deployment instructions
 
 ### Future Additions ###
-Moar Commands!
-#more to come
+* Moar Commands!
+* #more to come
 
 ### Tech Used ###
-Ruby on Rails
-MySQL
-Coffeescript
-HTML
+* Ruby on Rails
+* MySQL
+* Coffeescript
+* HTML
 
 ### Sources ###
-Moon Data - eve-moons.com - http://eve-moons.com/rawdata.php
-SDE - CCP conversion by Fuzzworks - https://www.fuzzwork.co.uk/dump/
-API - CCP
-CREST - CCP
+* Moon Data - eve-moons.com - http://eve-moons.com/rawdata.php
+* SDE - CCP conversion by Fuzzworks - https://www.fuzzwork.co.uk/dump/
+* API - CCP
+* CREST - CCP
 
 ### Sources (Detailed) ###
 Authed CREST - Location - Used to provide system location for the Atlas dashboard
