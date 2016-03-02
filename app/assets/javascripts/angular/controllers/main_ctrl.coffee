@@ -19,6 +19,9 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
       crestService.signout().then (response) =>
         @user =
           name: ''
+          location: ''
+        if @interval != null
+          $interval.cancel(@interval)
 
     getUserLocation = =>
       crestService.getUserLocation().then (repsonse) =>
