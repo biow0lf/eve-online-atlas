@@ -3,19 +3,19 @@ CrestApiContest::Application.load_tasks
 
 class UpdatePlayerstations
   def perform
-    Rake::Task['update:playerstations'].invoke
+    Rake::Task['update:PlayerStations'].invoke
   end
 end
 
 class UpdateItemhistory
   def perform
-    Rake::Task['update:itemhistory'].invoke
+    Rake::Task['update:ItemHistory'].invoke
   end
 end
 
 class UpdateCostIndicies
   def perform
-    Rake::Task['update:systemcostindices'].invoke
+    Rake::Task['update:SystemCostIndices'].invoke
   end
 end
 

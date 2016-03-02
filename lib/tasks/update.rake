@@ -62,7 +62,7 @@ namespace :update do
   end
 
   desc 'Updates systemCostIndexes table'
-  task systemcostindices: :environment do
+  task SystemCostIndices: :environment do
     # remove old stations
     SystemCostIndex.delete_all
     # get cost indices
