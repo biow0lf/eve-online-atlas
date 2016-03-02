@@ -19,7 +19,7 @@ module Api
       private
 
       def find_solarsystem
-        @solarsystem = SolarSystem.find(params[:solarsystem_id])
+        @solarsystem = SolarSystem.find(params[:solar_system_id])
       end
 
       def find_stations
