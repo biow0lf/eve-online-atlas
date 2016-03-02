@@ -25,16 +25,20 @@ md-list {
   padding-top: 0;
 }
 
+* { color: rgb(200,200,200) !important; }
+
 md-content {
-  background-color: #CFD8DC !important;
+  // background-color: #CFD8DC !important;
 }
 
 .buy-order {
-  background-color: #BDECB6;
+  // #bdecb6
+  background-color: rgba(189, 236, 182, 0.01);
 }
 
 .sell-order {
-  background-color: #FFC48C;
+  // #ffc48c
+  background-color: rgba(255, 196, 140, 0.01);
 }
 
 .selector-column {
@@ -51,10 +55,56 @@ md-content {
   }
 }
 
-md-select-menu md-content {
-  background-color: $white !important;
-}
-
 .selected {
   background-color: lightseagreen !important;
+}
+
+md-toolbar {
+  background-color: rgb(78,115,125) !important;
+}
+
+tr.md-selected td{
+  color: rgb(50,50,50) !important;
+  background-color: rgb(200,200,200);
+  span {
+    color: rgb(50,50,50) !important;
+    background-color: rgb(200,200,200);
+  }
+}
+
+tr:hover td {
+  background-color: rgb(200,200,200);
+  color: rgb(50,50,50) !important;
+  span {
+    color: rgb(50,50,50) !important;
+    background-color: rgb(200,200,200);
+  }
+}
+
+table.md-table.md-row-select tbody.md-body > tr.md-row {
+  transition: none !important;
+}
+
+tspan {
+  fill: rgb(200,200,200) !important;
+}
+
+.c3-axis text {
+  fill: rgb(200,200,200) !important;
+}
+
+path.domain {
+  stroke: rgb(200,200,200) !important;
+}
+
+g.tick line {
+  stroke: rgb(200,200,200) !important;
+}
+
+.c3-legend-background {
+  opacity: 0 !important;
+}
+
+.c3-legend-item text {
+  fill: rgb(200,200,200) !important;
 }

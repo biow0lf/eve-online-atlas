@@ -20,6 +20,10 @@ gem 'omniauth'
 gem 'omniauth-crest'
 gem 'activerecord-import'
 gem 'activerecord-mysql-unsigned'
+gem 'daemons'
+gem 'crono'
+gem 'sinatra'
+gem 'haml'
 # gem 'reve', :git => 'git@github.com:lisa/reve.git'
 
 source 'https://rails-assets.org' do

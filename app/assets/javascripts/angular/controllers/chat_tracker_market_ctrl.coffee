@@ -11,11 +11,22 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'ut
     page: 1
     tab: 0
 
+  # orders-light: #DBEBFF
+  # volumne-light: #BDFFEA
+  # orders-dark: #2b5797
+  # volume-dark: #1e7145
+
   # chart variables
   @datapointsMonthly = []
   @datapointsWeekly = []
   @chartType = 'monthly'
-  @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: 'blue'}, {id: 'high', type: 'spline', name: 'High Price', color: 'red'}, {id: 'low', type: 'spline', name: 'Low Price', color: 'green'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#DBEBFF'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#BDFFEA'}]
+  # @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: '#810099'}, {id: 'high', type: 'spline', name: 'High Price', color: '#998100'}, {id: 'low', type: 'spline', name: 'Low Price', color: '#009981'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#1b3249'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#7e570a'}]
+  # Karlyn : 17
+  # @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: '#F1F0EA'}, {id: 'high', type: 'spline', name: 'High Price', color: '#F7CE3D'}, {id: 'low', type: 'spline', name: 'Low Price', color: '#38AFFC'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#948076'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#BFC766'}]
+  # Graus Arquitectura Técnia : 21
+  # @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: '#6F97B2'}, {id: 'high', type: 'spline', name: 'High Price', color: '#FE6800'}, {id: 'low', type: 'spline', name: 'Low Price', color: '#1B3067'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#988E87'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#342E2A'}]
+  @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: '#F1F0EA'}, {id: 'high', type: 'spline', name: 'High Price', color: '#F7CE3D'}, {id: 'low', type: 'spline', name: 'Low Price', color: '#38AFFC'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#1B3067'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#342E2A'}]
+  # @datacolumns = [{id: 'avg', type: 'spline', name: 'Avg. Price', color: '#3F9852'}, {id: 'high', type: 'spline', name: 'High Price', color: '#DA7E30'}, {id: 'low', type: 'spline', name: 'Low Price', color: '#3869B1'}, {id: 'order', type: 'bar', name: 'Order Count', color: '#818787'}, {id: 'volume', type: 'bar', name: 'Volume', color: '#CCC374'}]
   @datax = {id: 'date'}
   @marketItem = ''
   @charts = []
