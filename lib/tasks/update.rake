@@ -1,6 +1,6 @@
 namespace :update do
-  desc 'Updates ItemHistory table'
-  task ItemHistory: :environment do
+  desc 'Updates item_history table'
+  task item_history: :environment do
     # get list of items that have market history
     response = HTTParty.get('https://public-crest.eveonline.com/market/prices/')
     item_list = JSON.parse(response.body)
@@ -45,8 +45,8 @@ namespace :update do
     end
   end
 
-  desc 'Updates playerstations table'
-  task playerstations: :environment do
+  desc 'Updates player_stations table'
+  task player_stations: :environment do
     # remove old stations
     PlayerStation.delete_all
     # get new stations
@@ -62,7 +62,7 @@ namespace :update do
   end
 
   desc 'Updates systemCostIndexes table'
-  task SystemCostIndices: :environment do
+  task system_cost_indices: :environment do
     # remove old stations
     SystemCostIndex.delete_all
     # get cost indices
@@ -75,8 +75,8 @@ namespace :update do
     SystemCostIndex.import systems
   end
 
-  desc 'Updates player kills'
-  task playerkills: :environment do
+  desc 'Updates player_kills table'
+  task player_kills: :environment do
     # remove old kill stats
     # KillsCurrent.where('cachedUntil < :date', date: oldCache + 1.hours < DateTime.now.utc).delete_all
     # get kills
@@ -101,8 +101,8 @@ namespace :update do
     KillsCurrent.import result
   end
 
-  desc 'Updates player jumps'
-  task playerjumps: :environment do
+  desc 'Updates player_jumps table'
+  task player_jumps: :environment do
     # remove old jump stats
     # Mapjumpscurrent.where('cachedUntil < :date', date: oldCache + 1.hours < DateTime.now.utc).delete_all
     # get jumps
@@ -127,8 +127,8 @@ namespace :update do
     JumpsCurrent.import result
   end
 
-  desc 'Adds planet materials to table'
-  task planetmaterials: :environment do
+  desc 'Adds planet_materials to table'
+  task planet_materials: :environment do
     to_load = []
     planets = PlanetMaterial.find_by_sql("SELECT planet.typeID, pi.typeName
 FROM invTypes planet, invTypes pi, dgmTypeAttributes dgmPlanet, dgmTypeAttributes dgmPi
