@@ -19,11 +19,10 @@ class UsersController < ApplicationController
     headers = { Authorization: 'Bearer ' + @user.token }
     # Route: /characters/<characterID:characterIdType>/contacts/
     response = HTTParty.get("https://public-crest.eveonline.com/characters/#{@user.characterID}/location", headers: headers)
-    log = Logger.new('log/location.log')
     data = JSON.parse(response.body)
-    log.debug response.body
-    log.debug response.body.inspect
-    log.debug data
+    puts response.body
+    puts response.body.inspect
+    puts data
     render json: data
   end
 
