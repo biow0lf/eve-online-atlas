@@ -29,6 +29,8 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
       crestService.getUser().then (response) =>
         if _.keys(response.data).length > 0
           angular.merge({}, userService.user, response.data)
+          console.log 'service', userService.user
+          console.log 'user', @user
           if @user.hasOwnProperty('characterID')
             @user.image = "https://image.eveonline.com/Character/#{@user.characterID}_64.jpg"
           # cache timer is 10s

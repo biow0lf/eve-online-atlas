@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     return render json: {} unless @user
     refresh_token_if_expired
     headers = { Authorization: 'Bearer ' + @user.token }
-    # Route: /characters/<characterID:characterIdType>/contacts/
+    # Route: /characters/<characterID:characterIdType>/location/
     response = HTTParty.get("https://crest-tq.eveonline.com/characters/#{@user.characterID}/location/", headers: headers)
     data = JSON.parse(response.body)
     render json: data
