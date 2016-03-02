@@ -14,5 +14,5 @@ class SolarSystem < ActiveRecord::Base
   has_one :wormholeClass, foreign_key: 'locationID', primary_key: 'regionID'
   has_one :systemCostIndex, foreign_key: 'solarSystemID'
   has_many :mapSolarSystemJumps, foreign_key: 'fromSolarSystemID'
-  has_many :toSolarSystems, :through => :mapSolarSystemJumps, foreign_key: 'toSolarSystemID'
+  has_many :toSolarSystems, through: :mapSolarSystemJumps, foreign_key: 'toSolarSystemID'
 end

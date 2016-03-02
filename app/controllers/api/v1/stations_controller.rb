@@ -9,7 +9,6 @@ module Api
       end
 
       def show
-        result = {}
         result = @station.as_json
         result['type'] = @station.stationOperation
         result['services'] = @station.stationServices
@@ -23,11 +22,11 @@ module Api
       end
 
       def find_stations
-        if params[:id]
-         @station = @solarsystem.stations.find(params[:id])
-        else
-         @station = @solarsystem.stations
-        end
+        @station = if params[:id]
+                     @solarsystem.stations.find(params[:id])
+                   else
+                     @solarsystem.stations
+                   end
       end
     end
   end

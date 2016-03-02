@@ -36,4 +36,4 @@ Crono.perform(UpdateCostIndicies).every 1.hour
 Crono.perform(UpdatePlayerJumps).every 1.hour
 Crono.perform(UpdatePlayerKills).every 1.hour
 # 18:00 is UTC midnight in Central tz - so wait a couple of hours for downtime, etc.
-Crono.perform(UpdateItemhistory).every 1.day, at: {hour: 20, min: 0}
+Crono.perform(UpdateItemhistory).every 1.day, at: { hour: 20, min: 0 }

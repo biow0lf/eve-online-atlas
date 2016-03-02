@@ -34,9 +34,14 @@ namespace :update do
         next unless history.key?('items')
         history['items'].each do |h|
           # make sure that the item doesn't already exist
-          if DateTime.parse(h['date']) > date
-            to_insert << ItemHistory.new(typeID: id, orderCount: h['orderCount'], lowPrice: h['lowPrice'], highPrice: h['highPrice'], avgPrice: h['avgPrice'], volume: h['volume'], date: h['date'])
-          end
+          next unless DateTime.parse(h['date']) > date
+          to_insert << ItemHistory.new(
+            typeID: id, orderCount: h['orderCount'],
+            lowPrice: h['lowPrice'],
+            highPrice: h['highPrice'],
+            avgPrice: h['avgPrice'],
+            volume: h['volume'],
+            date: h['date'])
         end
       end
       ItemHistory.import to_insert if to_insert.count > 0
@@ -55,8 +60,16 @@ namespace :update do
     stations = []
     # xml sucks
     data['eveapi']['result']['rowset']['row'].each do |row|
-      stations << PlayerStation.new(stationID: row['stationID'].to_i, stationName: row['stationName'], stationTypeID: row['stationTypeID'].to_i, solarSystemID: row['solarSystemID'].to_i, corporationName: row['corporationName'], corporationID: row['corporationID'].to_i, x: row['x'].to_f, y: row['y'].to_f, z: row['z'].to_f)
-      # PlayerStation.create(stationID: row['stationID'].to_i, stationName: row['stationName'], stationTypeID: row['stationTypeID'].to_i, solarSystemID: row['solarSystemID'].to_i, corporationName: row['corporationName'], corporationID: row['corporationID'].to_i, x: row['x'].to_f, y: row['y'].to_f, z: row['z'].to_f)
+      stations << PlayerStation.new(
+        stationID: row['stationID'].to_i,
+        stationName: row['stationName'],
+        stationTypeID: row['stationTypeID'].to_i,
+        solarSystemID: row['solarSystemID'].to_i,
+        corporationName: row['corporationName'],
+        corporationID: row['corporationID'].to_i,
+        x: row['x'].to_f,
+        y: row['y'].to_f,
+        z: row['z'].to_f)
     end
     PlayerStation.import stations
   end
@@ -70,7 +83,13 @@ namespace :update do
     json = JSON.parse(result)
     systems = []
     json['items'].each_with_index do |_sys, idx|
-      systems << SystemCostIndex.new(solarSystemID: json['items'][idx]['solarSystem']['id'].to_i, inventionIndex: json['items'][idx]['systemCostIndices'][0]['costIndex'].to_s, manufacturingIndex: json['items'][idx]['systemCostIndices'][1]['costIndex'].to_s, timeResearchIndex: json['items'][idx]['systemCostIndices'][2]['costIndex'].to_s, materialResearchIndex: json['items'][idx]['systemCostIndices'][3]['costIndex'].to_s, copyingIndex: json['items'][idx]['systemCostIndices'][4]['costIndex'].to_s)
+      systems << SystemCostIndex.new(
+        solarSystemID: json['items'][idx]['solarSystem']['id'].to_i,
+        inventionIndex: json['items'][idx]['systemCostIndices'][0]['costIndex'].to_s,
+        manufacturingIndex: json['items'][idx]['systemCostIndices'][1]['costIndex'].to_s,
+        timeResearchIndex: json['items'][idx]['systemCostIndices'][2]['costIndex'].to_s,
+        materialResearchIndex: json['items'][idx]['systemCostIndices'][3]['costIndex'].to_s,
+        copyingIndex: json['items'][idx]['systemCostIndices'][4]['costIndex'].to_s)
     end
     SystemCostIndex.import systems
   end
@@ -83,19 +102,31 @@ namespace :update do
     response = HTTParty.get('https://api.eveonline.com/map/kills.xml.aspx')
     data = response.parsed_response
     result = []
-    solarSystemIDsAll = SolarSystem.pluck(:solarSystemID)
-    cachedUntil = data['eveapi']['cachedUntil']
+    solar_system_ids_all = SolarSystem.pluck(:solarSystemID)
+    cached_until = data['eveapi']['cachedUntil']
     # xml  still sucks
-    xmlData = {}
-    cachedUntil = DateTime.parse(data['eveapi']['cachedUntil'])
+    xml_data = {}
+    cached_until = DateTime.parse(data['eveapi']['cachedUntil'])
     data['eveapi']['result']['rowset']['row'].each do |row|
-      xmlData[row['solarSystemID'].to_i.to_s] = { shipKills: row['shipKills'].to_i, factionKills: row['factionKills'].to_i, podKills: row['podKills'].to_i }
+      xml_data[row['solarSystemID'].to_i.to_s] = {
+        shipKills: row['shipKills'].to_i,
+        factionKills: row['factionKills'].to_i,
+        podKills: row['podKills'].to_i }
     end
-    solarSystemIDsAll.each do |id|
-      if xmlData.key?(id.to_s)
-        result << KillsCurrent.new(solarSystemID: id, shipKills: xmlData[id.to_s][:shipKills], factionKills: xmlData[id.to_s][:factionKills], podKills: xmlData[id.to_s][:podKills], cachedUntil: cachedUntil)
+    solar_system_ids_all.each do |id|
+      if xml_data.key?(id.to_s)
+        result << KillsCurrent.new(
+          solarSystemID: id,
+          shipKills: xml_data[id.to_s][:shipKills],
+          factionKills: xml_data[id.to_s][:factionKills],
+          podKills: xml_data[id.to_s][:podKills],
+          cachedUntil: cached_until)
       else
-        result << KillsCurrent.new(solarSystemID: id, shipKills: 0, factionKills: 0, podKills: 0, cachedUntil: cachedUntil)
+        result << KillsCurrent.new(
+          solarSystemID: id,
+          shipKills: 0,
+          factionKills: 0, podKills: 0,
+          cachedUntil: cached_until)
       end
     end
     KillsCurrent.import result
@@ -109,19 +140,19 @@ namespace :update do
     response = HTTParty.get('https://api.eveonline.com/map/Jumps.xml.aspx')
     data = response.parsed_response
     result = []
-    solarSystemIDsAll = SolarSystem.pluck(:solarSystemID)
-    cachedUntil = data['eveapi']['cachedUntil']
+    solar_system_ids_all = SolarSystem.pluck(:solarSystemID)
+    cached_until = data['eveapi']['cachedUntil']
     # xml continues to suck
-    xmlData = {}
-    cachedUntil = DateTime.parse(data['eveapi']['cachedUntil'])
+    xml_data = {}
+    cached_until = DateTime.parse(data['eveapi']['cachedUntil'])
     data['eveapi']['result']['rowset']['row'].each do |row|
-      xmlData[row['solarSystemID'].to_i.to_s] = row['shipJumps'].to_i
+      xml_data[row['solarSystemID'].to_i.to_s] = row['shipJumps'].to_i
     end
-    solarSystemIDsAll.each do |id|
-      result << if xmlData.key?(id.to_s)
-                  JumpsCurrent.new(solarSystemID: id, shipJumps: xmlData[id.to_s], cachedUntil: cachedUntil)
+    solar_system_ids_all.each do |id|
+      result << if xml_data.key?(id.to_s)
+                  JumpsCurrent.new(solarSystemID: id, shipJumps: xml_data[id.to_s], cachedUntil: cached_until)
                 else
-                  JumpsCurrent.new(solarSystemID: id, shipJumps: 0, cachedUntil: cachedUntil)
+                  JumpsCurrent.new(solarSystemID: id, shipJumps: 0, cachedUntil: cached_until)
                 end
     end
     JumpsCurrent.import result

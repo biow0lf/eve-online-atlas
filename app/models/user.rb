@@ -12,7 +12,8 @@ class User < ActiveRecord::Base
 
   def token_expired?
     expiry = Time.at(self.expiry)
-    return true if expiry < Time.now
+    # +6 hours to get to UTC 0
+    return true if expiry < Time.now + 6.hours
     false
   end
 end

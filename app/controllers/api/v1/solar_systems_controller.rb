@@ -25,7 +25,7 @@ module Api
         render json: result
       end
 
-      def get_neighbors
+      def neighbors
         render json: @solarsystem.toSolarSystems
       end
 
