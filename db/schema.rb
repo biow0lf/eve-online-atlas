@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302015322) do
+ActiveRecord::Schema.define(version: 20160302042022) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -473,7 +473,7 @@ ActiveRecord::Schema.define(version: 20160302015322) do
   add_index "invuniquenames", ["groupID", "itemName"], name: "invUniqueNames_IX_GroupName", using: :btree
   add_index "invuniquenames", ["itemName"], name: "invUniqueNames_UQ", unique: true, using: :btree
 
-  create_table "itemHistory", force: :cascade do |t|
+  create_table "item_history", force: :cascade do |t|
     t.integer  "typeID",     limit: 4,               unsigned: true
     t.integer  "orderCount", limit: 8,               unsigned: true
     t.float    "lowPrice",   limit: 24
@@ -485,7 +485,7 @@ ActiveRecord::Schema.define(version: 20160302015322) do
     t.datetime "updated_at",            null: false
   end
 
-  add_index "itemhistory", ["typeID"], name: "index_itemHistory_on_typeID", using: :btree
+  add_index "item_history", ["typeID"], name: "index_item_history_on_typeID", using: :btree
 
   create_table "mapCelestialStatistics", primary_key: "celestialID", force: :cascade do |t|
     t.float   "temperature",    limit: 53
@@ -668,23 +668,13 @@ ActiveRecord::Schema.define(version: 20160302015322) do
     t.float  "radius",       limit: 53
   end
 
-  create_table "mapjumpscurrent", force: :cascade do |t|
+  create_table "map_jumps_current", force: :cascade do |t|
     t.integer  "solarSystemID", limit: 4
     t.integer  "shipJumps",     limit: 4
     t.datetime "cachedUntil"
   end
 
-  create_table "mapkKllsHistory", force: :cascade do |t|
-    t.integer  "solarSystemID", limit: 4
-    t.integer  "shipKills",     limit: 4
-    t.integer  "factionKills",  limit: 4
-    t.integer  "podKills",      limit: 4
-    t.datetime "cachedUntil"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-  end
-
-  create_table "mapkillscurrent", force: :cascade do |t|
+  create_table "map_kills_current", force: :cascade do |t|
     t.integer  "solarSystemID", limit: 4
     t.integer  "shipKills",     limit: 4
     t.integer  "factionKills",  limit: 4
@@ -692,7 +682,7 @@ ActiveRecord::Schema.define(version: 20160302015322) do
     t.datetime "cachedUntil"
   end
 
-  create_table "mapmoons", primary_key: "moonID", force: :cascade do |t|
+  create_table "map_moons", primary_key: "moonID", force: :cascade do |t|
     t.integer "atm",  limit: 4, default: -1
     t.integer "eva",  limit: 4, default: -1
     t.integer "hyd",  limit: 4, default: -1
@@ -716,6 +706,16 @@ ActiveRecord::Schema.define(version: 20160302015322) do
     t.integer "scan", limit: 4, default: -1
   end
 
+  create_table "mapkKllsHistory", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipKills",     limit: 4
+    t.integer  "factionKills",  limit: 4
+    t.integer  "podKills",      limit: 4
+    t.datetime "cachedUntil"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
     t.string  "schematicName", limit: 255
     t.integer "cycleTime",     limit: 4
@@ -733,12 +733,12 @@ ActiveRecord::Schema.define(version: 20160302015322) do
     t.boolean "isInput",     limit: 1
   end
 
-  create_table "planetmaterials", force: :cascade do |t|
+  create_table "planet_materials", force: :cascade do |t|
     t.integer "typeID",       limit: 4
     t.string  "materialType", limit: 255
   end
 
-  create_table "playerstations", force: :cascade do |t|
+  create_table "player_stations", force: :cascade do |t|
     t.integer  "stationID",       limit: 4
     t.string   "stationName",     limit: 255
     t.integer  "stationTypeID",   limit: 4
@@ -894,7 +894,7 @@ ActiveRecord::Schema.define(version: 20160302015322) do
   add_index "stastations", ["solarSystemID"], name: "staStations_IX_system", using: :btree
   add_index "stastations", ["stationTypeID"], name: "staStations_IX_type", using: :btree
 
-  create_table "systemcostindex", force: :cascade do |t|
+  create_table "system_cost_indices", force: :cascade do |t|
     t.integer "solarSystemID",         limit: 4
     t.string  "inventionIndex",        limit: 255
     t.string  "manufacturingIndex",    limit: 255

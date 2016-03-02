@@ -1,5 +1,5 @@
 class PlayerStation < ActiveRecord::Base
-  self.table_name = 'playerstations'
+  self.table_name = 'player_stations'
   self.primary_key = 'stationID'
 
   belongs_to :solarSystem, foreign_key: 'solarSystemID'
