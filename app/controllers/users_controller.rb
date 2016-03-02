@@ -2,6 +2,7 @@ require 'logger'
 require 'base64'
 class UsersController < ApplicationController
   before_action :find_user
+  include HTTParty
 
   def index
     return render json: {} unless @user
@@ -37,8 +38,6 @@ class UsersController < ApplicationController
     return unless @user.token_expired?
     log = Logger.new('log/location.log')
     log.debug @user
-
-    include HTTParty
 
     headers = { Authorization: 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}") }
     body = { grant_type: 'refresh_token', refresh_token: refreshToken }
