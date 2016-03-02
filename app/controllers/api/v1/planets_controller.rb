@@ -11,6 +11,7 @@ module Api
           to_push = planet.as_json
           to_push['type'] = Item.find_by(typeID: planet.typeID).typeName[/\(([^)]+)\)/, 1]
           to_push['moonIDs'] = planet.moons.pluck(:itemID)
+          to_push['materials'] = planet.planetmaterials
           to_push['statistics'] = planet.celestialstatistic
           result << to_push
         end
