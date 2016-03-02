@@ -10,7 +10,7 @@ module Api
           # find item by name
           items = find_item_by_name(params[:name])
         end
-        render json: items.to_json
+        render json: items.as_json
       end
 
       def show
@@ -21,7 +21,7 @@ module Api
                  # else search by name
                  Item.find_by(typeName: params[:id])
                end
-        render json: item.to_json
+        render json: item.as_json
       end
 
       def price
@@ -45,7 +45,7 @@ module Api
           items[idx]['sell_price'] = get_trimmed_mean(system_items, 0.2)
           items[idx]['system'] = @solarsystem.solarSystemName
         end
-        render json: items.to_json
+        render json: items.as_json
       end
 
       def history
@@ -58,7 +58,7 @@ module Api
           to_push['history'] = item.itemHistories.select('id,orderCount,lowPrice,highPrice,avgPrice,volume,date').as_json
           result << to_push
         end
-        render json: result.to_json
+        render json: result.as_json
       end
 
       private

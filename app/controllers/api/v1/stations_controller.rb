@@ -5,7 +5,7 @@ module Api
       before_action :find_solarsystem, :find_stations
 
       def index
-        render json: @solarsystem.stations.to_json
+        render json: @solarsystem.stations.as_json
       end
 
       def show

@@ -6,7 +6,7 @@ module Api
       # after_action :verify_policy_scoped, only: :index
 
       def index
-        render json: Agent.all.to_json
+        render json: Agent.all.as_json
       end
 
       def show

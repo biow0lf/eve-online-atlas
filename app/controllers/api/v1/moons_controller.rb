@@ -5,7 +5,7 @@ module Api
       before_action :find_solarsystem, :find_planet, :find_moon
 
       def index
-        render json: @planet.moons.to_json
+        render json: @planet.moons.as_json
       end
 
       def show
