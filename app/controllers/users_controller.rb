@@ -20,9 +20,6 @@ class UsersController < ApplicationController
     # Route: /characters/<characterID:characterIdType>/contacts/
     response = HTTParty.get("https://public-crest.eveonline.com/characters/#{@user.characterID}/location", headers: headers)
     data = JSON.parse(response.body)
-    puts response.body
-    puts response.body.inspect
-    puts data
     render json: data
   end
 
@@ -34,16 +31,10 @@ class UsersController < ApplicationController
 
   def refresh_token_if_expired
     return unless @user.token_expired?
-    puts @user
     headers = { Authorization: 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}") }
     body = { grant_type: 'refresh_token', refresh_token: @user.refreshToken }
     response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.as_json, headers: headers.as_json)
-
     data = JSON.parse(response.body)
-
-    puts response.body
-    puts response.body.inspect
-
     @user.update(token: data['token'], expiry: DateTime.now + data['expires_at'].to_i.seconds)
   end
 end

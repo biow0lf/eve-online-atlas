@@ -41,6 +41,9 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
   factory.getUser = ->
     return $http.get("/users")
 
+  factory.getUserLocation = ->
+    return $http.get("/users/location")
+
   factory.signout = ->
     return $http.get("/signout")
 

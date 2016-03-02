@@ -1,8 +1,10 @@
-app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window', 'crestService',
-  ($scope, $http, $mdSidenav, $state, $window, crestService) -> do =>
+app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window', 'crestService', '$interval'
+  ($scope, $http, $mdSidenav, $state, $window, crestService, $interval) -> do =>
     @version = '0.0.0'
     @user = 
         name: ''
+        location: ''
+    @interval = null
 
     closeSidenav = (componentId) =>
       $mdSidenav(componentId).close()
@@ -18,6 +20,11 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
         @user =
           name: ''
 
+    getUserLocation = =>
+      crestService.getUserLocation().then (repsonse) =>
+        console.log response
+        # @user.location
+
     init = =>
       @version = '0.0.1'
       crestService.getUser().then (response) =>
@@ -25,6 +32,8 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
           angular.copy(response.data, @user)
           if @user.hasOwnProperty('characterID')
             @user.image = "https://image.eveonline.com/Character/#{@user.characterID}_64.jpg"
+          # cache timer is 10s
+          @interval = $interval(getUserLocation, 10000)
 
     init()
 
