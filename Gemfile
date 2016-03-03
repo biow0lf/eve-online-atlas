@@ -38,6 +38,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-daniel-nagy--md-data-table'
   gem 'rails-assets-ng-file-upload'
   gem 'rails-assets-moment'
+  gem 'rails-assets-moment-timezone'
   gem 'rails-assets-angular-moment', '1.0.0.beta.4'
   gem 'rails-assets-c3-angular', '1.0.1'
   gem 'rails-assets-angular-sanitize'

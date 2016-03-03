@@ -19,6 +19,7 @@
 #= require angular-ui-router
 #= require ui-router-extras
 #= require moment
+#= require moment-timezone
 #= require angular-aria
 #= require angular-animate
 #= require angular-material

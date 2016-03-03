@@ -1,4 +1,4 @@
-app.controller 'logParserCtrl', ['$scope', '$interval', ($scope, $interval) -> do =>
+app.controller 'logParserCtrl', ['$scope', '$interval', 'moment', ($scope, $interval, moment) -> do =>
   @bookmark = 1
   @selectedTab = 0
   @listener = ''
@@ -26,7 +26,7 @@ app.controller 'logParserCtrl', ['$scope', '$interval', ($scope, $interval) -> d
   parseTime = (line) =>
     t = line.match(/\d{4}\.\d{2}\.\d{2}\s\d{2}:\d{2}:\d{2}/)
     unless _.isEmpty(t)
-      return new Date(t[0])
+      return moment.utc(t[0], 'YYYY.MM.DD HH:mm:ss').toDate()
     else
       return new Date('1969.12.31 18:00:00')
 

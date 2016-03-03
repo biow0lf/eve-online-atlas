@@ -318,6 +318,8 @@ GEM
       rails-assets-angular-material (>= 1.0.0, < 2)
     rails-assets-lodash (4.5.1)
     rails-assets-moment (2.11.2)
+    rails-assets-moment-timezone (0.5.0)
+      rails-assets-moment (>= 2.6.0)
     rails-assets-ng-file-upload (12.0.1)
       rails-assets-angular (> 1.2.0)
     rails-assets-ng-rails-csrf (0.1.0)
@@ -443,6 +445,7 @@ DEPENDENCIES
   rails-assets-daniel-nagy--md-data-table!
   rails-assets-lodash!
   rails-assets-moment!
+  rails-assets-moment-timezone!
   rails-assets-ng-file-upload!
   rails-assets-ng-rails-csrf!
   rails-assets-ui-router-extras!
