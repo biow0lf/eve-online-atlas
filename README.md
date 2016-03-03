@@ -10,6 +10,8 @@
     * Allows you to add alts to parsing & listening - no need to always run commands from the same character
 * Variety of commands
     * Check the buy/sell price of an item or list of items at a specified system / region
+        * Can specify item quantity
+        * Can also paste in a list of items from an inventory details set
     * Find Thera wormholes and distances to those wormholes from a given system
     * Support for adding multiple characters for log parsing & listening
 * History graph for item prices & order quantities over the past year (in monthly or weekly format)
@@ -20,6 +22,7 @@
 
 ### Future Additions ###
 * More Commands!
+* Highcharts to replace C3.js
 * TBA
 
 ### Tech Used ###
