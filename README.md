@@ -5,6 +5,7 @@
 ## Highlights and Features
 * Automatic chat-log parsing and updating once initialized
 * Works in the background and when the tab is not selected
+    * Parallel states too! - Dashboard and Chat Parser can run concurrently
 * Configurable for simultaneous multiple characters in a chat
     * Allows you to add alts to parsing & listening - no need to always run commands from the same character
 * Variety of commands
@@ -14,6 +15,7 @@
 * History graph for item prices & order quantities over the past year (in monthly or weekly format)
 * SPA (single page application)
 * Character location-aware dashboard
+* Scheduled jobs for keeping API data up-to-date (via Crono)
 * Public API for querying SDE with models & associations (endpoints listed below)
 
 ### Future Additions ###
