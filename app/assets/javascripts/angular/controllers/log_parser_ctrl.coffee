@@ -51,6 +51,41 @@ app.controller 'logParserCtrl', ['$scope', '$interval', 'moment', ($scope, $inte
         break
     return command
 
+  parseArgument = (argument) =>
+    result = []
+    # case 1 : check to see if the argument contains m3 -> signifies a list pasted from inventory
+    if argument.indexOf('m3') >= 0
+      items = _.split(argument, 'm3')
+      for item in items
+        separated = _.split(item, '    ')
+        result.push({name: separated[0], quantity: separated[1]}) if item.length > 0 and separated[0].length > 0 and separated[1].length > 0
+      return result
+    else
+      # case 2 : check to see if arguments contain comma or double space for splitting
+      splitChar = null
+      if argument.indexOf(',') >= 0 then splitChar = ','
+      if argument.indexOf('  ') >= 0 then splitChar = '  '
+      if splitChar != null
+        argument = _.split(argument, splitChar)
+        converted = _.map(argument, (s) ->
+          int = _.parseInt(s)
+          if _.isNaN(int)
+            return _.trim(s)
+          else
+            return int
+        )
+      else
+        converted = [_.trim(argument)]
+
+      # then check to find @[number] for item quantitues : else just push name
+      for item in converted
+        if item.indexOf('@') >= 0
+          separated = _.split(item, '@')
+          result.push({name: separated[0], quantity: separated[1]})
+        else
+          result.push({name: item})
+      return result
+
   readFile = (file) =>
     if file.size != 0
       fileReader = new FileReader
@@ -79,26 +114,8 @@ app.controller 'logParserCtrl', ['$scope', '$interval', 'moment', ($scope, $inte
             # verify character
             character_name = parseCharacter(line)
             if character_name in @characters
-              value = line.substr(line.indexOf(command)+command.length+1, line.length)
-              converted = []
-
-              # two ways to imput items to parse
-              # first, by typing in items delimited by comma
-              # second, by dragging items to bar there are two spaces between items
-              splitChar = null
-              if value.indexOf(',') >= 0 then splitChar = ','
-              if value.indexOf('  ') >= 0 then splitChar = '  '
-              if splitChar != null
-                value = _.split(value, splitChar)
-                converted = _.map(value, (s) ->
-                  int = _.parseInt(s)
-                  if _.isNaN(int)
-                    return _.trim(s)
-                  else
-                    return int
-                )
-              else
-                converted = [_.trim(value)]
+              argument = line.substr(line.indexOf(command)+command.length+1, line.length)
+              converted = parseArgument(argument)
 
               console.log 'command from', character_name, ':', command, 'argument', converted
 

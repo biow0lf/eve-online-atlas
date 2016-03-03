@@ -58,23 +58,29 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
     return results.sort((a, b) -> new Date(a.date) - new Date(b.date))
 
   priceCheck = (executor, item, time) =>
-    crestService.getPrices(@system, @region, item).then (response) =>
+    itemName = ''
+    itemQuantity = 1
+    if item.hasOwnProperty('name')
+      itemName = item.name
+    if item.hasOwnProperty('quantity')
+      itemQuantity = item.quantity
+
+    crestService.getPrices(@system, @region, itemName).then (response) =>
       if _.isEmpty(@system)
         # prices came from region
-        for item in response.data
+        for responseItem in response.data
           @commandNumber += 1
-          @commands.unshift({id: @commandNumber, time: time, item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.region}})
-          @marketItem = item.typeName
+          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.region}})
       else
-        for item in response.data
+        for responseItem in response.data
           @commandNumber += 1
-          @commands.unshift({id: @commandNumber, time: time, item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
-          @marketItem = item.typeName
+          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.system}})
       onPaginate()
       focusTab()
 
-    crestService.getHistories(item).then (response) =>
+    crestService.getHistories(itemName).then (response) =>
       @datapoints = []
+      @marketItem = itemName
       for item in response.data
         # sort items into month groups
         groupsMonthly = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
@@ -92,13 +98,13 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
             @datapointsWeekly.push({date: r.date, avg: r.avg, high: r.high, low: r.low, order: r.order, volume: r.volume})
 
   changeSystem = (executor, system) =>
-    crestService.isValidSystem(system).then (response) =>
+    crestService.isValidSystem(system.name).then (response) =>
       @system = response.data.solarSystemName
       @region = ''
       focusTab()
 
   changeRegion = (executor, region) =>
-    crestService.isValidRegion(region).then (response) =>
+    crestService.isValidRegion(region.name).then (response) =>
       @region = response.data.regionName
       @system = ''
       focusTab()
@@ -155,10 +161,11 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
       name: '!pc'
       set: 'market'
       argument: '{item}'
-      description: 'Price checks an item in the current market system; items must be separated by commas or two spaces'
+      description: 'Price checks an item in the current market system; items must be separated by commas or two spaces, or be pasted from an inventory'
       example: '!pc tritanium' +
         '\n!pc legion, ishtar' +
-        '\n!pc oracle  harbinger'
+        '\n!pc oracle  harbinger' +
+        '\n!pc legion@10, ishtar@5'
       fn: priceCheck
     }
     {

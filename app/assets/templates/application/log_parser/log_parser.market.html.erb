@@ -14,6 +14,7 @@
     <tr md-row>
       <th md-column><span>System / Region</span></th>
       <th md-column><span>Item</span></th>
+      <th md-column><span>Quantity</span></th>
       <th md-column><span>Buy Price</span></th>
       <th md-column><span>Sell Price</span></th>
       <th md-column><span>Time</span></th>
@@ -23,6 +24,7 @@
     <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in market.commandsToShow">
       <td md-cell>{{command.item.system}}</td>
       <td md-cell>{{command.item.name}}</td>
+      <td md-cell>{{command.item.quantity}}</td>
       <td md-cell>{{command.item.buy_price}} isk</td>
       <td md-cell>{{command.item.sell_price}} isk</td>
       <td md-cell am-time-ago="command.time"></td>

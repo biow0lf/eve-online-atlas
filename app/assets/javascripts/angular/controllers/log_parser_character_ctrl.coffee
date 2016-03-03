@@ -27,22 +27,22 @@ app.controller 'logParserCharacterCtrl', ['$scope', 'utilsService', ($scope, uti
     $scope.$emit 'changeTab', @query.tab
 
   allowCharacter = (executor, character) =>
-    unless character in @characterNames
-      @commands.unshift({name: character, time: Date.now()})
+    unless character.name in @characterNames
+      @commands.unshift({name: character.name, time: Date.now()})
     @characterNames = (c.name for c in @commands)
     $scope.$emit 'setCharacters', @characterNames
     onPaginate()
     focusTab()
 
   removeCharacter = (executor, character) =>
-    if character is 'all'
+    if character.name is 'all'
       @commands = [{name: @listener, time: Date.now()}]
-    else if character is 'self'
+    else if character.name is 'self'
       # this mutates the @commands array
       _.remove(@commands, (c) => c.name isnt @listener and c.name is executor)
     else
       # this mutates the @commands array
-      _.remove(@commands, (c) => c.name isnt @listener and c.name is character)
+      _.remove(@commands, (c) => c.name isnt @listener and c.name is character.name)
     @characterNames = (c.name for c in @commands)
     $scope.$emit 'setCharacters', @characterNames
     onPaginate()

@@ -25,11 +25,14 @@ app.controller 'logParserTheraCtrl', ['$scope', 'crestService', 'utilsService', 
     $scope.$emit 'changeTab', @query.tab
 
   findThera = (executor, system) =>
-    crestService.getTheraInfo(system).then (response) =>
+    systemName = ''
+    if system.hasOwnProperty('name')
+      systemName = system.name
+    crestService.getTheraInfo(systemName).then (response) =>
       @commands = []
       for item in response.data
         @commands.push({id: @commands.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
-      @theraOrigin = _.upperFirst(system)
+      @theraOrigin = _.upperFirst(systemName)
       onPaginate()
       focusTab()
 
