@@ -131,6 +131,9 @@ Unix / Linux / Mac
 * Run `rake update:player_jumps update:player_kills update:player_stations update:sov_structures update:system_cost_indices update:item_history` to get the latest API data (warning: item_history WILL take a long time the first time, as it grabs the entire history from The Forge; future updates are faster as it only inserts newer histories)
 * Run `rails s` to host the server on localhost:3000
 
+Windows
+* All I know is that it's possible because George did it, but I don't remember how.
+
 ### License ###
 Copyright © 2016 George Dietrich, Zachary Lovin
 
