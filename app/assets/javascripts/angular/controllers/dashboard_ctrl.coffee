@@ -2,6 +2,7 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
   @solarSystemID = 30000001
   @systemData = []
   @planetData = []
+  @moonData = []
   @stationData = []
   @selectedTab = 0
   @neighbors = []
@@ -29,6 +30,10 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
   init = =>
     crestService.getSolarSystem(@solarSystemID).then (response) =>
       @systemData = response.data
+      for planetID in @systemData['planetIDs']
+        crestService.getMoon(@solarSystemID, planetID).then (response) =>
+          for item in response.data
+            @moonData.push(item)
       @indexData.push({
         index: 0,
         manufacturing: @systemData.costIndexes.manufacturingIndex*10,
@@ -36,19 +41,14 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
         researchTime: @systemData.costIndexes.timeResearchIndex*10,
         invention: @systemData.costIndexes.inventionIndex*10,
         copying: @systemData.costIndexes.copyingIndex*10})
-
-      crestService.getNeighboringSystems(@solarSystemID).then (response) =>
+    crestService.getNeighboringSystems(@solarSystemID).then (response) =>
         @neighbors = response.data
-
       # getAgentData()
     crestService.getPlanet(@solarSystemID).then (response) =>
       @planetData = response.data
-      @selectedPlanet = _.head(@planetData)
       #console.log @planetData
     crestService.getStation(@solarSystemID).then (response) =>
       @stationData = response.data
-      @selectedStation = _.head(@stationData)
-      console.log @stationData
     return
 
   init()
@@ -57,6 +57,7 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
   $scope.$watch (=> @selectedTab), (newValue, oldValue) =>
     if newValue == 0 and @charts.length > 0
       @charts[0].flush()
+
 
   #-- Public Functions
 

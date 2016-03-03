@@ -8,7 +8,7 @@
       </div>
     </md-toolbar>
     <md-tabs md-border-bottom md-dynamic-height md-selected="dc.selectedTab"t>
-      <md-tab label="Map">
+      <md-tab label="Overview">
         <div flex layout="row">
           <div flex="60" layout layout-margin>
             Map goes here
@@ -29,181 +29,71 @@
           </div>
         </div>
       </md-tab>
-      <md-tab label="Planets" flex>
+      <md-tab label="Station(s)" flex>
+
         <md-table-container style="margin-bottom: 0; margin-top: 0;">
-          <table md-table md-row-select ng-model="dc.selectedPlanet">
+          <table md-table md-row-select ng-model="dc.stationData">
+            <thead md-head>
+            <tr md-row >
+              <td ng-repeat="station in dc.stationData">
+                {{station.stationName}}
+                <div ng-repeat="service in station.services">{{service}}</div>
+              </td>
+            </tr>
+            </thead>
+            <tbody md-body>
+
+            </tbody>
+          </table>
+        </md-table-container>
+      </md-tab>
+      <md-tab label="Planets" flex>
+
+        <h2>Planet Details</h2>
+        <md-table-container style="margin-bottom: 0; margin-top: 0;">
+          <table md-table ng-model="dc.planetData">
             <thead md-head>
             <tr md-row>
               <th md-column><span>Name</span></th>
               <th md-column><span>Type</span></th>
               <th md-column><span>Moons</span></th>
-              <th md-column><span>Radius</span></th>
-              <th md-column><span>Temperature</span></th>
-              <th md-column><span>Orbit Radius</span></th>
-              <th md-column><span>Eccentricity</span></th>
-              <th md-column><span>Escape Velocity</span></th>
-              <th md-column><span>Orbital Period</span></th>
-              <th md-column><span>Density</span></th>
-              <th md-column><span>Gravity</span></th>
+              <th md-column><span>Material 1</span></th>
+              <th md-column><span>Material 2</span></th>
+              <th md-column><span>Material 3</span></th>
+              <th md-column><span>Material 4</span></th>
+              <th md-column><span>Material 5</span></th>
             </tr>
             </thead>
             <tbody md-body>
-            <tr md-row md-select="planet" md-select-id="{{planet.name}}" md-auto-select ng-repeat="planet in dc.planetData">
+            <tr md-row ng-repeat="planet in dc.planetData">
               <td md-cell>{{planet.itemName}}</td>
               <td md-cell>{{planet.type}}</td>
               <td md-cell>{{planet.moonIDs.length}}</td>
-              <td md-cell>{{planet.statistics.radius / 1000 | number : 2}} km</td>
-              <td md-cell>{{planet.statistics.temperature | number : 2}} K</td>
-              <td md-cell>{{planet.statistics.orbitRadius / 149597870691 | number : 2}} AU</td>
-              <td md-cell>{{planet.statistics.eccentricity | number : 2}}</td>
-              <td md-cell>{{planet.statistics.escapeVelocity / 1000 | number : 2}}km/s</td>
-              <td md-cell>{{planet.statistics.orbitPeriod / 8640000 | number : 2}} days</td>
-              <td md-cell>{{planet.statistics.density | number : 2}} kg/m3</td>
-              <td md-cell>{{planet.statistics.surfaceGravity | number : 2}} m/s^2</td>
+              <td ng-repeat="material in planet.materials">{{material.materialType}}</td>
             </tr>
             </tbody>
           </table>
         </md-table-container>
 
-        <!--<div layout flex style="height: 100%">-->
-        <!--<div layout="column" class="selector-column">-->
-        <!--<md-list>-->
-        <!--<md-list-item ng-repeat="planet in dc.planetData" ng-click="dc.selectPlanet($index)" ng-class="{selected:$index == dc.planetIndex}">-->
-        <!--<div class="md-list-item-text" layout="column">-->
-        <!--{{planet.itemName}} ({{planet.type}})-->
-        <!--</div>-->
-        <!--</md-list-item>-->
-        <!--</md-list>-->
-        <!--</div>-->
-        <!--<div layout="column">-->
-        <!--<md-card>-->
-        <!--<md-card-title>-->
-        <!--<md-card-title-text>-->
-        <!--<span class="md-headline">{{dc.selectedPlanet.itemName}}</span>-->
-        <!--</md-card-title-text>-->
-        <!--<md-card-title-media>-->
-        <!--<div class="md-media-sm card-media"><img style="width: 64px; height: 64px" ng-src="https://imageserver.eveonline.com/Type/{{dc.selectedPlanet.typeID}}_64.png"/></div>-->
-        <!--</md-card-title-media>-->
-        <!--</md-card-title>-->
-        <!--<md-card-content>-->
-        <!--<md-list>-->
-        <!--<md-list-item class="md-2-line">-->
-        <!--<div class="md-list-item-text">-->
-        <!--<h3>{{ dc.selectedPlanet.statistics.radius / 1000 | number }} km</h3>-->
-        <!--<p>DIAMETER</p>-->
-        <!--</div>-->
-        <!--</md-list-item>-->
-        <!--</md-list>-->
-        <!--</md-card-content>-->
-        <!--</md-card>-->
-
-        <!--<table md-table md-row-select>-->
-        <!--<thead md-head>-->
-        <!--<tr md-row>-->
-        <!--<td md-headline md-column colspan="5">Planet Details</td>-->
-        <!--</tr>-->
-        <!--<tr md-row>-->
-        <!--<th md-column>Diameter</th>-->
-        <!--<th md-column>Temperature</th>-->
-        <!--<th md-column>Orbit Radius</th>-->
-        <!--<th md-column>Eccentricity</th>-->
-        <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody md-body>-->
-        <!--<tr>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.radius / 1000 | number}} km</td>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.temperature | number}} K</td>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.orbitRadius / 149597870691 | number}} AU</td>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.eccentricity | number}}</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
-        <!--<table md-table md-row-select>-->
-        <!--<thead md-head>-->
-        <!--<tr md-row>-->
-        <!--<th md-column>Escape Velocity</th>-->
-        <!--<th md-column>Orbit Period</th>-->
-        <!--<th md-column>Rotation Rate</th>-->
-        <!--<th md-column>Density</th>-->
-        <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody md-body>-->
-        <!--<tr>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.escapeVelocity / 1000 | number}}km/s</td>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.orbitPeriod / (600*24*60) | number}}</td>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.density | number}} kg/m3</td>-->
-        <!--<td md-cell>{{dc.selectedPlanet.statistics.surfaceGravity | number}} m/s^2</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
-
-        <!--</div>-->
-        <!--</div>-->
       </md-tab>
-      <md-tab label="Station(s)">
-        <div layout flex>
-          <div layout="column" class="selector-column">
-            <md-list>
-              <md-list-item ng-repeat="sys in dc.stationData" ng-init="dc.selectStation(0)" ng-click="dc.selectStation($index)">
-                <div class="md-list-item-text" layout="column">
-                  {{sys.stationName}}
-                </div>
-              </md-list-item>
-            </md-list>
-          </div>
-          <div flex layout="column" layout-padding>
-            <img style="width: 256px; height: 256px" ng-src="http://e.dotlan.net/images/Station/{{dc.selectedStation.stationTypeID}}_256.png"/>
-            <h3>{{dc.selectedStation.stationName}}</h3>
+      <md-tab label="Moons">
 
-            <table md-table md-row-select>
-              <thead md-head>
-              <tr md-row>
-                <td md-headline md-column colspan="5">Planet Details</td>
-              </tr>
-              <tr md-row>
-                <th md-column>Diameter</th>
-                <th md-column>Temperature</th>
-                <th md-column>Orbit Radius</th>
-                <th md-column>Eccentricity</th>
-              </tr>
-              </thead>
-              <tbody md-body>
-              <tr>
-                <td md-cell>{{dc.selectedStation.statistics.radius / 1000 | number}} km</td>
-                <td md-cell>{{dc.selectedStation.statistics.temperature | number}} K</td>
-                <td md-cell>{{dc.selectedStation.statistics.orbitRadius / 149597870691 | number}} AU</td>
-                <td md-cell>{{dc.selectedStation.statistics.eccentricity | number}}</td>
-              </tr>
-              </tbody>
-            </table>
-            <table md-table md-row-select>
-              <thead md-head>
-              <tr md-row>
-                <th md-column>Escape Velocity</th>
-                <th md-column>Orbit Period</th>
-                <th md-column>Rotation Rate</th>
-                <th md-column>Density</th>
-              </tr>
-              </thead>
-              <tbody md-body>
-              <tr>
-                <td md-cell>{{dc.selectedStation.statistics.escapeVelocity / 1000 | number}}km/s</td>
-                <td md-cell>{{dc.selectedStation.statistics.orbitPeriod / (600*24*60) | number}}</td>
-                <td md-cell>{{dc.selectedStation.statistics.density | number}} kg/m3</td>
-                <td md-cell>{{dc.selectedStation.statistics.surfaceGravity | number}} m/s^2</td>
-              </tr>
-              </tbody>
-            </table>
+        <h2>Moon Details</h2>
+        <md-table-container style="margin-bottom: 0; margin-top: 0;">
+          <table md-table ng-model="dc.moonData">
+            <thead md-head>
+            <tr md-row>
+              <th md-column><span>Name</span></th>
+            </tr>
+            </thead>
+            <tbody md-body>
+            <tr md-row ng-repeat="planet in dc.moonData">
+              <td md-cell>{{planet.itemName}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </md-table-container>
 
-          </div>
-        </div>
-      </md-tab>
-      <md-tab label="System">
-        <div layout flex>
-          <div flex layout="column" layout-padding>
-            Main Stuff
-          </div>
-        </div>
       </md-tab>
     </md-tabs>
   </md-card>

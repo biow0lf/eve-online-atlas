@@ -24,6 +24,7 @@ module Api
         result['type'] = Item.find_by(typeID: @planet.typeID).typeName[/\(([^)]+)\)/, 1]
         result['moonIDs'] = moon_ids
         result['statistics'] = @planet.celestialStatistic
+        result['materials'] = @planet.planetMaterials.pluck(:materialType)
         render json: result.as_json
       end
 

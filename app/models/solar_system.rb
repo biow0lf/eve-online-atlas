@@ -11,6 +11,7 @@ class SolarSystem < ActiveRecord::Base
   has_many :killsHistory, foreign_key: 'solarSystemID'
   has_many :celestials, foreign_key: 'solarSystemID'
   has_many :planets, through: :celestials, foreign_key: 'solarSystemID'
+  has_many :sov_structures, foreign_key: 'solarSystemID'
   has_one :wormholeClass, foreign_key: 'locationID', primary_key: 'regionID'
   has_one :systemCostIndex, foreign_key: 'solarSystemID'
   has_many :mapSolarSystemJumps, foreign_key: 'fromSolarSystemID'

@@ -5,7 +5,15 @@ module Api
       before_action :find_solarsystem, :find_stations
 
       def index
-        render json: @solarsystem.stations.as_json
+        stations = @solarsystem.stations.order(:stationID)
+        result = []
+        stations.each do |station|
+          to_push = station.as_json
+          to_push['type'] = station.stationOperation
+          to_push['services'] = station.stationServices.pluck(:serviceName)
+          result << to_push
+        end
+        render json: result
       end
 
       def show
