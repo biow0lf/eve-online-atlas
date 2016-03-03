@@ -70,11 +70,11 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
         # prices came from region
         for responseItem in response.data
           @commandNumber += 1
-          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.region}})
+          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, unit_buy: priceToIsk(responseItem.buy_price), unit_sell: priceToIsk(responseItem.sell_price), buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.region}})
       else
         for responseItem in response.data
           @commandNumber += 1
-          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.system}})
+          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, unit_buy: priceToIsk(responseItem.buy_price), unit_sell: priceToIsk(responseItem.sell_price), buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.system}})
       onPaginate()
       focusTab()
 
