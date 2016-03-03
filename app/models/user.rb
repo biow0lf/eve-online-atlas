@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   end
 
   def token_expired?
-    return true if self.expiry < Time.now.utc
+    return true if expiry < Time.now.utc
     false
   end
 end

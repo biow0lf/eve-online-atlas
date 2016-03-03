@@ -1,6 +1,6 @@
 <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
   <div class="md-toolbar-tools">
-    <h2>Market Commands ({{market.system}}) {{market.commandTime > 0 ? ' - ' : ''}}
+    <h2>Market Commands ({{market.system.length > 0 ? market.system : market.region}}) {{market.commandTime > 0 ? ' - ' : ''}}
       <span ng-show="market.commandTime > 0" am-time-ago="market.commandTime"></span>
     </h2>
     <div flex></div>
@@ -12,7 +12,7 @@
   <table md-table md-row-select ng-model="market.selected">
     <thead md-head md-order="market.query.order" md-on-reorder="market.onReorder">
     <tr md-row>
-      <th md-column><span>System</span></th>
+      <th md-column><span>System / Region</span></th>
       <th md-column><span>Item</span></th>
       <th md-column><span>Buy Price</span></th>
       <th md-column><span>Sell Price</span></th>

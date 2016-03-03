@@ -17,7 +17,7 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
       crestService.signout().then (response) =>
         if @interval != null
           $interval.cancel(@interval)
-        angular.copy({ name: '', location: ''}, userService.user)
+        angular.copy({ name: '', location: '', solarSystem: {}}, userService.user)
 
     getUserLocation = =>
       crestService.getUserLocation().then (response) =>
@@ -29,6 +29,7 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
       crestService.getUser().then (response) =>
         if _.keys(response.data).length > 0
           angular.copy(response.data, userService.user)
+          userService.user.solarSystem = {}
           console.log 'service', userService.user
           console.log 'user', @user
           if @user.hasOwnProperty('characterID')

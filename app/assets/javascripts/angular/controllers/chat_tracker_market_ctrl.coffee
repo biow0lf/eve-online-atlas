@@ -33,6 +33,7 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'ut
 
   @commandTime = new Date('1969.12.31 18:00:00')
   @system = 'Jita'
+  @region = ''
   @commandNumber = 0
 
   executeCommand = (executor, command, argument, time) =>
@@ -57,12 +58,20 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'ut
     return results.sort((a, b) -> new Date(a.date) - new Date(b.date))
 
   priceCheck = (executor, item, time) =>
-    crestService.getPrices(@system, item).then (response) =>
-      for item in response.data
-        @commandNumber += 1
-        @commands.unshift({id: @commandNumber, time: time, item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
-        @marketItem = item.typeName
+    crestService.getPrices(@system, @region, item).then (response) =>
+      if _.isEmpty(@system)
+        # prices came from region
+        for item in response.data
+          @commandNumber += 1
+          @commands.unshift({id: @commandNumber, time: time, item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.region}})
+          @marketItem = item.typeName
+      else
+        for item in response.data
+          @commandNumber += 1
+          @commands.unshift({id: @commandNumber, time: time, item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
+          @marketItem = item.typeName
       onPaginate()
+
     crestService.getHistories(item).then (response) =>
       @datapoints = []
       for item in response.data
@@ -83,8 +92,13 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'ut
 
   changeSystem = (executor, system) =>
     crestService.isValidSystem(system).then (response) =>
-      if response.data != null
-        @system = response.data.solarSystemName
+      @system = response.data.solarSystemName
+      @region = ''
+
+  changeRegion = (executor, region) =>
+    crestService.isValidRegion(region).then (response) =>
+      @region = response.data.regionName
+      @system = ''
 
   onPaginate = (page, limit) =>
     [@commandsToShow, @query.page] = utilsService.paginate(@commands, page || @query.page, limit || @query.limit)
@@ -151,6 +165,14 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'ut
       description: 'Sets the market system for checking prices. Does not change if argument system is invalid'
       example: '!system jita'
       fn: changeSystem
+    }
+    {
+      name: '!region'
+      set: 'market'
+      argument: '{region name}'
+      description: 'Sets the market region for checking prices. Does not change if argument region is invalid'
+      example: '!region the forge'
+      fn: changeRegion
     }
   ]
 

@@ -5,9 +5,15 @@ app.factory 'crestService', ['$q', '$http', ($q, $http) ->
   factory.isValidSystem = (system) ->
     $http.get("/api/v1/solar_systems?name=#{system}")
 
-  factory.getPrices = (system, items) ->
+  factory.isValidRegion = (region) ->
+    $http.get("/api/v1/regions?name=#{region}")
+
+  factory.getPrices = (system, region, items) ->
     names = encodeURI(items)
-    return $http.get("/api/v1/items/price?name=#{names}&system=#{system}&buy&sell")
+    unless _.isEmpty(system)
+      return $http.get("/api/v1/items/price?name=#{names}&system=#{system}&buy&sell")
+    else
+      return $http.get("/api/v1/items/price?name=#{names}&region=#{region}&buy&sell")
 
   factory.getHistories = (items) ->
     names = encodeURI(items)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302042022) do
+ActiveRecord::Schema.define(version: 20160302234554) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -826,6 +826,16 @@ ActiveRecord::Schema.define(version: 20160302042022) do
   create_table "skins", primary_key: "skinID", force: :cascade do |t|
     t.string  "internalName",   limit: 70
     t.integer "skinMaterialID", limit: 4
+  end
+
+  create_table "sovStructures", force: :cascade do |t|
+    t.integer  "solarSystemID",       limit: 4
+    t.integer  "allianceID",          limit: 4
+    t.float    "occupancyLevel",      limit: 24
+    t.integer  "structureID",         limit: 8
+    t.integer  "structureTypeID",     limit: 4
+    t.datetime "vulnerableStartTime"
+    t.datetime "vulnerableEndTime"
   end
 
   create_table "staOperationServices", id: false, force: :cascade do |t|

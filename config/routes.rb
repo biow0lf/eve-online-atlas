@@ -39,6 +39,7 @@ Rails.application.routes.draw do
           get '/history', to: 'items#history'
         end
       end
+      resources :regions, only: [:index, :show]
       resources :solar_systems, only: [:index, :show] do
         resources :planets, only: [:index, :show] do
           resources :moons, only: [:index, :show]
