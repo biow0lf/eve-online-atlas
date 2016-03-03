@@ -78,9 +78,12 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
       onPaginate()
       focusTab()
 
-    crestService.getHistories(itemName).then (response) =>
+    getItemHistory(itemName)
+
+  getItemHistory = (item) =>
+    crestService.getHistories(item).then (response) =>
       @datapoints = []
-      @marketItem = itemName
+      @marketItem = _.upperFirst(item)
       for item in response.data
         # sort items into month groups
         groupsMonthly = _.groupBy(item.history, (h) -> (moment(h['date']).month() + 1) + ' ' + moment(h['date']).year())
