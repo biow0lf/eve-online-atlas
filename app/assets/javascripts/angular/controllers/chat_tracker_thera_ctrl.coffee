@@ -26,7 +26,7 @@ app.controller 'chatTrackerTheraCtrl', ['$scope', 'crestService', 'utilsService'
 
   findThera = (executor, system) =>
     crestService.getTheraInfo(system).then (response) =>
-      @commands.thera = []
+      @commands = []
       for item in response.data
         @commands.push({id: @commands.length, region: item.destinationSolarSystem.name, system: item.destinationSolarSystem.name, jumps: item.jumps, type: item.destinationWormholeType.name, outSig: item.signatureId, inSig: item.wormholeDestinationSignatureId, estimatedLife: item.wormholeEstimatedEol, updated: item.updatedAt})
       @theraOrigin = _.upperFirst(system)
