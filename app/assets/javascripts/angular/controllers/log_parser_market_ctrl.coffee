@@ -1,4 +1,4 @@
-app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'utilsService', ($scope, crestService, moment, utilsService) -> do =>
+app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'utilsService', ($scope, crestService, moment, utilsService) -> do =>
 
   # datatable variables
   @selected = []
@@ -71,6 +71,7 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'ut
           @commands.unshift({id: @commandNumber, time: time, item: {name: item.typeName, buy_price: priceToIsk(item.buy_price), sell_price: priceToIsk(item.sell_price), system: item.system}})
           @marketItem = item.typeName
       onPaginate()
+      focusTab()
 
     crestService.getHistories(item).then (response) =>
       @datapoints = []
@@ -94,11 +95,13 @@ app.controller 'chatTrackerMarketCtrl', ['$scope', 'crestService', 'moment', 'ut
     crestService.isValidSystem(system).then (response) =>
       @system = response.data.solarSystemName
       @region = ''
+      focusTab()
 
   changeRegion = (executor, region) =>
     crestService.isValidRegion(region).then (response) =>
       @region = response.data.regionName
       @system = ''
+      focusTab()
 
   onPaginate = (page, limit) =>
     [@commandsToShow, @query.page] = utilsService.paginate(@commands, page || @query.page, limit || @query.limit)

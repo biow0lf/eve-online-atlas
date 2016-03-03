@@ -1,4 +1,4 @@
-app.controller 'chatTrackerCommandCtrl', ['$scope', 'utilsService', ($scope, utilsService) -> do =>
+app.controller 'logParserCommandCtrl', ['$scope', 'utilsService', ($scope, utilsService) -> do =>
 
   # datatable variables
   @selected = []

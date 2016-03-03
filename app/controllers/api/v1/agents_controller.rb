@@ -2,10 +2,10 @@ module Api
   module V1
     class AgentsController < ApiController
       respond_to :json
-      # after_action :verify_authorized, except: :index
-      # after_action :verify_policy_scoped, only: :index
+      before_action :find_solarsystem, :find_station
 
       def index
+        return render json: @station.agents if @station
         render json: Agent.all.as_json
       end
 
@@ -27,6 +27,17 @@ module Api
         # return the output
         render json: result.as_json
       end
+
+      private
+
+      def find_solarsystem
+        @solarsystem = SolarSystem.find(params[:solar_system_id])
+      end
+
+      def find_station
+        @station = @solarsystem.stations.find(params[:station_id])
+      end
+
     end
   end
 end

@@ -1,4 +1,4 @@
-app.controller 'chatTrackerCtrl', ['$scope', '$interval', ($scope, $interval) -> do =>
+app.controller 'logParserCtrl', ['$scope', '$interval', ($scope, $interval) -> do =>
   @bookmark = 1
   @selectedTab = 0
   @listener = ''

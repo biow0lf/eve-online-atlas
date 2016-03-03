@@ -1,4 +1,4 @@
-<div flex layout="column" ng-controller="chatTrackerCtrl as ctc" ng-cloak>
+<div flex layout="column" ng-controller="logParserCtrl as ctc" ng-cloak>
   <md-card layout="column" flex layout-margin class="md-whiteframe-z2">
     <div layout="row" style="margin-bottom: 0;" layout-align="center center">
       <md-button class="md-primary md-raised" ngf-select="ctc.setFile($file)">Click to set log file</md-button>
@@ -8,16 +8,16 @@
     </div>
     <md-tabs flex md-selected="ctc.selectedTab" style="margin-top: 0;">
       <md-tab label="Market" flex>
-        <ng-include src="'application/chat_tracker/chat_tracker.market.html'" ng-controller="chatTrackerMarketCtrl as market"></ng-include>
+        <ng-include src="'application/log_parser/log_parser.market.html'" ng-controller="logParserMarketCtrl as market"></ng-include>
       </md-tab>
       <md-tab label="thera" flex>
-        <ng-include src="'application/chat_tracker/chat_tracker.thera.html'" ng-controller="chatTrackerTheraCtrl as thera"></ng-include>
+        <ng-include src="'application/log_parser/log_parser.thera.html'" ng-controller="logParserTheraCtrl as thera"></ng-include>
       </md-tab>
       <md-tab label="Characters" flex>
-        <ng-include src="'application/chat_tracker/chat_tracker.character.html'" ng-controller="chatTrackerCharacterCtrl as character"></ng-include>
+        <ng-include src="'application/log_parser/log_parser.character.html'" ng-controller="logParserCharacterCtrl as character"></ng-include>
       </md-tab>
       <md-tab label="Commands" flex>
-        <ng-include src="'application/chat_tracker/chat_tracker.command.html'" ng-controller="chatTrackerCommandCtrl as command"></ng-include>
+        <ng-include src="'application/log_parser/log_parser.command.html'" ng-controller="logParserCommandCtrl as command"></ng-include>
       </md-tab>
     </md-tabs>
   </md-card>

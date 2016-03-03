@@ -143,13 +143,13 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     sticky: true
   };
 
-  var chat_tracker = {
-    name: 'root.chat_tracker',
+  var log_parser = {
+    name: 'root.log_parser',
     parent: root,
-    url: '/chat_tracker',
+    url: '/log_parser',
     views: {
-      'chat_tracker': {
-        templateUrl: 'application/chat_tracker/chat_tracker.layout.html'
+      'log_parser': {
+        templateUrl: 'application/log_parser/log_parser.layout.html'
       }
     },
     sticky: true
@@ -158,7 +158,7 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
   $stateProvider
       .state(root)
       .state(dashboard)
-      .state(chat_tracker);
+      .state(log_parser);
 
   // default fallback route
   // Workaround for infinite digest loop error - see https://github.com/Narzerus/angular-permission/issues/65
