@@ -14,6 +14,7 @@ module Api
         planet_ids = @solarsystem.planets.pluck(:itemID)
         result = @solarsystem.as_json
         result['class'] = @solarsystem.wormholeClass.wormholeClassID
+        result['structures'] = @solarsystem.sov_structures
         result['region'] = @solarsystem.region
         result['costIndexes'] = @solarsystem.systemCostIndex
         result['constellation'] = @solarsystem.constellation
