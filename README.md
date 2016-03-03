@@ -132,6 +132,7 @@ Unix / Linux / Mac
 * Run `rails s` to host the server on localhost:3000
 
 Windows
+
 * All I know is that it's possible because George did it, but I don't remember how.
 
 ### License ###
