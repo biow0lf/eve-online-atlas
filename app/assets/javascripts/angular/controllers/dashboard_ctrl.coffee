@@ -30,7 +30,7 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
     @charts.push(chartObj)
 
   changeSystem = (system) =>
-    @solarSystemID += 1
+    @solarSystemID = system
     crestService.getSolarSystem(@solarSystemID).then (response) =>
       @moonData = []
       @indexData = []
@@ -97,6 +97,10 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
     if newValue == 0 and @charts.length > 0
       @charts[0].flush()
 
+  $scope.$watchCollection (=> @user.solarSystem), (newValue, oldValue) =>
+    if newValue.hasOwnProperty('id') and oldValue.hasOwnProperty('id')
+      if newValue.id != oldValue.id and !_.isNaN(newValue)
+        changeSystem(newValue.id)
 
   #-- Public Functions
 
