@@ -8,7 +8,8 @@ app.controller 'logParserCtrl', ['$scope', '$interval', 'moment', ($scope, $inte
   @interval = null
   @lastMod = @file.lastModifiedDate
 
-  @lastCommandTime = new Date('1969.12.31 18:00:00')
+  # set as now
+  @lastCommandTime = new Date()
 
   tick = =>
     currentTime = new Date

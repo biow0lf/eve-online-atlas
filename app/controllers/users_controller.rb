@@ -1,4 +1,5 @@
 require 'base64'
+require 'logger'
 class UsersController < ApplicationController
   before_action :find_user
   include HTTParty
@@ -30,11 +31,16 @@ class UsersController < ApplicationController
   end
 
   def refresh_token_if_expired
-    return unless @user.token_expired?
-    headers = { 'Authorization': 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}"), 'Content-Type': 'application/json' }
-    body = { 'grant_type': 'refresh_token', 'refresh_token': @user.refreshToken }
-    response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.as_json, headers: headers.as_json)
-    data = JSON.parse(response.body)
-    @user.update(token: data['token'], expiry: DateTime.now + data['expires_at'].to_i.seconds)
+    # have to just reset session for now because refresh_token doesn't seem to work
+    reset_session
+    @user.delete
+    render nothing: true
+    # my_logger = ::Logger.new 'log/httparty.log'
+    # return unless @user.token_expired?
+    # headers = { 'Authorization': 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}"), 'Content-Type': 'application/x-www-form-urlencoded' }
+    # body = { grant_type: 'refresh_token', refresh_token: @user.refreshToken }
+    # response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.as_json, headers: headers.as_json, logger: my_logger)
+    # data = JSON.parse(response.body)
+    # @user.update(token: data['token'], expiry: DateTime.now + data['expires_at'].to_i.seconds)
   end
 end

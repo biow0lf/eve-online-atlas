@@ -20,9 +20,12 @@ app.controller 'mainCtrl', ['$scope', '$http', '$mdSidenav', '$state', '$window'
         angular.copy({ name: '', location: '', solarSystem: {}}, userService.user)
 
     getUserLocation = =>
-      crestService.getUserLocation().then (response) =>
+      crestService.getUserLocation().then ((response) =>
         console.log response
         angular.copy(response, userService.user.solarSystem)
+      ), ((response) =>
+        signout()
+      )
 
     init = =>
       @version = '0.0.1'

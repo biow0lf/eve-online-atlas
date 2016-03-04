@@ -5,8 +5,11 @@ class SessionsController < ApplicationController
 
   def create
     auth = request.env['omniauth.auth']
-    logger.debug auth
-    user = User.where(uid: auth['uid'].to_s).first || User.create_from_omniauth(auth)
+    user = User.where(uid: auth['uid'].to_s).first
+    unless user.nil?
+      user.delete
+    end
+    user = User.create_from_omniauth(auth)
     reset_session
     session[:user_id] = user.id
     redirect_to root_url, notice: 'Signed in!'
