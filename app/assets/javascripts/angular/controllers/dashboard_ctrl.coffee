@@ -1,5 +1,5 @@
 app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService', 'mapGraph', ($scope, $http, crestService, userService, mapGraph) -> do =>
-  @solarSystemID = 30000001
+  @solarSystemID = 30000142
   @systemData = []
   @planetData = []
   @moonData = []

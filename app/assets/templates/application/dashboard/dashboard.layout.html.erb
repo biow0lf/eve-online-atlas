@@ -88,42 +88,8 @@
               </table>
             </md-table-container>
 
-
-
-
-
-<!--            <c3chart bindto-id="chartSystemIndices" chart-data="dc.indexData" chart-columns="dc.datacolumns" chart-x="dc.datax"  callback-function="dc.handleCallback" padding-right="60">
-              <chart-axis>
-                <chart-axis-x axis-id="index" axis-type="category" axis-label="" axis-position="outer-center">
-                  <chart-axis-x-tick tick-format-function="dc.noTick"></chart-axis-x-tick>
-                </chart-axis-x>
-                <chart-axis-y axis-id="y" axis-min="0" axis-max="1" padding-bottom="0" padding-top="0">
-                  <chart-axis-y-tick tick-format-function="dc.indexToPercent"></chart-axis-y-tick>
-                </chart-axis-y>
-              </chart-axis>
-              <chart-axes y="manufacturing,researchMaterial,researchTime,invention,copying"/>
-              &lt;!&ndash;<chart-legend legend-position="inset" legend-inset="top-left" legend-inset-x="20"/>&ndash;&gt;
-            </c3chart>-->
           </div>
         </div>
-      </md-tab>
-      <md-tab label="Station(s)" flex>
-
-        <md-table-container style="margin-bottom: 0; margin-top: 0;">
-          <table md-table md-row-select ng-model="dc.stationData">
-            <thead md-head>
-            <tr md-row >
-              <td ng-repeat="station in dc.stationData">
-                {{station.stationName}}
-                <div ng-repeat="service in station.services">{{service}}</div>
-              </td>
-            </tr>
-            </thead>
-            <tbody md-body>
-
-            </tbody>
-          </table>
-        </md-table-container>
       </md-tab>
       <md-tab label="Planets" flex>
 
@@ -182,7 +148,7 @@
               <th md-column><span>dys</span></th>
               <th md-column><span>neo</span></th>
               <th md-column><span>thu</span></th>
-              <th md-column><span>scanned</span></th>
+              <th md-column><span>scanned?</span></th>
             </tr>
             </thead>
             <tbody md-body>
@@ -190,7 +156,7 @@
               <td>
                 {{planet.itemName}}
               </td>
-              <td ng-if="!$first" ng-repeat="material in planet.materials" md-cell>{{material}}</td>
+              <td ng-if="!$first" ng-repeat="material in planet.materials" md-cell>{{material==-1 ? 'No' : 'Yes'}}</td>
             </tr>
             </tbody>
           </table>
