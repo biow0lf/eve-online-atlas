@@ -42,6 +42,7 @@
 * Thera wormholes - https://eve-scout.com
 * Moon Data - eve-moons.com - http://eve-moons.com/rawdata.php
 * SDE - CCP conversion by Fuzzworks - https://www.fuzzwork.co.uk/dump/
+* Wormhole Data DB - by heicrd - https://github.com/heicrd/pyhole
 * API - CCP's xml api
 * CREST - CCP's crest api
 
@@ -63,7 +64,6 @@ SDE      | mapConstellations          | Used for constellationID to constellatio
 SDE      | mapDenormalize             | Provide data on celestials
 SDE      | mapSolarSystemJumps        | Used to figure out neighboring systems
 SDE      | mapCelestialStatistics     | Used for planet/moon statistics
-SDE      | mapLocationWormholeClasses | Provides WH classes
 SDE      | staStations                | Provide station data
 SDE      | staOperationServices       | operationID to serviceID conversions
 SDE      | staServices                | serviceID to serviceName converions
@@ -78,9 +78,12 @@ Category | Table Name        | Desc
 CREST    | item_history      | Custom table to store historic market data for chart
 API      | map_jumps_current | Custom table to store current day's jumps
 API      | map_kills_current | Custom table to store current day's kills
-API      | map_jumps_history    | Custom table to store the jump history
-API      | map_kills_history    | Custom table to store the kills history
+API      | map_jumps_history | Custom table to store the jump history
+API      | map_kills_history | Custom table to store the kills history
 EXTERNAL | map_moons         | Moon material data supplied by eve-moons.com
+EXTERNAL | wormhole_systems  | Wormhole sys data supplied from heicrd's sql dump
+EXTERNAL | wormhole_types    | Wormhole static data supplied from heicrd's sql dump
+SDE      | wormhole_effects  | Custom table to store wormhole effects
 SDE      | planet_materials  | Custom table to store materials planets have
 API      | player_stations   | Custom table to store Outposts
 CREST    | users             | Custom table for SSO
@@ -129,7 +132,7 @@ Unix / Linux / Mac
 * Run `rake db:create` to initialize the database
 * Import the mysql2 conversion of the SDE into the your dbName-develop database
 * Run `rake db:migrate` to run the database migrations
-* Import the mapmoons.sql from the mapmoons.zip into your dbName-develop database
+* Import the map_moons_and_wormhole_data.sql from the map_moons_and_wormhole_data.zip into your dbName-develop database
 * Run `rake convert:planet_materials` to populate the planet_materials table
 * Run `rake update:player_jumps update:player_kills update:player_stations update:sov_structures update:system_cost_indices update:item_history` to get the latest API data (warning: item_history WILL take a long time the first time, as it grabs the entire history from The Forge; future updates are faster as it only inserts newer histories)
 * Run `rails s` to host the server on localhost:3000
