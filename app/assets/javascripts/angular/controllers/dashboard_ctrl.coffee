@@ -1,5 +1,5 @@
 app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService', 'mapGraph', ($scope, $http, crestService, userService, mapGraph) -> do =>
-  @solarSystemID = 30000142
+  @solarSystemID = 30000001
   @systemData = []
   @planetData = []
   @moonData = []
@@ -44,11 +44,11 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
             @moonData.push(item)
         @indexData.push({
           index: 0,
-          manufacturing: @systemData.costIndexes.manufacturingIndex*10,
-          researchMaterial: @systemData.costIndexes.materialResearchIndex*10,
-          researchTime: @systemData.costIndexes.timeResearchIndex*10,
-          invention: @systemData.costIndexes.inventionIndex*10,
-          copying: @systemData.costIndexes.copyingIndex*10})
+          manufacturing: @systemData.costIndexes.manufacturingIndex0,
+          researchMaterial: @systemData.costIndexes.materialResearchIndex,
+          researchTime: @systemData.costIndexes.timeResearchIndex,
+          invention: @systemData.costIndexes.inventionIndex,
+          copying: @systemData.costIndexes.copyingIndex})
       # getAgentData()
       crestService.getNeighboringSystems(@solarSystemID).then (response) =>
         @neighbors = response.data
@@ -72,11 +72,11 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
             @moonData.push(item)
         @indexData.push({
           index: 0,
-          manufacturing: @systemData.costIndexes.manufacturingIndex*10,
-          researchMaterial: @systemData.costIndexes.materialResearchIndex*10,
-          researchTime: @systemData.costIndexes.timeResearchIndex*10,
-          invention: @systemData.costIndexes.inventionIndex*10,
-          copying: @systemData.costIndexes.copyingIndex*10})
+          manufacturing: @systemData.costIndexes.manufacturingIndex,
+          researchMaterial: @systemData.costIndexes.materialResearchIndex,
+          researchTime: @systemData.costIndexes.timeResearchIndex,
+          invention: @systemData.costIndexes.inventionIndex,
+          copying: @systemData.costIndexes.copyingIndex})
       # getAgentData()
       crestService.getNeighboringSystems(@solarSystemID).then (response) =>
         @neighbors = response.data

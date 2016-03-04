@@ -33,11 +33,11 @@
                 </thead>
                 <tbody md-body>
                 <tr md-row >
-                  <td md-cell>{{dc.systemData.costIndexes.manufacturingIndex*10}}</td>
-                  <td md-cell>{{dc.systemData.costIndexes.materialResearchIndex*10}}</td>
-                  <td md-cell>{{dc.systemData.costIndexes.timeResearchIndex*10}}</td>
-                  <td md-cell>{{dc.systemData.costIndexes.inventionIndex*10}}</td>
-                  <td md-cell>{{dc.systemData.costIndexes.copyingIndex*10}}</td>
+                  <td md-cell>{{dc.systemData.costIndexes.manufacturingIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.materialResearchIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.timeResearchIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.inventionIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.copyingIndex*100 | number}}%</td>
                 </tr>
                 </tbody>
               </table>
