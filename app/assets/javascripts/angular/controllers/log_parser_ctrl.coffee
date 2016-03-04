@@ -69,16 +69,18 @@ app.controller 'logParserCtrl', ['$scope', '$interval', 'moment', ($scope, $inte
       if splitChar != null
         argument = _.split(argument, splitChar)
         converted = _.map(argument, (s) ->
-          int = _.parseInt(s)
-          if _.isNaN(int)
+          int = isNaN(s)
+          # is NaN
+          if int
             return _.trim(s)
+          # is not NaN
           else
-            return int
+            return _.parseInt(s)
         )
       else
         converted = [_.trim(argument)]
 
-      # then check to find @[number] for item quantitues : else just push name
+      # then check to find @[number] for item quantities : else just push name
       for item in converted
         if item.indexOf('@') >= 0
           separated = _.split(item, '@')
@@ -103,7 +105,7 @@ app.controller 'logParserCtrl', ['$scope', '$interval', 'moment', ($scope, $inte
             unless _.isNull(listener)
               console.log 'Added character:', listener
               @listener = listener
-              $scope.$broadcast 'setListener', listener
+              $scope.$broadcast 'setListener', listener.toLowerCase()
 
           # check to see if line contains a command and find time of line
           command = parseCommand(line)
@@ -113,7 +115,7 @@ app.controller 'logParserCtrl', ['$scope', '$interval', 'moment', ($scope, $inte
             # if command is after newest command timestamp, save command time and execute command
             @lastCommandTime = commandTime
             # verify character
-            character_name = parseCharacter(line)
+            character_name = parseCharacter(line).toLowerCase()
             if character_name in @characters
               argument = line.substr(line.indexOf(command)+command.length+1, line.length)
               converted = parseArgument(argument)
