@@ -31,8 +31,8 @@ class UsersController < ApplicationController
 
   def refresh_token_if_expired
     return unless @user.token_expired?
-    headers = { Authorization: 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}") }
-    body = { grant_type: 'refresh_token', refresh_token: @user.refreshToken }
+    headers = { 'Authorization': 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}"), 'Content-Type': 'application/json' }
+    body = { 'grant_type': 'refresh_token', 'refresh_token': @user.refreshToken }
     response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.as_json, headers: headers.as_json)
     data = JSON.parse(response.body)
     @user.update(token: data['token'], expiry: DateTime.now + data['expires_at'].to_i.seconds)
