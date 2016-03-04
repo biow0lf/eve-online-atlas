@@ -27,6 +27,7 @@ module Api
         result['jumps'] = @solarsystem.jumpsCurrents.last.shipJumps
         result['shipKills'] = @solarsystem.killsCurrents.last.shipKills
         result['podKills'] = @solarsystem.killsCurrents.last.podKills
+        result['npcKills'] = @solarsystem.killsCurrents.last.factionKills
         if result['stationIDs'].empty?
           result['stationIDs'] = @solarsystem.playerStations.pluck(:stationID)
         end
@@ -41,6 +42,7 @@ module Api
           to_push = n.as_json
           to_push['shipKills'] = n.killsCurrents.last.shipKills
           to_push['podKills'] = n.killsCurrents.last.podKills
+          to_push['npcKills'] = n.killsCurrents.last.factionKills
           to_push['jumps'] = n.jumpsCurrents.last.shipJumps
           result << to_push
         end

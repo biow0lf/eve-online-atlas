@@ -4,6 +4,7 @@
       <div class="md-toolbar-tools">
         <h2 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}} <span ng-if="dc.systemData.whData.wormholeClass!= 7 && dc.systemData.whData.wormholeClass!= 8 && dc.systemData.whData.wormholeClass!= 9 && dc.systemData.whData.wormholeClass!= nil">(Class {{dc.systemData.whData.wormholeClass}}) <span ng-if="dc.systemData.whData.static1 != null">Static {{dc.systemData.whData.static1.destination}}<span ng-if="dc.systemData.whData.static2 != null"> and {{dc.systemData.whData.static2.destination}}</span></span></span></h2>
         <div flex></div>
+        <md-button ng-click="dc.testChangeSystem()">Click to change system</md-button>
       </div>
     </md-toolbar>
     <md-tabs md-border-bottom md-dynamic-height md-selected="dc.selectedTab">
@@ -57,10 +58,10 @@
                 </thead>
                 <tbody md-body>
                 <tr md-row >
-                  <td md-cell>{{}}</td>
-                  <td md-cell>{{}}</td>
-                  <td md-cell>{{}}</td>
-                  <td md-cell>{{}}</td>
+                  <td md-cell>{{dc.systemData.jumps}}</td>
+                  <td md-cell>{{dc.systemData.shipKills}}</td>
+                  <td md-cell>{{dc.systemData.podKills}}</td>
+                  <td md-cell>{{dc.systemData.npcKills}}</td>
                 </tr>
                 </tbody>
               </table>

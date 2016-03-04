@@ -8,6 +8,7 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
   @neighbors = []
 
   @user = userService.user
+  @systemTestID = 30000141
 
   @indexData = []
   @datacolumns = [{id: 'manufacturing', type: 'bar', name: 'Manufacturing', color: 'blue'},
@@ -28,6 +29,10 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
 
   handleCallback = (chartObj) =>
     @charts.push(chartObj)
+
+  testChangeSystem = =>
+    @systemTestID += 1
+    angular.copy({id: @systemTestID}, @user.solarSystem)
 
   changeSystem = (system) =>
     @solarSystemID = system
@@ -98,15 +103,15 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
       @charts[0].flush()
 
   $scope.$watchCollection (=> @user.solarSystem), (newValue, oldValue) =>
-    if newValue.hasOwnProperty('id') and oldValue.hasOwnProperty('id')
-      if newValue.id != oldValue.id and !_.isNaN(newValue)
-        changeSystem(newValue.id)
+    if newValue.hasOwnProperty('id') and newValue.id != @solarSystemID and !_.isNaN(newValue)
+      changeSystem(newValue.id)
 
   #-- Public Functions
 
   @indexToPercent = indexToPercent
   @noTick = noTick
   @handleCallback = handleCallback
+  @testChangeSystem = testChangeSystem
 
   return
 ]
