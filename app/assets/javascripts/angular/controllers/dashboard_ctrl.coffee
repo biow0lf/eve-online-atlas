@@ -34,13 +34,13 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
         crestService.getMoon(@solarSystemID, planetID).then (response) =>
           for item in response.data
             @moonData.push(item)
-      @indexData.push({
-        index: 0,
-        manufacturing: @systemData.costIndexes.manufacturingIndex*10,
-        researchMaterial: @systemData.costIndexes.materialResearchIndex*10,
-        researchTime: @systemData.costIndexes.timeResearchIndex*10,
-        invention: @systemData.costIndexes.inventionIndex*10,
-        copying: @systemData.costIndexes.copyingIndex*10})
+        @indexData.push({
+          index: 0,
+          manufacturing: @systemData.costIndexes.manufacturingIndex*10,
+          researchMaterial: @systemData.costIndexes.materialResearchIndex*10,
+          researchTime: @systemData.costIndexes.timeResearchIndex*10,
+          invention: @systemData.costIndexes.inventionIndex*10,
+          copying: @systemData.costIndexes.copyingIndex*10})
     crestService.getNeighboringSystems(@solarSystemID).then (response) =>
         @neighbors = response.data
       # getAgentData()

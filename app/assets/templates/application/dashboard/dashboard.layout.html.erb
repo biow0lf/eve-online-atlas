@@ -2,7 +2,7 @@
   <md-card layout="column" style="margin-right: 0;">
     <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
       <div class="md-toolbar-tools">
-        <h2 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}}</h2>
+        <h2 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}} <span ng-if="dc.systemData.whData.wormholeClass!= 7 && dc.systemData.whData.wormholeClass!= 8 && dc.systemData.whData.wormholeClass!= 9">(Class {{dc.systemData.whData.wormholeClass}}) <span ng-if="dc.systemData.whData.static1 != null">Static {{dc.systemData.whData.static1.destination}}<span ng-if="dc.systemData.whData.static2 != null"> and {{dc.systemData.whData.static2.destination}}</span></span></span></h2>
         <h2 class="md-headline">{{dc.user.solarSystem.name}}</h2>
         <div flex></div>
       </div>
@@ -10,11 +10,68 @@
     <md-tabs md-border-bottom md-dynamic-height md-selected="dc.selectedTab"t>
       <md-tab label="Overview">
         <div flex layout="row">
-          <div flex="60" layout layout-margin>
+          <div flex="20" layout layout-margin>
             Map goes here
           </div>
-          <div flex="40" layout layout-margin>
-            <c3chart bindto-id="chartSystemIndices" chart-data="dc.indexData" chart-columns="dc.datacolumns" chart-x="dc.datax"  callback-function="dc.handleCallback" padding-right="60">
+          <div flex="80" layout layout-margin>
+            <md-table-container style="margin-bottom: 0; margin-top: 0;">
+              <table md-table ng-model="dc.planetData">
+                <thead md-head>
+                <tr>
+                  <th colspan="5">
+                    System Cost indicies
+                  </th>
+                </tr>
+                <tr md-row>
+                  <th md-column><span>Material</span></th>
+                  <th md-column><span>researchMaterial</span></th>
+                  <th md-column><span>researchTime</span></th>
+                  <th md-column><span>Copying</span></th>
+                  <th md-column><span>Invention</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row >
+                  <td md-cell>{{dc.systemData.costIndexes.manufacturingIndex*10}}</td>
+                  <td md-cell>{{dc.systemData.costIndexes.materialResearchIndex*10}}</td>
+                  <td md-cell>{{dc.systemData.costIndexes.timeResearchIndex*10}}</td>
+                  <td md-cell>{{dc.systemData.costIndexes.inventionIndex*10}}</td>
+                  <td md-cell>{{dc.systemData.costIndexes.copyingIndex*10}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
+            <md-table-container style="margin-bottom: 0; margin-top: 0;">
+              <table md-table ng-model="dc.planetData">
+                <thead md-head>
+                <tr>
+                  <th colspan="4">
+                    Jump & Kill Data (within last hour)
+                  </th>
+                </tr>
+                <tr md-row>
+                  <th md-column><span>Ship Jumps</span></th>
+                  <th md-column><span>Ship Kills</span></th>
+                  <th md-column><span>Pod Kills</span></th>
+                  <th md-column><span>NPC Kills</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row >
+                  <td md-cell>{{}}</td>
+                  <td md-cell>{{}}</td>
+                  <td md-cell>{{}}</td>
+                  <td md-cell>{{}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
+
+
+
+
+
+<!--            <c3chart bindto-id="chartSystemIndices" chart-data="dc.indexData" chart-columns="dc.datacolumns" chart-x="dc.datax"  callback-function="dc.handleCallback" padding-right="60">
               <chart-axis>
                 <chart-axis-x axis-id="index" axis-type="category" axis-label="" axis-position="outer-center">
                   <chart-axis-x-tick tick-format-function="dc.noTick"></chart-axis-x-tick>
@@ -24,8 +81,8 @@
                 </chart-axis-y>
               </chart-axis>
               <chart-axes y="manufacturing,researchMaterial,researchTime,invention,copying"/>
-              <!--<chart-legend legend-position="inset" legend-inset="top-left" legend-inset-x="20"/>-->
-            </c3chart>
+              &lt;!&ndash;<chart-legend legend-position="inset" legend-inset="top-left" legend-inset-x="20"/>&ndash;&gt;
+            </c3chart>-->
           </div>
         </div>
       </md-tab>
@@ -84,11 +141,35 @@
             <thead md-head>
             <tr md-row>
               <th md-column><span>Name</span></th>
+              <th md-column><span>atm</span></th>
+              <th md-column><span>eva</span></th>
+              <th md-column><span>hyd</span></th>
+              <th md-column><span>sil</span></th>
+              <th md-column><span>cob</span></th>
+              <th md-column><span>sca</span></th>
+              <th md-column><span>tit</span></th>
+              <th md-column><span>tun</span></th>
+              <th md-column><span>cad</span></th>
+              <th md-column><span>van</span></th>
+              <th md-column><span>chr</span></th>
+              <th md-column><span>pla</span></th>
+              <th md-column><span>cae</span></th>
+              <th md-column><span>tec</span></th>
+              <th md-column><span>haf</span></th>
+              <th md-column><span>mer</span></th>
+              <th md-column><span>pro</span></th>
+              <th md-column><span>dys</span></th>
+              <th md-column><span>neo</span></th>
+              <th md-column><span>thu</span></th>
+              <th md-column><span>scanned</span></th>
             </tr>
             </thead>
             <tbody md-body>
             <tr md-row ng-repeat="planet in dc.moonData">
-              <td md-cell>{{planet.itemName}}</td>
+              <td>
+                {{planet.itemName}}
+              </td>
+              <td ng-if="!$first" ng-repeat="material in planet.materials" md-cell>{{material}}</td>
             </tr>
             </tbody>
           </table>

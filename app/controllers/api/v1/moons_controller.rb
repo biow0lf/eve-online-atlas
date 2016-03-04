@@ -5,7 +5,15 @@ module Api
       before_action :find_solarsystem, :find_planet, :find_moon
 
       def index
-        render json: @planet.moons.as_json
+        moons = @planet.moons
+        result = []
+        moons.each do |moon|
+          to_push = moon.as_json
+          to_push['materials'] = moon.moonMaterial
+          to_push['statistics'] = moon.celestialStatistic
+          result << to_push
+        end
+        render json: result
       end
 
       def show
