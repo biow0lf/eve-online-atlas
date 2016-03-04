@@ -67,6 +67,27 @@
                 </tbody>
               </table>
             </md-table-container>
+            <md-table-container style="margin-bottom: 0; margin-top: 0;">
+              <table md-table ng-model="dc.planetData">
+                <thead md-head>
+                <tr>
+                  <th colspan="4">
+                    Sov Structures
+                  </th>
+                </tr>
+                <tr md-row>
+                  <th md-column><span>Territorial Claim Unit</span></th>
+                  <th md-column><span>Infrastructure Hub</span></th>
+                  <th md-column><span>Outpost</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row>
+                  <td md-cell ng-repeat="structure in dc.systemData.structures">{{structure.vulnerableStartTime | amUtc | amDateFormat:'HH:mm'}}-{{structure.vulnerableEndTime | amUtc | amDateFormat:'HH:mm'}} </td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
 
 
 

@@ -18,8 +18,8 @@ module Api
           result['whData']['static1'] = @wormhole.static1
           result['whData']['static2'] = @wormhole.static2
           result['whData']['effects'] = @wormhole.wormholeEffects
-        end
-        result['structures'] = @solarsystem.sov_structures
+          end
+        result['structures'] = @solarsystem.sovStructures
         result['region'] = @solarsystem.region
         result['costIndexes'] = @solarsystem.systemCostIndex
         result['constellation'] = @solarsystem.constellation

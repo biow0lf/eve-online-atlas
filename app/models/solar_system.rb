@@ -10,7 +10,7 @@ class SolarSystem < ActiveRecord::Base
   has_many :jumpsHistory, foreign_key: 'solarSystemID'
   has_many :killsHistory, foreign_key: 'solarSystemID'
   has_many :planets, foreign_key: 'solarSystemID'
-  has_many :sov_structures, foreign_key: 'solarSystemID'
+  has_many :sovStructures, foreign_key: 'solarSystemID'
   has_one :systemCostIndex, foreign_key: 'solarSystemID'
   has_many :mapSolarSystemJumps, foreign_key: 'fromSolarSystemID'
   has_many :toSolarSystems, through: :mapSolarSystemJumps, foreign_key: 'toSolarSystemID'
