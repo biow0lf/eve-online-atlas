@@ -31,6 +31,10 @@
   width: 100% !important;
 }
 
+p {
+  white-space: normal !important;
+}
+
 .layout-column > .flex-5  { flex: 5; }
 .layout-column > .flex-10 { flex: 10; }
 .layout-column > .flex-15 { flex: 15; }

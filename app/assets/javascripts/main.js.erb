@@ -1,4 +1,4 @@
-var app = angular.module('CrestApiContest', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'templates', 'permission', 'md.data.table', 'ngFileUpload', 'ct.ui.router.extras', 'angularMoment', 'gridshore.c3js.chart', 'ngSanitize']);
+var app = angular.module('EveOnlineAtlas', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'templates', 'permission', 'md.data.table', 'ngFileUpload', 'ct.ui.router.extras', 'angularMoment', 'gridshore.c3js.chart', 'ngSanitize']);
 
 app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', '$urlRouterProvider', '$stickyStateProvider', function ($httpProvider, $stateProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, $urlRouterProvider, $stickyStateProvider) {
 
@@ -155,10 +155,22 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     sticky: true
   };
 
+  var copyright = {
+    name: 'root.copyright',
+    parent: root,
+    url: '/copyright',
+    views: {
+      'copyright': {
+        templateUrl: 'application/root/root.copyright.html'
+      }
+    }
+  };
+
   $stateProvider
       .state(root)
       .state(dashboard)
-      .state(log_parser);
+      .state(log_parser)
+      .state(copyright);
 
   // default fallback route
   // Workaround for infinite digest loop error - see https://github.com/Narzerus/angular-permission/issues/65
