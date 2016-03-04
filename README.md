@@ -131,6 +131,7 @@ GET  | /api/v1/solar_systems/{solar_system_id}/planets/{planet_id}/moons/{id} | 
 
 ### Other Issues ###
 * Multiple word character names break chat log modified time
+* CREST Location sometime caches system and does not update (Known error)
 
 ### Bug Reporters ###
 miquela01 - Various thera related bugs
