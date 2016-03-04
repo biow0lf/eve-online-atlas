@@ -27,6 +27,8 @@
 * Model rest of the SDE
 * General improvements to API and backend
 * Possible other information as new CREST endpoints are released
+* Add model testing and E2E testing
+* FC commands (ex: !xStart, !xEnd for tabulating x ups)
 * Highcharts to replace C3.js
 
 ### Compatibility ###
