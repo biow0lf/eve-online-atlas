@@ -32,15 +32,17 @@ class UsersController < ApplicationController
 
   def refresh_token_if_expired
     # have to just reset session for now because refresh_token doesn't seem to work
+    return unless @user.token_expired?
     reset_session
     @user.delete
-    render nothing: true
+    raise ActiveRecord::RecordInvalid
     # my_logger = ::Logger.new 'log/httparty.log'
-    # return unless @user.token_expired?
     # headers = { 'Authorization': 'Basic ' + Base64.encode64("#{ENV['CREST_CLIENT_ID']}:#{ENV['CREST_CLIENT_SECRET']}"), 'Content-Type': 'application/x-www-form-urlencoded' }
     # body = { grant_type: 'refresh_token', refresh_token: @user.refreshToken }
     # response = HTTParty.post('https://login.eveonline.com/oauth/token', body: body.as_json, headers: headers.as_json, logger: my_logger)
     # data = JSON.parse(response.body)
     # @user.update(token: data['token'], expiry: DateTime.now + data['expires_at'].to_i.seconds)
+  rescue ActiveRecord::RecordInvalid
+    return render json: { error: 'Your user was logged out because refresh_token is not working, please log in again.' }, status: :bad_request
   end
 end
