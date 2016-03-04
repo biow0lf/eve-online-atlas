@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302234554) do
+ActiveRecord::Schema.define(version: 20160304011625) do
 
   create_table "agtAgentTypes", primary_key: "agentTypeID", force: :cascade do |t|
     t.string "agentType", limit: 50
@@ -564,14 +564,6 @@ ActiveRecord::Schema.define(version: 20160302234554) do
     t.integer "destinationID", limit: 8
   end
 
-  create_table "mapJumpsHistory", force: :cascade do |t|
-    t.integer  "solarSystemID", limit: 4
-    t.integer  "shipJumps",     limit: 4
-    t.datetime "cachedUntil"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-  end
-
   create_table "mapLandmarks", primary_key: "landmarkID", force: :cascade do |t|
     t.string  "landmarkName", limit: 100
     t.text    "description",  limit: 4294967295
@@ -674,12 +666,30 @@ ActiveRecord::Schema.define(version: 20160302234554) do
     t.datetime "cachedUntil"
   end
 
+  create_table "map_jumps_history", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipJumps",     limit: 4
+    t.datetime "cachedUntil"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "map_kills_current", force: :cascade do |t|
     t.integer  "solarSystemID", limit: 4
     t.integer  "shipKills",     limit: 4
     t.integer  "factionKills",  limit: 4
     t.integer  "podKills",      limit: 4
     t.datetime "cachedUntil"
+  end
+
+  create_table "map_kills_history", force: :cascade do |t|
+    t.integer  "solarSystemID", limit: 4
+    t.integer  "shipKills",     limit: 4
+    t.integer  "factionKills",  limit: 4
+    t.integer  "podKills",      limit: 4
+    t.datetime "cachedUntil"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "map_moons", primary_key: "moonID", force: :cascade do |t|
@@ -704,16 +714,6 @@ ActiveRecord::Schema.define(version: 20160302234554) do
     t.integer "neo",  limit: 4, default: -1
     t.integer "thu",  limit: 4, default: -1
     t.integer "scan", limit: 4, default: -1
-  end
-
-  create_table "mapkKllsHistory", force: :cascade do |t|
-    t.integer  "solarSystemID", limit: 4
-    t.integer  "shipKills",     limit: 4
-    t.integer  "factionKills",  limit: 4
-    t.integer  "podKills",      limit: 4
-    t.datetime "cachedUntil"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
   end
 
   create_table "planetSchematics", primary_key: "schematicID", force: :cascade do |t|
@@ -962,6 +962,33 @@ ActiveRecord::Schema.define(version: 20160302234554) do
     t.integer "factionID",      limit: 4
     t.integer "centerSystemID", limit: 4
     t.string  "description",    limit: 500
+  end
+
+  create_table "wormhole_effects", id: false, force: :cascade do |t|
+    t.integer "effectID",      limit: 4
+    t.string  "effectName",    limit: 255
+    t.string  "wormholeClass", limit: 255
+    t.string  "attributeName", limit: 255
+    t.float   "effectValue",   limit: 24
+  end
+
+  create_table "wormhole_systems", id: false, force: :cascade do |t|
+    t.integer "solarSystemID",      limit: 4
+    t.string  "wormholeName",       limit: 255
+    t.integer "wormholeClass",      limit: 4
+    t.integer "wormHoleEffectName", limit: 4
+    t.integer "static1",            limit: 4
+    t.integer "static2",            limit: 4
+  end
+
+  create_table "wormhole_types", id: false, force: :cascade do |t|
+    t.integer "wormholeID",   limit: 4
+    t.string  "wormholeName", limit: 255
+    t.string  "source",       limit: 255
+    t.string  "destination",  limit: 255
+    t.integer "lifeTime",     limit: 4
+    t.integer "jumpMass",     limit: 4
+    t.integer "maxMass",      limit: 4
   end
 
 end
