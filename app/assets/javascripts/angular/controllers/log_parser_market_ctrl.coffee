@@ -66,15 +66,15 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
       itemQuantity = item.quantity
 
     crestService.getPrices(@system, @region, itemName).then (response) =>
-      if _.isEmpty(@system)
-        # prices came from region
-        for responseItem in response.data
-          @commandNumber += 1
-          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, unit_buy: priceToIsk(responseItem.buy_price), unit_sell: priceToIsk(responseItem.sell_price), buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.region}})
-      else
-        for responseItem in response.data
-          @commandNumber += 1
-          @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, unit_buy: priceToIsk(responseItem.buy_price), unit_sell: priceToIsk(responseItem.sell_price), buy_price: priceToIsk(responseItem.buy_price * itemQuantity), sell_price: priceToIsk(responseItem.sell_price * itemQuantity), system: responseItem.system}})
+      for responseItem in response.data
+        @commandNumber += 1
+        sys = ''
+        if responseItem.hasOwnProperty('region')
+          sys = responseItem.region
+        else if responseItem.hasOwnProperty('system')
+          sys = responseItem.system
+        @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, highest_buy: priceToIsk(responseItem.highest_buy * itemQuantity), lowest_sell: priceToIsk(responseItem.lowest_sell * itemQuantity), unit_buy: priceToIsk(responseItem.highest_buy), unit_sell: priceToIsk(responseItem.lowest_sell), buy_price: priceToIsk(responseItem.buy_price), sell_price: priceToIsk(responseItem.sell_price), system: sys}})
+
       onPaginate()
       focusTab()
 

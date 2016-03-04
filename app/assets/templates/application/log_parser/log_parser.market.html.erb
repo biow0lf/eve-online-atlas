@@ -15,8 +15,8 @@
       <th md-column><span>System / Region</span></th>
       <th md-column><span>Item</span></th>
       <th md-column><span>Quantity</span></th>
-      <th md-column><span>Buy Price</span></th>
-      <th md-column><span>Sell Price</span></th>
+      <th md-column><span>Buy Price (avg, unit)</span></th>
+      <th md-column><span>Sell Price (avg, unit)</span></th>
       <th md-column><span>Time</span></th>
     </tr>
     </thead>
@@ -25,8 +25,8 @@
       <td md-cell>{{command.item.system}}</td>
       <td md-cell>{{command.item.name}}</td>
       <td md-cell>{{command.item.quantity}}</td>
-      <td md-cell>{{command.item.buy_price}} isk ({{command.item.unit_buy}} isk)</td>
-      <td md-cell>{{command.item.sell_price}} isk ({{command.item.unit_sell}} isk)</td>
+      <td md-cell>{{command.item.highest_buy}} isk ({{command.item.buy_price}}, {{command.item.unit_buy}})</td>
+      <td md-cell>{{command.item.lowest_sell}} isk ({{command.item.sell_price}}, {{command.item.unit_sell}})</td>
       <td md-cell am-time-ago="command.time"></td>
     </tr>
     </tbody>

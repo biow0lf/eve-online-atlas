@@ -48,7 +48,7 @@ module Api
                              else
                                get_items_from_system(buy)
                              end
-            items[idx]['buy_price'] = get_trimmed_mean(filtered_items, 0.2)
+            items[idx]['buy_price'], items[idx]['highest_buy'] = get_trimmed_mean(filtered_items, 0.2, 'highest')
             items[idx]['system'] = @solarsystem.solarSystemName unless @solarsystem.nil?
             items[idx]['region'] = @region.regionName unless @region.nil?
           end
@@ -59,7 +59,7 @@ module Api
                            else
                              get_items_from_system(sell)
                            end
-          items[idx]['sell_price'] = get_trimmed_mean(filtered_items, 0.2)
+          items[idx]['sell_price'], items[idx]['lowest_sell'] = get_trimmed_mean(filtered_items, 0.2, 'lowest')
           items[idx]['system'] = @solarsystem.solarSystemName unless @solarsystem.nil?
           items[idx]['region'] = @region.regionName unless @region.nil?
         end
@@ -116,15 +116,21 @@ module Api
         Item.where(typeName: names)
       end
 
-      def get_trimmed_mean(items, trim_percentage)
+      def get_trimmed_mean(items, trim_percentage, direction)
         unless items.empty?
+          price = nil
           item_prices = items.map { |item| item['price'] }.sort
+          if direction == 'highest'
+            price = item_prices.last
+          elsif direction == 'lowest'
+            price = item_prices.first
+          end
           to_trim = (item_prices.size * trim_percentage).round
           trimmed_items = item_prices.slice(to_trim..(item_prices.size - to_trim))
-          price = trimmed_items.sum / trimmed_items.size.to_f
-          return price.round(2)
+          trimmed_price = trimmed_items.sum / trimmed_items.size.to_f
+          return trimmed_price.round(2), price
         end
-        0
+        return 0, 0
       end
     end
   end
