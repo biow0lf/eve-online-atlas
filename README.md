@@ -128,6 +128,7 @@ GET  | /api/v1/solar_systems/{solar_system_id}/planets/{planet_id}/moons/{id} | 
 *  Out of the 471,577 planets in mapCelestialStatistics all of them have fragmented and mass = 0.
 *  No way to get station services from outposts.
 *  Planets/moons/asteroid belts should be in their own table.
+*  Should remove the "DEPRECATED DIVISIONS" from crpNpcDivisions table.
 
 ### Other Issues ###
 * Multiple word character names break chat log modified time
