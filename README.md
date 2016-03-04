@@ -26,7 +26,7 @@
 * TBA
 
 ### Compatibility ###
-* Compatible and tested with Chrome 49
+* Compatible and tested with Chrome 48 & 49
 
 ### Demo ###
 The server is hosted at https://eve-atlas.com/
@@ -150,10 +150,9 @@ Unix / Linux / Mac
 * Copy the database.yml.samle in config/ to database.yml and input desired database names for `dbName`
 * Inside the project root, run `gem install bundler`
 * Once bundler is installed run `bundle install` to install the rest of the gems
-* Run `rake db:create` to initialize the database
-* Import the mysql2 conversion of the SDE into the your dbName-develop database
-* Run `rake db:migrate` to run the database migrations
-* Import the map_moons_and_wormhole_data.sql from the map_moons_and_wormhole_data.zip into your dbName-develop database
+* Run `rake db:setup` to initialize the database
+* Import the mysql2 conversion of the SDE into the your dbName-develop database (available from https://www.fuzzwork.co.uk/dump/ - use latest mysql2 dump and import the mysql56-yc118-2-116998.sql)
+* Import the map_moons_and_wormhole_data.sql from the map_moons_and_wormhole_data.zip into your dbName-develop database (available in the root of this repository)
 * Run `rake convert:planet_materials` to populate the planet_materials table
 * Run `rake update:player_jumps update:player_kills update:player_stations update:sov_structures update:system_cost_indices update:item_history` to get the latest API data (warning: item_history WILL take a long time the first time, as it grabs the entire history from The Forge; future updates are faster as it only inserts newer histories)
 * Run `rails s` to host the server on localhost:3000
