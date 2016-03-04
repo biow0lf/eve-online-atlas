@@ -25,6 +25,9 @@
 * Highcharts to replace C3.js
 * TBA
 
+### Compatibility ###
+* Compatible and tested with Chrome 49
+
 ### Demo ###
 The server is hosted at https://eve-atlas.com/
 
@@ -116,7 +119,6 @@ GET  | /api/v1/solar_systems/{solar_system_id}/neighbors | Queries SDE; returns 
 GET  | /api/v1/solar_systems/{solar_system_id}/stations  | Queries SDE; returns a list of stations for a solarSystem, including station services
 GET  | /api/v1/solar_systems/{solar_system_id}/stations/{id}  | Queries SDE; returns station of a solarSystem, including station services
 GET  | /api/v1/solar_systems/{solar_system_id}/stations/{station_id}/agents  | Queries SDE; returns a list of agent rows for a station
-GET  | /api/v1/solar_systems/{solar_system_id}/stations/{station_id}/agents/{id}  | Queries SDE; returns an agent row
 GET  | /api/v1/solar_systems/{solar_system_id}/planets | Queries SDE; returns list of planets (with respective moon ids and celestialStatistics) for a solarSystem
 GET  | /api/v1/solar_systems/{solar_system_id}/planets/{id} | Queries SDE; returns a specific planet of a solarSystem and associated data
 GET  | /api/v1/solar_systems/{solar_system_id}/planets/{planet_id}/moons | Queries SDE; returns a list of moons with respective celestialStatistics
@@ -130,15 +132,13 @@ GET  | /api/v1/solar_systems/{solar_system_id}/planets/{planet_id}/moons/{id} | 
 *  Planets/moons/asteroid belts should be in their own table.
 *  Should remove the "DEPRECATED DIVISIONS" from crpNpcDivisions table.
 
-### Other Issues ###
+### Known Issues ###
 * Multiple word character names break chat log modified time
 * CREST Location sometime caches system and does not update (Known error)
+* /api/v1/solar_systems/{id} API can return false wh effect information
 
 ### Bug Reporters ###
 miquela01 - Various thera related bugs
-
-### Compatibility ###
-* Compatible and tested with Chrome 49
 
 ### Setup Instructions ###
 Unix / Linux / Mac
