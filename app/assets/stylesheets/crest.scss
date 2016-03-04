@@ -21,6 +21,10 @@ md-list-item a {
   margin: 0 !important;
 }
 
+md-list {
+  padding-top: 0;
+}
+
 * { color: rgb(200,200,200) !important; }
 
 md-content {
@@ -37,8 +41,22 @@ md-content {
   background-color: rgba(255, 196, 140, 0.01);
 }
 
-md-select-menu md-content {
-  // background-color: $white !important;
+.selector-column {
+  border-right: 1px solid rgba(0, 0, 0, 0.117647);
+}
+
+#system-info {
+  height: 48px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.117647);
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 16px;
+  }
+}
+
+.selected {
+  background-color: lightseagreen !important;
 }
 
 md-toolbar {
@@ -89,4 +107,13 @@ g.tick line {
 
 .c3-legend-item text {
   fill: rgb(200,200,200) !important;
+}
+
+#map {
+  height: 400px;
+  width: 400px;
+}
+
+.wordwrap {
+  white-space: pre-wrap !important;
 }

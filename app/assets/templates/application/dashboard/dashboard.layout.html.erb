@@ -1,5 +1,168 @@
 <div flex layout="column" ng-controller="dashboardCtrl as dc">
-	<p> SolarSystemID:  {{dc.solarSystemID}} </p>
-	
-	<p> You are in:  {{dc.systemName}} </p>
+  <md-card layout="column" style="margin-right: 0;">
+    <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+      <div class="md-toolbar-tools">
+        <h2 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}} <span ng-if="dc.systemData.whData.wormholeClass!= 7 && dc.systemData.whData.wormholeClass!= 8 && dc.systemData.whData.wormholeClass!= 9 && dc.systemData.whData.wormholeClass!= nil">(Class {{dc.systemData.whData.wormholeClass}}) <span ng-if="dc.systemData.whData.static1 != null">Static {{dc.systemData.whData.static1.destination}}<span ng-if="dc.systemData.whData.static2 != null"> and {{dc.systemData.whData.static2.destination}}</span></span></span></h2>
+        <div flex></div>
+        <md-button ng-click="dc.testChangeSystem()">Click to change system</md-button>
+      </div>
+    </md-toolbar>
+    <md-tabs md-border-bottom md-dynamic-height md-selected="dc.selectedTab">
+      <md-tab label="Overview">
+        <div flex layout="row">
+          <div layout layout-margin>
+            <div id="map" style="border: 2px solid #4D737E;"></div>
+          </div>
+          <div layout="column" flex layout-margin>
+            <md-table-container style="margin-bottom: 0; margin-top: 0;">
+              <table md-table ng-model="dc.planetData">
+                <thead md-head>
+                <tr>
+                  <th colspan="5">
+                    System Cost indicies
+                  </th>
+                </tr>
+                <tr md-row>
+                  <th md-column><span>Manufacturing</span></th>
+                  <th md-column><span>researchMaterial</span></th>
+                  <th md-column><span>researchTime</span></th>
+                  <th md-column><span>Copying</span></th>
+                  <th md-column><span>Invention</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row >
+                  <td md-cell>{{dc.systemData.costIndexes.manufacturingIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.materialResearchIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.timeResearchIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.inventionIndex*100 | number}}%</td>
+                  <td md-cell>{{dc.systemData.costIndexes.copyingIndex*100 | number}}%</td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
+            <md-table-container style="margin-bottom: 0; margin-top: 0;">
+              <table md-table ng-model="dc.planetData">
+                <thead md-head>
+                <tr>
+                  <th colspan="4">
+                    Jump & Kill Data (within last hour)
+                  </th>
+                </tr>
+                <tr md-row>
+                  <th md-column><span>Ship Jumps</span></th>
+                  <th md-column><span>Ship Kills</span></th>
+                  <th md-column><span>Pod Kills</span></th>
+                  <th md-column><span>NPC Kills</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row >
+                  <td md-cell>{{dc.systemData.jumps}}</td>
+                  <td md-cell>{{dc.systemData.shipKills}}</td>
+                  <td md-cell>{{dc.systemData.podKills}}</td>
+                  <td md-cell>{{dc.systemData.npcKills}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
+            <md-table-container style="margin-bottom: 0; margin-top: 0;" ng-if="dc.systemData.structures.length != 0">
+              <table md-table ng-model="dc.planetData">
+                <thead md-head>
+                <tr>
+                  <th colspan="4">
+                    Sov Structures
+                  </th>
+                </tr>
+                <tr md-row>
+                  <th md-column><span>Territorial Claim Unit</span></th>
+                  <th md-column><span>Infrastructure Hub</span></th>
+                  <th md-column><span>Outpost</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row>
+                  <td md-cell ng-repeat="structure in dc.systemData.structures">{{structure.vulnerableStartTime | amUtc | amDateFormat:'HH:mm'}}-{{structure.vulnerableEndTime | amUtc | amDateFormat:'HH:mm'}} </td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
+
+          </div>
+        </div>
+      </md-tab>
+      <md-tab label="Planets" flex>
+
+        <h2>Planet Details</h2>
+        <md-table-container style="margin-bottom: 0; margin-top: 0;">
+          <table md-table ng-model="dc.planetData">
+            <thead md-head>
+            <tr md-row>
+              <th md-column><span>Name</span></th>
+              <th md-column><span>Type</span></th>
+              <th md-column><span>Moons</span></th>
+              <th md-column><span>Material 1</span></th>
+              <th md-column><span>Material 2</span></th>
+              <th md-column><span>Material 3</span></th>
+              <th md-column><span>Material 4</span></th>
+              <th md-column><span>Material 5</span></th>
+            </tr>
+            </thead>
+            <tbody md-body>
+            <tr md-row ng-repeat="planet in dc.planetData">
+              <td md-cell>{{planet.itemName}}</td>
+              <td md-cell>{{planet.type}}</td>
+              <td md-cell>{{planet.moonIDs.length}}</td>
+              <td ng-repeat="material in planet.materials">{{material.materialType}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+
+      </md-tab>
+      <md-tab label="Moons">
+
+        <h2>Moon Details</h2>
+        <md-table-container style="margin-bottom: 0; margin-top: 0;">
+          <table md-table ng-model="dc.moonData">
+            <thead md-head>
+            <tr md-row>
+              <th md-column><span>Name</span></th>
+              <th md-column><span>atm</span></th>
+              <th md-column><span>eva</span></th>
+              <th md-column><span>hyd</span></th>
+              <th md-column><span>sil</span></th>
+              <th md-column><span>cob</span></th>
+              <th md-column><span>sca</span></th>
+              <th md-column><span>tit</span></th>
+              <th md-column><span>tun</span></th>
+              <th md-column><span>cad</span></th>
+              <th md-column><span>van</span></th>
+              <th md-column><span>chr</span></th>
+              <th md-column><span>pla</span></th>
+              <th md-column><span>cae</span></th>
+              <th md-column><span>tec</span></th>
+              <th md-column><span>haf</span></th>
+              <th md-column><span>mer</span></th>
+              <th md-column><span>pro</span></th>
+              <th md-column><span>dys</span></th>
+              <th md-column><span>neo</span></th>
+              <th md-column><span>thu</span></th>
+              <th md-column><span>scanned?</span></th>
+            </tr>
+            </thead>
+            <tbody md-body>
+            <tr md-row ng-repeat="planet in dc.moonData">
+              <td>
+                {{planet.itemName}}
+              </td>
+              <td ng-if="!$first" ng-repeat="material in planet.materials" md-cell>{{material==-1 ? 'No' : 'Yes'}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+
+      </md-tab>
+    </md-tabs>
+  </md-card>
 </div>

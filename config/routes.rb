@@ -22,7 +22,11 @@ Rails.application.routes.draw do
   get '/auth/failure' => 'sessions#failure'
 
   resources :sessions, only: [:destroy]
-  resources :users, only: [:index, :show]
+  resources :users, only: [:index, :show] do
+    collection do
+      get '/location', to: 'users#location'
+    end
+  end
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
@@ -35,12 +39,16 @@ Rails.application.routes.draw do
           get '/history', to: 'items#history'
         end
       end
-      resources :solarsystems, only: [:index, :show] do
+      resources :regions, only: [:index, :show]
+      resources :solar_systems, only: [:index, :show] do
         resources :planets, only: [:index, :show] do
           resources :moons, only: [:index, :show]
         end
         resources :stations, only: [:index, :show] do
           resources :agents, only: [:index, :show]
+        end
+        member do
+          get '/neighbors', to: 'solar_systems#neighbors'
         end
       end
     end

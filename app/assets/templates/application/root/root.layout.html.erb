@@ -5,5 +5,6 @@
 <div layout="column" flex>
   <div ui-view="toolbar"></div>
   <div ui-view="dashboard" ng-show="main.$state.includes('root.dashboard')" layout flex></div>
-  <div ui-view="chat_tracker" ng-show="main.$state.includes('root.chat_tracker')" layout flex></div>
+  <div ui-view="log_parser" ng-show="main.$state.includes('root.log_parser')" layout flex></div>
+  <div ui-view="copyright" ng-show="main.$state.includes('root.copyright')" layout></div>
 </div>

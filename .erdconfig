@@ -14,5 +14,5 @@ orientation: horizontal
 polymorphism: false
 sort: true
 warn: true
-title: true
+title: Eve Online Atlas domain model
 prepend_primary: false

@@ -19,6 +19,7 @@
 #= require angular-ui-router
 #= require ui-router-extras
 #= require moment
+#= require moment-timezone
 #= require angular-aria
 #= require angular-animate
 #= require angular-material
@@ -32,6 +33,7 @@
 #= require d3
 #= require c3
 #= require c3-angular
+#= require cytoscape
 #= require main
 #= require_tree .
 #= require_tree ../templates

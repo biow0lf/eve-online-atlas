@@ -10,7 +10,7 @@ module Api
           # find item by name
           items = find_item_by_name(params[:name])
         end
-        render json: items.to_json
+        render json: items.as_json
       end
 
       def show
@@ -21,31 +21,49 @@ module Api
                  # else search by name
                  Item.find_by(typeName: params[:id])
                end
-        render json: item.to_json
+        render json: item.as_json
       end
 
       def price
         uri_base = 'https://public-crest.eveonline.com/market'
         type_base = 'https://public-crest.eveonline.com/types'
-        find_solarsystem
-        region = @solarsystem.region
+        region = ''
+
+        if params.key?(:system)
+          find_solarsystem
+          region = @solarsystem.region
+        else
+          find_region
+          region = @region
+        end
+
         items = find_item_by_name(params[:name])
         items = items.to_ary
         items.each_with_index do |item, idx|
           items[idx] = item.as_json
           if params.key?(:buy)
             buy = HTTParty.get("#{uri_base}/#{region.id}/orders/buy/?type=#{type_base}/#{item[:typeID]}/")
-            system_items = get_items_from_system(buy)
-            items[idx]['buy_price'] = get_trimmed_mean(system_items, 0.2)
-            items[idx]['system'] = @solarsystem.solarSystemName
+            filtered_items = if @solarsystem.nil?
+                               get_items_from_region(buy)
+                             else
+                               get_items_from_system(buy)
+                             end
+            items[idx]['buy_price'], items[idx]['highest_buy'] = get_trimmed_mean(filtered_items, 0.2, 'highest')
+            items[idx]['system'] = @solarsystem.solarSystemName unless @solarsystem.nil?
+            items[idx]['region'] = @region.regionName unless @region.nil?
           end
           next unless params.key?(:sell)
           sell = HTTParty.get("#{uri_base}/#{region.id}/orders/sell/?type=#{type_base}/#{item[:typeID]}/")
-          system_items = get_items_from_system(sell)
-          items[idx]['sell_price'] = get_trimmed_mean(system_items, 0.2)
-          items[idx]['system'] = @solarsystem.solarSystemName
+          filtered_items = if @solarsystem.nil?
+                             get_items_from_region(sell)
+                           else
+                             get_items_from_system(sell)
+                           end
+          items[idx]['sell_price'], items[idx]['lowest_sell'] = get_trimmed_mean(filtered_items, 0.2, 'lowest')
+          items[idx]['system'] = @solarsystem.solarSystemName unless @solarsystem.nil?
+          items[idx]['region'] = @region.regionName unless @region.nil?
         end
-        render json: items.to_json
+        render json: items.as_json
       end
 
       def history
@@ -55,13 +73,18 @@ module Api
         items.each do |item|
           to_push = {}
           to_push['typeID'] = item.typeID
-          to_push['history'] = item.itemhistories.select('id,orderCount,lowPrice,highPrice,avgPrice,volume,date').as_json
+          to_push['history'] = item.itemHistories.select('id,orderCount,lowPrice,highPrice,avgPrice,volume,date').as_json
           result << to_push
         end
-        render json: result.to_json
+        render json: result.as_json
       end
 
       private
+
+      def get_items_from_region(item_list)
+        items = JSON.parse item_list
+        items['items'].as_json
+      end
 
       def get_items_from_system(item_list)
         items = JSON.parse item_list
@@ -69,9 +92,7 @@ module Api
         items['items'].each do |i|
           station = Station.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
           if station.nil?
-            # check to see if player stations need to be updated
-            check_playerstations
-            station = Playerstation.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
+            station = PlayerStation.find_by(stationID: i['location']['id'].to_i, solarSystemID: @solarsystem.solarSystemID)
           end
           items_from_system.push(i) unless station.nil?
         end
@@ -79,22 +100,15 @@ module Api
       end
 
       def find_solarsystem
-        @solarsystem = if params.key?(:system)
-                         Solarsystem.find_by(solarSystemName: params[:system])
-                       else
-                         # Jita
-                         Solarsystem.find(30_000_142)
-                       end
+        return @solarsystem = SolarSystem.find_by(solarSystemName: params[:system]) if params.key?(:system)
+        # else use Jita
+        @solarsystem = SolarSystem.find_by(solarSystemName: 'Jita')
       end
 
-      def check_playerstations
-        return true
-        # # make sure there are entries in the table
-        # if Playerstation.exists?
-        #   # do not update if created_at is more recent than an hour ago
-        #   return if Playerstation.first.created_at > Date.current - 1.hour
-        # end
-        # UpdatePlayerstations.update_playerstations
+      def find_region
+        return @region = Region.find_by(regionName: params[:region]) if params.key?(:region)
+        # else use The Forge
+        @region = Region.find_by(regionName: 'The Forge')
       end
 
       def find_item_by_name(names)
@@ -102,15 +116,21 @@ module Api
         Item.where(typeName: names)
       end
 
-      def get_trimmed_mean(items, trim_percentage)
+      def get_trimmed_mean(items, trim_percentage, direction)
         unless items.empty?
+          price = nil
           item_prices = items.map { |item| item['price'] }.sort
+          if direction == 'highest'
+            price = item_prices.last
+          elsif direction == 'lowest'
+            price = item_prices.first
+          end
           to_trim = (item_prices.size * trim_percentage).round
           trimmed_items = item_prices.slice(to_trim..(item_prices.size - to_trim))
-          price = trimmed_items.sum / trimmed_items.size.to_f
-          return price.round(2)
+          trimmed_price = trimmed_items.sum / trimmed_items.size.to_f
+          return trimmed_price.round(2), price
         end
-        0
+        [0, 0]
       end
     end
   end

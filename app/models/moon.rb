@@ -1,8 +1,9 @@
-class Moon < Planet
-  self.primary_key = 'itemID'
-  belongs_to :planet, foreign_key: %w(celestialID solarSystemID), primary_key: %w(itemID solarSystemID)
-  has_one :celestialstatistic, foreign_key: 'celestialID'
-  has_one :moonmaterial, foreign_key: 'moonID'
+class Moon < ActiveRecord::Base
+  self.table_name = 'mapDenormalize'
+  self.primary_keys = [:solarSystemID, :celestialIndex]
+  belongs_to :planet, foreign_key: [:solarSystemID, :celestialIndex]
+  has_one :celestialStatistic, foreign_key: 'celestialID', primary_key: 'itemID'
+  has_one :moonMaterial, foreign_key: 'moonID', primary_key: 'itemID'
   def self.default_scope
     where(groupID: 8)
   end
