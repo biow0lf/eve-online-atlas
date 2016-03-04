@@ -20,10 +20,14 @@
 * Scheduled jobs for keeping API data up-to-date (via Crono)
 * Public API for querying SDE with models & associations (endpoints listed below)
 
-### Future Additions ###
+### Future Possible Changes ###
 * More Commands!
+* Add station/agent tab
+* Mining OP commands
+* Model rest of the SDE
+* General improvements to API and backend
+* Possible other information as new CREST endpoints are released
 * Highcharts to replace C3.js
-* TBA
 
 ### Compatibility ###
 * Compatible and tested with Chrome 48 & 49
@@ -133,9 +137,10 @@ GET  | /api/v1/solar_systems/{solar_system_id}/planets/{planet_id}/moons/{id} | 
 *  Should remove the "DEPRECATED DIVISIONS" from crpNpcDivisions table.
 
 ### Known Issues ###
-* Multiple word character names break chat log modified time
-* CREST Location sometime caches system and does not update (Known error)
-* /api/v1/solar_systems/{id} API can return false wh effect information
+*  Multiple word character names break chat log modified time
+*  CREST Location sometime caches system and does not update (Known error)
+*  /api/v1/solar_systems/{id} API can return false wh effect information
+*  Some information such as indices and jump/kill may be broken when in wormholes
 
 ### Bug Reporters ###
 miquela01 - Various thera related bugs
