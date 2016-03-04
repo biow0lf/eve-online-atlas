@@ -119,6 +119,12 @@ GET  | /api/v1/solar_systems/{solar_system_id}/planets/{planet_id}/moons/{id} | 
 *  No way to get station services from outposts.
 *  Planets/moons/asteroid belts should be in their own table.
 
+### Other Issues ###
+* Multiple word character names break chat log modified time
+
+### Bug Reporters ###
+miquela01 - Various thera related bugs
+
 ### Setup Instructions ###
 Unix / Linux / Mac
 
