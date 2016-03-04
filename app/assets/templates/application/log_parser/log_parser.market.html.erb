@@ -1,0 +1,67 @@
+<md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
+  <div class="md-toolbar-tools">
+    <h2>Market Commands ({{market.system.length > 0 ? market.system : market.region}}) {{market.commandTime > 0 ? ' - ' : ''}}
+      <span ng-show="market.commandTime > 0" am-time-ago="market.commandTime"></span>
+    </h2>
+    <div flex></div>
+    <md-button ng-show="market.commands.length" ng-click="market.changeChartType()">Chart Timescale</md-button>
+    <md-button ng-show="market.commands.length" ng-click="market.clearTable()">Clear Table</md-button>
+  </div>
+</md-toolbar>
+<md-table-container style="margin-bottom: 0; margin-top: 0;">
+  <table md-table md-row-select ng-model="market.selected">
+    <thead md-head md-order="market.query.order" md-on-reorder="market.onReorder">
+    <tr md-row>
+      <th md-column md-order-by="system"><span>System / Region</span></th>
+      <th md-column md-order-by="name"><span>Item</span></th>
+      <th md-column md-order-by="quantity"><span>Quantity</span></th>
+      <th md-column md-order-by="unit_buy"><span>Buy Price (avg, unit)</span></th>
+      <th md-column md-order-by="unit_sell"><span>Sell Price (avg, unit)</span></th>
+      <th md-column md-order-by="time"><span>Time</span></th>
+    </tr>
+    </thead>
+    <tbody md-body>
+    <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in market.commandsToShow">
+      <td md-cell>{{command.system}}</td>
+      <td md-cell>{{command.name}}</td>
+      <td md-cell>{{command.quantity}}</td>
+      <td md-cell>{{command.highest_buy | priceToIsk}} isk ({{command.buy_price | priceToIsk}}, {{command.unit_buy | priceToIsk}})</td>
+      <td md-cell>{{command.lowest_sell | priceToIsk}} isk ({{command.sell_price | priceToIsk}}, {{command.unit_sell | priceToIsk}})</td>
+      <td md-cell am-time-ago="command.time"></td>
+    </tr>
+    </tbody>
+  </table>
+</md-table-container>
+<md-table-pagination md-limit="market.query.limit" md-page="market.query.page" md-total="{{market.commands.length}}" md-on-paginate="market.onPaginate" md-page-select style="margin-top: 0;"></md-table-pagination>
+<div ng-show="market.datapointsWeekly.length && market.chartType=='weekly'">
+  <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{market.marketItem}} at Jita (Weekly Average)</h4>
+  <c3chart bindto-id="chart" chart-data="market.datapointsWeekly" chart-columns="market.datacolumns" chart-x="market.datax" callback-function="market.handleCallback">
+    <chart-axis>
+      <chart-axis-x axis-id="date" axis-type="timeseries" axis-label="Date" axis-position="outer-center">
+        <chart-axis-x-tick format-time="%m-%d-%Y"/>
+      </chart-axis-x>
+      <chart-axis-y axis-id="y" axis-label="Price (isk)">
+        <chart-axis-y-tick tick-format-function="market.priceToIsk"></chart-axis-y-tick>
+      </chart-axis-y>
+      <chart-axis-y axis-id="y2" axis-label="Item Quantity"></chart-axis-y>
+    </chart-axis>
+    <chart-axes y="avg,high,low" y2="order,volume"/>
+    <chart-legend legend-position="inset" legend-inset="top-left" legend-inset-x="20"/>
+  </c3chart>
+</div>
+<div ng-show="market.datapointsMonthly.length && market.chartType=='monthly'">
+  <h4 style="margin-left: 16px; margin-top: 0">Average Price of {{market.marketItem}} at Jita (Monthly Average)</h4>
+  <c3chart bindto-id="chart2" chart-data="market.datapointsMonthly" chart-columns="market.datacolumns" chart-x="market.datax" callback-function="market.handleCallback">
+    <chart-axis>
+      <chart-axis-x axis-id="date" axis-type="timeseries" axis-label="Date" axis-position="outer-center">
+        <chart-axis-x-tick format-time="%m-%d-%Y"/>
+      </chart-axis-x>
+      <chart-axis-y axis-id="y" axis-label="Price (isk)">
+        <chart-axis-y-tick tick-format-function="market.priceToIsk"></chart-axis-y-tick>
+      </chart-axis-y>
+      <chart-axis-y axis-id="y2" axis-label="Item Quantity"></chart-axis-y>
+    </chart-axis>
+    <chart-axes y="avg,high,low" y2="order,volume"/>
+    <chart-legend legend-position="inset" legend-inset="top-left" legend-inset-x="20"/>
+  </c3chart>
+</div>

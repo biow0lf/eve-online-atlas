@@ -1,4 +1,4 @@
-var app = angular.module('CrestApiContest', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'RecursionHelper', 'templates', 'restmod', 'permission', 'md.data.table', 'ngFileUpload', 'ct.ui.router.extras', 'angularMoment']);
+var app = angular.module('EveOnlineAtlas', ['ui.router', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngMessages', 'templates', 'permission', 'md.data.table', 'ngFileUpload', 'ct.ui.router.extras', 'angularMoment', 'gridshore.c3js.chart', 'ngSanitize']);
 
 app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', '$urlRouterProvider', '$stickyStateProvider', function ($httpProvider, $stateProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, $urlRouterProvider, $stickyStateProvider) {
 
@@ -8,7 +8,93 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     enabled: true
   });
 
-  $mdThemingProvider.theme('default').primaryPalette('blue');
+  // $mdThemingProvider.theme('default').primaryPalette('blue');
+
+  var customPrimary = {
+    '50': '#90b1ba',
+    '100': '#81a6b0',
+    '200': '#719ba6',
+    '300': '#62909c',
+    '400': '#58818d',
+    '500': '#4e737d',
+    '600': '#44656d',
+    '700': '#3a565e',
+    '800': '#31484e',
+    '900': '#27393e',
+    'A100': '#a0bcc4',
+    'A200': '#b0c7ce',
+    'A400': '#c0d2d7',
+    'A700': '#1d2b2e'
+  };
+  $mdThemingProvider
+      .definePalette('customPrimary',
+          customPrimary);
+
+  var customAccent = {
+    '50': '#23ffd4',
+    '100': '#0affcf',
+    '200': '#00efc0',
+    '300': '#00d6ac',
+    '400': '#00bc97',
+    '500': '#00a383',
+    '600': '#00896f',
+    '700': '#00705a',
+    '800': '#005646',
+    '900': '#003d31',
+    'A100': '#3dffd9',
+    'A200': '#56ffde',
+    'A400': '#70ffe3',
+    'A700': '#00231d'
+  };
+  $mdThemingProvider
+      .definePalette('customAccent',
+          customAccent);
+
+  var customWarn = {
+    '50': '#ffb280',
+    '100': '#ffa266',
+    '200': '#ff934d',
+    '300': '#ff8333',
+    '400': '#ff741a',
+    '500': '#ff6400',
+    '600': '#e65a00',
+    '700': '#cc5000',
+    '800': '#b34600',
+    '900': '#993c00',
+    'A100': '#ffc199',
+    'A200': '#ffd1b3',
+    'A400': '#ffe0cc',
+    'A700': '#803200'
+  };
+  $mdThemingProvider
+      .definePalette('customWarn',
+          customWarn);
+
+  var customBackground = {
+    '50': '#404040',
+    '100': '#333333',
+    '200': '#262626',
+    '300': '#1a1a1a',
+    '400': '#0d0d0d',
+    '500': '#000',
+    '600': '#000000',
+    '700': '#000000',
+    '800': '#000000',
+    '900': '#000000',
+    'A100': '#4d4d4d',
+    'A200': '#595959',
+    'A400': '#666666',
+    'A700': '#000000'
+  };
+  $mdThemingProvider
+      .definePalette('customBackground',
+          customBackground);
+
+  $mdThemingProvider.theme('default')
+      .primaryPalette('customPrimary')
+      .accentPalette('customAccent')
+      .warnPalette('customWarn')
+      .backgroundPalette('customBackground');
 
   $mdIconProvider
       .iconSet('action', '<%= asset_path('iconsets/action-icons.svg') %>', 24)
@@ -41,29 +127,50 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
       'sidenav@root': {
         templateUrl: 'application/root/root.sidenav.html'
       }
-    }
+    },
+    sticky: true
   };
 
   var dashboard = {
     name: 'root.dashboard',
     parent: root,
     url: '/',
-    templateUrl: 'application/dashboard/dashboard.layout.html'
+    views: {
+      'dashboard': {
+        templateUrl: 'application/dashboard/dashboard.layout.html'
+      }
+    },
+    sticky: true
   };
 
-  var chat_tracker = {
-    name: 'root.chat_tracker',
+  var log_parser = {
+    name: 'root.log_parser',
     parent: root,
-    url: '/chat_tracker',
-    templateUrl: 'application/chat_tracker/chat_tracker.layout.html',
-    sticky: true,
-    dsr: true
+    url: '/log_parser',
+    views: {
+      'log_parser': {
+        templateUrl: 'application/log_parser/log_parser.layout.html'
+      }
+    },
+    sticky: true
+  };
+
+  var copyright = {
+    name: 'root.copyright',
+    parent: root,
+    url: '/copyright',
+    views: {
+      'copyright': {
+        templateUrl: 'application/root/root.copyright.html'
+      }
+    }
   };
 
   $stateProvider
       .state(root)
       .state(dashboard)
-      .state(chat_tracker);
+      .state(log_parser)
+      .state(copyright);
 
   // default fallback route
   // Workaround for infinite digest loop error - see https://github.com/Narzerus/angular-permission/issues/65
@@ -71,5 +178,4 @@ app.config(['$httpProvider', '$stateProvider', '$locationProvider', '$mdThemingP
     var $state = $injector.get("$state");
     $state.go('root.dashboard');
   });
-
 }]);
