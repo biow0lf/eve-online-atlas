@@ -37,7 +37,6 @@ module Api
       def find_station
         @station = @solarsystem.stations.find(params[:station_id])
       end
-
     end
   end
 end
