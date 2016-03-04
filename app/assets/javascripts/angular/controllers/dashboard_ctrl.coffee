@@ -107,7 +107,6 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
   @indexToPercent = indexToPercent
   @noTick = noTick
   @handleCallback = handleCallback
-  @changeSystem = changeSystem
 
   return
 ]
