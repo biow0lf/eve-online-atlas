@@ -6,6 +6,9 @@ module Api
 
       def index
         stations = @solarsystem.stations.order(:stationID)
+        if stations.length == 0
+          stations = @solarsystem.playerStations.order(:stationID)
+        end
         result = []
         stations.each do |station|
           to_push = station.as_json
