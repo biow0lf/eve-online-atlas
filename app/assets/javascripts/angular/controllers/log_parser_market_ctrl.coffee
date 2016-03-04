@@ -73,7 +73,7 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
           sys = responseItem.region
         else if responseItem.hasOwnProperty('system')
           sys = responseItem.system
-        @commands.unshift({id: @commandNumber, time: time, item: {name: responseItem.typeName, quantity: itemQuantity, highest_buy: priceToIsk(responseItem.highest_buy * itemQuantity), lowest_sell: priceToIsk(responseItem.lowest_sell * itemQuantity), unit_buy: priceToIsk(responseItem.highest_buy), unit_sell: priceToIsk(responseItem.lowest_sell), buy_price: priceToIsk(responseItem.buy_price), sell_price: priceToIsk(responseItem.sell_price), system: sys}})
+        @commands.unshift({id: @commandNumber, time: time, name: responseItem.typeName, quantity: itemQuantity, highest_buy: responseItem.highest_buy * itemQuantity, lowest_sell: responseItem.lowest_sell * itemQuantity, unit_buy: responseItem.highest_buy, unit_sell: responseItem.lowest_sell, buy_price: responseItem.buy_price, sell_price: responseItem.sell_price, system: sys})
 
       onPaginate()
       focusTab()

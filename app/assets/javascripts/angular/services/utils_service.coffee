@@ -26,6 +26,8 @@ app.factory 'utilsService', [ ->
       order = _.replace(order, '-', '')
       reverse = true
     data.sort (a, b) ->
+      a[order] = parseInt(a[order]) unless isNaN(a[order])
+      b[order] = parseInt(b[order]) unless isNaN(b[order])
       if a[order] < b[order] then return -1
       if a[order] > b[order] then return 1
       return 0

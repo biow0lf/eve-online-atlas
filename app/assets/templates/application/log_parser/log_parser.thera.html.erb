@@ -10,14 +10,14 @@
   <table md-table md-row-select ng-model="thera.selected">
     <thead md-head md-order="thera.query.order" md-on-reorder="thera.onReorder">
     <tr md-row>
-      <th md-column><span>Region</span></th>
-      <th md-column><span>System</span></th>
+      <th md-column md-order-by="region"><span>Region</span></th>
+      <th md-column md-order-by="system"><span>System</span></th>
       <th md-column md-order-by="jumps"><span>Jumps</span></th>
-      <th md-column><span>Type</span></th>
-      <th md-column><span>Out Sig</span></th>
-      <th md-column><span>In Sig</span></th>
-      <th md-column md-numeric><span>Estimated Life</span></th>
-      <th md-column md-numeric><span>Updated</span></th>
+      <th md-column md-order-by="type"><span>Type</span></th>
+      <th md-column md-order-by="outSig"><span>Out Sig</span></th>
+      <th md-column md-order-by="inSig"><span>In Sig</span></th>
+      <th md-column md-numeric md-order-by="estimatedLife"><span>Estimated Life</span></th>
+      <th md-column md-numeric md-order-by="updated"><span>Updated</span></th>
     </tr>
     </thead>
     <tbody md-body>

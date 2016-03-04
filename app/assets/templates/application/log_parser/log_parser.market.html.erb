@@ -12,21 +12,21 @@
   <table md-table md-row-select ng-model="market.selected">
     <thead md-head md-order="market.query.order" md-on-reorder="market.onReorder">
     <tr md-row>
-      <th md-column><span>System / Region</span></th>
-      <th md-column><span>Item</span></th>
-      <th md-column><span>Quantity</span></th>
-      <th md-column><span>Buy Price (avg, unit)</span></th>
-      <th md-column><span>Sell Price (avg, unit)</span></th>
-      <th md-column><span>Time</span></th>
+      <th md-column md-order-by="system"><span>System / Region</span></th>
+      <th md-column md-order-by="name"><span>Item</span></th>
+      <th md-column md-order-by="quantity"><span>Quantity</span></th>
+      <th md-column md-order-by="unit_buy"><span>Buy Price (avg, unit)</span></th>
+      <th md-column md-order-by="unit_sell"><span>Sell Price (avg, unit)</span></th>
+      <th md-column md-order-by="time"><span>Time</span></th>
     </tr>
     </thead>
     <tbody md-body>
     <tr md-row md-select="command" md-select-id="{{command.id}}" md-auto-select ng-repeat="command in market.commandsToShow">
-      <td md-cell>{{command.item.system}}</td>
-      <td md-cell>{{command.item.name}}</td>
-      <td md-cell>{{command.item.quantity}}</td>
-      <td md-cell>{{command.item.highest_buy}} isk ({{command.item.buy_price}}, {{command.item.unit_buy}})</td>
-      <td md-cell>{{command.item.lowest_sell}} isk ({{command.item.sell_price}}, {{command.item.unit_sell}})</td>
+      <td md-cell>{{command.system}}</td>
+      <td md-cell>{{command.name}}</td>
+      <td md-cell>{{command.quantity}}</td>
+      <td md-cell>{{command.highest_buy | priceToIsk}} isk ({{command.buy_price | priceToIsk}}, {{command.unit_buy | priceToIsk}})</td>
+      <td md-cell>{{command.lowest_sell | priceToIsk}} isk ({{command.sell_price | priceToIsk}}, {{command.unit_sell | priceToIsk}})</td>
       <td md-cell am-time-ago="command.time"></td>
     </tr>
     </tbody>
