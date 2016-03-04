@@ -24,6 +24,9 @@ module Api
         result['costIndexes'] = @solarsystem.systemCostIndex
         result['constellation'] = @solarsystem.constellation
         result['stationIDs'] = @solarsystem.stations.pluck(:stationID)
+        result['jumps'] = @solarsystem.jumpsCurrents.last.shipJumps
+        result['shipKills'] = @solarsystem.killsCurrents.last.shipKills
+        result['podKills'] = @solarsystem.killsCurrents.last.podKills
         if result['stationIDs'].empty?
           result['stationIDs'] = @solarsystem.playerStations.pluck(:stationID)
         end
@@ -32,7 +35,16 @@ module Api
       end
 
       def neighbors
-        render json: @solarsystem.toSolarSystems
+        neighboring = @solarsystem.toSolarSystems
+        result = []
+        neighboring.each do |n|
+          to_push = n.as_json
+          to_push['shipKills'] = n.killsCurrents.last.shipKills
+          to_push['podKills'] = n.killsCurrents.last.podKills
+          to_push['jumps'] = n.jumpsCurrents.last.shipJumps
+          result << to_push
+        end
+        render json: result
       end
 
       private

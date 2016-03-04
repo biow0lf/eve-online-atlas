@@ -1,5 +1,5 @@
-app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService', ($scope, $http, crestService, userService) -> do =>
-  @solarSystemID = 30000001
+app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService', 'mapGraph', ($scope, $http, crestService, userService, mapGraph) -> do =>
+  @solarSystemID = 30000142
   @systemData = []
   @planetData = []
   @moonData = []
@@ -18,6 +18,8 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
   @datax = {id: 'index'}
   @charts = []
 
+  @map = undefined
+
   indexToPercent = (index) ->
     return (index * 10).toFixed(2).toString()
 
@@ -26,6 +28,40 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
 
   handleCallback = (chartObj) =>
     @charts.push(chartObj)
+
+  changeSystem = (system) =>
+    @solarSystemID += 1
+    crestService.getSolarSystem(@solarSystemID).then (response) =>
+      @moonData = []
+      @indexData = []
+      @systemData = []
+      @neighbors = []
+
+      @systemData = response.data
+      for planetID in @systemData['planetIDs']
+        crestService.getMoon(@solarSystemID, planetID).then (response) =>
+          for item in response.data
+            @moonData.push(item)
+        @indexData.push({
+          index: 0,
+          manufacturing: @systemData.costIndexes.manufacturingIndex*10,
+          researchMaterial: @systemData.costIndexes.materialResearchIndex*10,
+          researchTime: @systemData.costIndexes.timeResearchIndex*10,
+          invention: @systemData.costIndexes.inventionIndex*10,
+          copying: @systemData.costIndexes.copyingIndex*10})
+      # getAgentData()
+      crestService.getNeighboringSystems(@solarSystemID).then (response) =>
+        @neighbors = response.data
+
+        mapGraph(_.concat(@systemData, @neighbors)).then (response) =>
+          @map = response
+
+    crestService.getPlanet(@solarSystemID).then (response) =>
+      @planetData = response.data
+    #console.log @planetData
+    crestService.getStation(@solarSystemID).then (response) =>
+      @stationData = response.data
+    return
 
   init = =>
     crestService.getSolarSystem(@solarSystemID).then (response) =>
@@ -41,9 +77,12 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
           researchTime: @systemData.costIndexes.timeResearchIndex*10,
           invention: @systemData.costIndexes.inventionIndex*10,
           copying: @systemData.costIndexes.copyingIndex*10})
-    crestService.getNeighboringSystems(@solarSystemID).then (response) =>
-        @neighbors = response.data
       # getAgentData()
+      crestService.getNeighboringSystems(@solarSystemID).then (response) =>
+        @neighbors = response.data
+        mapGraph(_.concat(@systemData, @neighbors)).then (response) =>
+          @map = response
+
     crestService.getPlanet(@solarSystemID).then (response) =>
       @planetData = response.data
       #console.log @planetData
@@ -64,6 +103,7 @@ app.controller 'dashboardCtrl', ['$scope', '$http', 'crestService', 'userService
   @indexToPercent = indexToPercent
   @noTick = noTick
   @handleCallback = handleCallback
+  @changeSystem = changeSystem
 
   return
 ]

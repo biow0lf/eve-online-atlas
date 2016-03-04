@@ -5,15 +5,16 @@
         <h2 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}} <span ng-if="dc.systemData.whData.wormholeClass!= 7 && dc.systemData.whData.wormholeClass!= 8 && dc.systemData.whData.wormholeClass!= 9">(Class {{dc.systemData.whData.wormholeClass}}) <span ng-if="dc.systemData.whData.static1 != null">Static {{dc.systemData.whData.static1.destination}}<span ng-if="dc.systemData.whData.static2 != null"> and {{dc.systemData.whData.static2.destination}}</span></span></span></h2>
         <h2 class="md-headline">{{dc.user.solarSystem.name}}</h2>
         <div flex></div>
+        <md-button ng-click="dc.changeSystem(30000001)">Click to change system</md-button>
       </div>
     </md-toolbar>
-    <md-tabs md-border-bottom md-dynamic-height md-selected="dc.selectedTab"t>
+    <md-tabs md-border-bottom md-dynamic-height md-selected="dc.selectedTab">
       <md-tab label="Overview">
         <div flex layout="row">
-          <div flex="20" layout layout-margin>
-            Map goes here
+          <div layout layout-margin>
+            <div id="map" style="border: 2px solid #4D737E;"></div>
           </div>
-          <div flex="80" layout layout-margin>
+          <div layout="column" flex layout-margin>
             <md-table-container style="margin-bottom: 0; margin-top: 0;">
               <table md-table ng-model="dc.planetData">
                 <thead md-head>
