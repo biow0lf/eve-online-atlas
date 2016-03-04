@@ -162,6 +162,7 @@ Unix / Linux / Mac
 * Import the map_moons_and_wormhole_data.sql from the map_moons_and_wormhole_data.zip into your dbName-develop database (available in the root of this repository)
 * Run `rake convert:planet_materials` to populate the planet_materials table
 * Run `rake update:player_jumps update:player_kills update:player_stations update:sov_structures update:system_cost_indices update:item_history` to get the latest API data (warning: item_history WILL take a long time the first time, as it grabs the entire history from The Forge; future updates are faster as it only inserts newer histories; also the eve api can time out during update:item_history, if it does then it has to be run again)
+* Set the environment variables: for the SSO: CREST_CLIENT_ID, CREST_CLIENT_SECRET, and for Rails: CREST_SECRET KEY
 * Run `rails s` to host the server on localhost:3000
 
 Windows
