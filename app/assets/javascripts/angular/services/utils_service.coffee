@@ -25,11 +25,11 @@ app.factory 'utilsService', [ ->
     if order.indexOf('-') >= 0
       order = _.replace(order, '-', '')
       reverse = true
-    @data.sort (a, b) ->
+    data.sort (a, b) ->
       if a[order] < b[order] then return -1
       if a[order] > b[order] then return 1
       return 0
-    @data.reverse() if reverse
+    data.reverse() if reverse
     return data
 
   return factory
