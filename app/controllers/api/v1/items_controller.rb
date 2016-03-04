@@ -130,7 +130,7 @@ module Api
           trimmed_price = trimmed_items.sum / trimmed_items.size.to_f
           return trimmed_price.round(2), price
         end
-        return 0, 0
+        [0, 0]
       end
     end
   end
