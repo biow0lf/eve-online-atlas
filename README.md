@@ -25,6 +25,16 @@
 * Highcharts to replace C3.js
 * TBA
 
+### Demo ###
+The server is hosted at https://eve-atlas.com/
+
+To use the dashboard functionality of the application, sign in using Eve's SSO. When you're in a system, or when you change systems, the dashboard will reflect the current system that your character is in. If the CREST location api is down for some reason, then you can click the button to change the system to imitate moving from one system to another (starts at Jita and increments solarSystemID by one per click).
+
+To use the log parser functionality, set a chat log file to track. Log files are typically present in your My Documents folder in Windows: C:\Users\[UserName]\Documents\EVE\logs
+
+Log parser commands are shown in the Commands tab, along with examples. 
+
+
 ### Tech Used ###
 * Ruby on Rails
 * MySQL
