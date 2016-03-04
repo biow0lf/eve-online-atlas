@@ -2,7 +2,7 @@
   <md-card layout="column" style="margin-right: 0;">
     <md-toolbar layout="row" flex class="md-table-toolbar md-default" style="margin-bottom: 0; width: auto">
       <div class="md-toolbar-tools">
-        <h2 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}} <span ng-if="dc.systemData.whData.wormholeClass!= 7 && dc.systemData.whData.wormholeClass!= 8 && dc.systemData.whData.wormholeClass!= 9">(Class {{dc.systemData.whData.wormholeClass}}) <span ng-if="dc.systemData.whData.static1 != null">Static {{dc.systemData.whData.static1.destination}}<span ng-if="dc.systemData.whData.static2 != null"> and {{dc.systemData.whData.static2.destination}}</span></span></span></h2>
+        <h2 class="md-headline">{{dc.systemData.solarSystemName}} - {{dc.systemData.constellation.constellationName}} - {{dc.systemData.region.regionName}} <span ng-if="dc.systemData.whData.wormholeClass!= 7 && dc.systemData.whData.wormholeClass!= 8 && dc.systemData.whData.wormholeClass!= 9 && dc.systemData.whData.wormholeClass!= nil">(Class {{dc.systemData.whData.wormholeClass}}) <span ng-if="dc.systemData.whData.static1 != null">Static {{dc.systemData.whData.static1.destination}}<span ng-if="dc.systemData.whData.static2 != null"> and {{dc.systemData.whData.static2.destination}}</span></span></span></h2>
         <h2 class="md-headline">{{dc.user.solarSystem.name}}</h2>
         <div flex></div>
         <md-button ng-click="dc.changeSystem(30000001)">Click to change system</md-button>
@@ -24,7 +24,7 @@
                   </th>
                 </tr>
                 <tr md-row>
-                  <th md-column><span>Material</span></th>
+                  <th md-column><span>Manufacturing</span></th>
                   <th md-column><span>researchMaterial</span></th>
                   <th md-column><span>researchTime</span></th>
                   <th md-column><span>Copying</span></th>

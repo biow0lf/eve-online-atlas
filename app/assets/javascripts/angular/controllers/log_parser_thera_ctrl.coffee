@@ -7,7 +7,7 @@ app.controller 'logParserTheraCtrl', ['$scope', 'crestService', 'utilsService', 
   @query =
     filter: ''
     order: ''
-    limit: 5
+    limit: 10
     page: 1
     tab: 1
 
