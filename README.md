@@ -28,7 +28,7 @@
 ### Demo ###
 The server is hosted at https://eve-atlas.com/
 
-To use the dashboard functionality of the application, sign in using Eve's SSO. When you're in a system, or when you change systems, the dashboard will reflect the current system that your character is in. If the CREST location api is down for some reason, then you can click the button to change the system to imitate moving from one system to another (starts at Jita and increments solarSystemID by one per click).
+To use the dashboard functionality of the application, sign in using Eve's SSO. When you're in a system, or when you change systems, the dashboard will reflect the current system that your character is in. If the CREST location api is down for some reason, then you can click the button to change the system to imitate moving from one system to another (starts at Jita and increments solarSystemID by one per click). Additionally, due to an issue with the refresh tokens that I haven't been able to figure out, your user needs to re-authenticate using Eve's SSO when the access token expires (every 20 minutes).
 
 To use the log parser functionality, set a chat log file to track. Log files are typically present in your My Documents folder in Windows: C:\Users\[UserName]\Documents\EVE\logs
 
