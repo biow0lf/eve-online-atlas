@@ -136,6 +136,9 @@ GET  | /api/v1/solar_systems/{solar_system_id}/planets/{planet_id}/moons/{id} | 
 ### Bug Reporters ###
 miquela01 - Various thera related bugs
 
+### Compatibility ###
+* Compatible and tested with Chrome 49
+
 ### Setup Instructions ###
 Unix / Linux / Mac
 
