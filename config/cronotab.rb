@@ -27,7 +27,7 @@ end
 
 class UpdatePlayerKills
   def perform
-    Rake::Task['update:player_jumps'].invoke
+    Rake::Task['update:player_kills'].invoke
   end
 end
 
