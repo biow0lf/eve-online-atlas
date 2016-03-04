@@ -35,7 +35,10 @@ module Api
       end
 
       def find_planet
-        @planet = @solarsystem.planets.find(params[:id]) if params[:id]
+        if params[:id]
+          @planet = @solarsystem.planets.find_by(itemID: params[:id])
+          raise ActiveRecord::RecordNotFound if @planet.nil?
+        end
       end
     end
   end

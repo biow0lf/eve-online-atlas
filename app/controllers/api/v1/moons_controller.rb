@@ -22,11 +22,17 @@ module Api
       end
 
       def find_planet
-        @planet = @solarsystem.planets.find(params[:planet_id])
+        if params[:planet_id]
+          @planet = @solarsystem.planets.find_by(itemID: params[:planet_id])
+          raise ActiveRecord::RecordNotFound if @planet.nil?
+        end
       end
 
       def find_moon
-        @moon = @planet.moons.find(params[:id]) if params[:id]
+        if params[:id]
+          @moon = @planet.moons.find_by(itemID: params[:id])
+          raise ActiveRecord::RecordNotFound if @moon.nil?
+        end
       end
     end
   end
