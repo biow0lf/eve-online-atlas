@@ -76,17 +76,17 @@ SDE      | invUniqueNames             | Provides agent's names
 Category | Table Name        | Desc
 ---------|-------------------|-----
 CREST    | item_history      | Custom table to store historic market data for chart
+CREST    | users             | Custom table for SSO
 API      | map_jumps_current | Custom table to store current day's jumps
 API      | map_kills_current | Custom table to store current day's kills
 API      | map_jumps_history | Custom table to store the jump history
 API      | map_kills_history | Custom table to store the kills history
+API      | player_stations   | Custom table to store Outposts
+SDE      | wormhole_effects  | Custom table to store wormhole effects
+SDE      | planet_materials  | Custom table to store materials planets have
 EXTERNAL | map_moons         | Moon material data supplied by eve-moons.com
 EXTERNAL | wormhole_systems  | Wormhole sys data supplied from heicrd's sql dump
 EXTERNAL | wormhole_types    | Wormhole static data supplied from heicrd's sql dump
-SDE      | wormhole_effects  | Custom table to store wormhole effects
-SDE      | planet_materials  | Custom table to store materials planets have
-API      | player_stations   | Custom table to store Outposts
-CREST    | users             | Custom table for SSO
 
 ## API
 
