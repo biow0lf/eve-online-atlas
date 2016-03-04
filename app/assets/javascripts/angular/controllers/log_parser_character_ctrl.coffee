@@ -1,4 +1,4 @@
-app.controller 'logParserCharacterCtrl', ['$scope', 'utilsService', ($scope, utilsService) -> do =>
+app.controller 'logParserCharacterCtrl', ['$scope', 'utilsService', '$state', ($scope, utilsService, $state) -> do =>
 
   # datatable variables
   @selected = []
@@ -25,6 +25,7 @@ app.controller 'logParserCharacterCtrl', ['$scope', 'utilsService', ($scope, uti
 
   focusTab = =>
     $scope.$emit 'changeTab', @query.tab
+    $state.go('root.log_parser') unless $state.current.name is 'root.log_parser'
 
   allowCharacter = (executor, character) =>
     unless character.name.toLowerCase() in @characterNames

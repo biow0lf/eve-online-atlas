@@ -1,4 +1,4 @@
-app.controller 'logParserTheraCtrl', ['$scope', 'crestService', 'utilsService', ($scope, crestService, utilsService) -> do =>
+app.controller 'logParserTheraCtrl', ['$scope', 'crestService', 'utilsService', '$state', ($scope, crestService, utilsService, $state) -> do =>
 
   # datatable variables
   @selected = []
@@ -23,6 +23,7 @@ app.controller 'logParserTheraCtrl', ['$scope', 'crestService', 'utilsService', 
 
   focusTab = =>
     $scope.$emit 'changeTab', @query.tab
+    $state.go('root.log_parser') unless $state.current.name is 'root.log_parser'
 
   findThera = (executor, system) =>
     systemName = ''

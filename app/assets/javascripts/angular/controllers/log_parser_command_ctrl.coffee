@@ -1,4 +1,4 @@
-app.controller 'logParserCommandCtrl', ['$scope', 'utilsService', ($scope, utilsService) -> do =>
+app.controller 'logParserCommandCtrl', ['$scope', 'utilsService', '$state', ($scope, utilsService, $state) -> do =>
 
   # datatable variables
   @selected = []
@@ -22,6 +22,7 @@ app.controller 'logParserCommandCtrl', ['$scope', 'utilsService', ($scope, utils
 
   focusTab = =>
     $scope.$emit 'changeTab', @query.tab
+    $state.go('root.log_parser') unless $state.current.name is 'root.log_parser'
 
   onPaginate = (page, limit) =>
     [@commandsToShow, @query.page] = utilsService.paginate(@commands, page || @query.page, limit || @query.limit)

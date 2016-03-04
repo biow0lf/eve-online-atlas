@@ -1,4 +1,4 @@
-app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'utilsService', ($scope, crestService, moment, utilsService) -> do =>
+app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'utilsService', '$state', ($scope, crestService, moment, utilsService, $state) -> do =>
 
   # datatable variables
   @selected = []
@@ -45,6 +45,7 @@ app.controller 'logParserMarketCtrl', ['$scope', 'crestService', 'moment', 'util
 
   focusTab = =>
     $scope.$emit 'changeTab', @query.tab
+    $state.go('root.log_parser') unless $state.current.name is 'root.log_parser'
 
   processGroupItems = (group, momentTimeKey) =>
     results = []
